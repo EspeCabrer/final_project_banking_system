@@ -1,6 +1,6 @@
-package com.ironhack.demo.services;
+package com.ironhack.demo.security;
 
-import com.ironhack.demo.repository.UserRepository;
+import com.ironhack.demo.User.UserRepository;
 import com.ironhack.demo.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,9 +1,9 @@
 package com.ironhack.demo;
 
-import com.ironhack.demo.models.Role;
-import com.ironhack.demo.models.User;
-import com.ironhack.demo.repository.RoleRepository;
-import com.ironhack.demo.repository.UserRepository;
+import com.ironhack.demo.Role.Role;
+import com.ironhack.demo.User.User;
+import com.ironhack.demo.Role.RoleRepository;
+import com.ironhack.demo.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -30,7 +30,7 @@ public class DemoApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		User user = userRepository.save(new User("jose",passwordEncoder.encode("1234")));
-		roleRepository.save(new Role("USER",user));
+		//roleRepository.save(new Role("USER",user));
 
 	}
 }

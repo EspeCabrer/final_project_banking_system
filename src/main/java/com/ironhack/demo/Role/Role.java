@@ -1,11 +1,13 @@
-package com.ironhack.demo.models;
+package com.ironhack.demo.Role;
 
 
+import com.ironhack.demo.User.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -20,11 +22,11 @@ public class Role {
     @Column(nullable = false)
     private String role;
 
-    @ManyToOne
-    private User user;
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users;
 
-    public Role(String role, User user) {
+    public Role(String role, Set<User> users) {
         this.role = role;
-        this.user = user;
+        this.users = users;
     }
 }

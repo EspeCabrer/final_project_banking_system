@@ -1,7 +1,8 @@
-package com.ironhack.demo.models;
+package com.ironhack.demo.User;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ironhack.demo.Role.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,7 +26,12 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    //@ManyToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    @ManyToMany
+    @JoinTable(name="Role",
+    joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")}
+    )
     @JsonIgnore
     private List<Role> roles;
 
