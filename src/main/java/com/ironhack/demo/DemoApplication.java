@@ -29,7 +29,7 @@ public class DemoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		User user = userRepository.save(new User("jose",passwordEncoder.encode("1234")));
+		//User user = userRepository.save(new User("jose",passwordEncoder.encode("1234")));
 		//roleRepository.save(new Role("USER",user));
 
 	}

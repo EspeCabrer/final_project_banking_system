@@ -11,10 +11,11 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 @NoArgsConstructor
-public class User {
+public abstract class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,10 +27,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    //@ManyToMany(mappedBy = "user",fetch = FetchType.EAGER)
     @ManyToMany
-    @JoinTable(name="Role",
-    joinColumns = {@JoinColumn(name = "user_id")},
+    @JoinTable(name="user_role",
+            joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
     @JsonIgnore

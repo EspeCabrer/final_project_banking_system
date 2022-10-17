@@ -1,6 +1,7 @@
 package com.ironhack.demo.Role;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ironhack.demo.User.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,8 @@ public class Role {
     @Column(nullable = false)
     private String role;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<User> users;
 
     public Role(String role, Set<User> users) {

@@ -1,43 +1,20 @@
 package com.ironhack.demo.Address;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.Embeddable;
 
 @Embeddable
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Address {
     private String postAddress;
-    private String City;
+    private String city;
     private Integer postalCode;
 
-    public Address(String postAddress, String city, Integer postalCode) {
-        this.postAddress = postAddress;
-        City = city;
-        this.postalCode = postalCode;
-    }
-
-    public Address() {
-    }
-
-    public String getPostAddress() {
-        return postAddress;
-    }
-
-    public void setPostAddress(String postAddress) {
-        this.postAddress = postAddress;
-    }
-
-    public String getCity() {
-        return City;
-    }
-
-    public void setCity(String city) {
-        City = city;
-    }
-
-    public Integer getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(Integer postalCode) {
-        this.postalCode = postalCode;
-    }
 }
