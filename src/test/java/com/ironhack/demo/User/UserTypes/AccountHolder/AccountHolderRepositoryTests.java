@@ -37,8 +37,4 @@ public class AccountHolderRepositoryTests {
         assertTrue(optionalAccountHolder.isPresent());
         assertEquals("pepe87", optionalAccountHolder.get().getUsername() );
     }
-
-
-
-
 }

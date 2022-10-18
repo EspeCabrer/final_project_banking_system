@@ -1,8 +1,9 @@
-package com.ironhack.demo.Account.AccountTypes;
+package com.ironhack.demo.Account.AccountTypes.Checking;
 
 import com.ironhack.demo.Account.Account;
 import com.ironhack.demo.Account.EnumStatusAccount;
 import com.ironhack.demo.Money.Money;
+import com.ironhack.demo.User.UserTypes.AccountHolder.AccountHolder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,7 +23,10 @@ public class Checking extends Account {
     private final Money MINIMUM_BALANCE = new Money(new BigDecimal(250));
     private final BigDecimal MONTHLY_MAINTENANCE_FEE = new BigDecimal(12);
     private final Date CREATION_DATE = new Date(System.currentTimeMillis());
-    private EnumStatusAccount status;
+    private EnumStatusAccount status = EnumStatusAccount.ACTIVE;
 
-
+    public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal penaltyFee, String secretKey) {
+        super(balance, primaryOwner, secondaryOwner, penaltyFee);
+        this.secretKey = secretKey;
+    }
 }

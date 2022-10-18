@@ -1,4 +1,4 @@
-package com.ironhack.demo.Account.AccountTypes;
+package com.ironhack.demo.Account.AccountTypes.Checking;
 
 import com.ironhack.demo.Account.Account;
 import com.ironhack.demo.Account.EnumStatusAccount;
