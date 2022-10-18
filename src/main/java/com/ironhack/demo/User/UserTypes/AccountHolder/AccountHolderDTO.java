@@ -20,7 +20,6 @@ public class AccountHolderDTO {
     @NotBlank
     private String password;
     @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private String dateBirth;
     @NotNull
     private Address primaryAddress;

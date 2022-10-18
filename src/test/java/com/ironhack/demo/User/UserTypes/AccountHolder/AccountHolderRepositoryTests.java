@@ -37,4 +37,17 @@ public class AccountHolderRepositoryTests {
         assertTrue(optionalAccountHolder.isPresent());
         assertEquals("pepe87", optionalAccountHolder.get().getUsername() );
     }
+
+    @Test
+    @DisplayName("Find by userName - works ok")
+    void findByUsername_WorksOk() {
+        Address address = new Address("Roma n25", "Madrid", 06754);
+        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null );
+
+        accountHolderRepository.save(user);
+        Optional<AccountHolder> optionalAccountHolder = accountHolderRepository.findByUsername("pepe87");
+
+        assertTrue(optionalAccountHolder.isPresent());
+        assertEquals("pepe87", optionalAccountHolder.get().getUsername() );
+    }
 }

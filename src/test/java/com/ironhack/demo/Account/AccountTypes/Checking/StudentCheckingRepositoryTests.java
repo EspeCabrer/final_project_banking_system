@@ -18,33 +18,33 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-public class CheckingRepositoryTests {
+public class StudentCheckingRepositoryTests {
 
     @Autowired
-    CheckingRepository checkingRepository;
+    StudentCheckingRepository studentCheckingRepository;
 
     @Autowired
     AccountHolderRepository accountHolderRepository;
 
     @BeforeEach
     void setUp() {
-        checkingRepository.deleteAll();
+        studentCheckingRepository.deleteAll();
     }
 
     @Test
-    @DisplayName("Save new checking account - works ok")
+    @DisplayName("Save new student checking account - works ok")
     void addCheckingAccount() {
         Address address = new Address("Roma n25", "Madrid", 06754);
-        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null );
+        AccountHolder user = new AccountHolder("antonia34", "password", LocalDate.parse("2000-06-02"), address, null );
         accountHolderRepository.save(user);
-        Checking account = new Checking(new Money(new BigDecimal(2000)), user, null, new BigDecimal("0.4"), "secretKey");
 
-        Checking savedAccount = checkingRepository.save(account);
-        Optional<Checking> optionalChecking = checkingRepository.findById(savedAccount.getId());
 
-        assertTrue(optionalChecking.isPresent());
-        assertEquals("pepe87", optionalChecking.get().getPrimaryOwner().getUsername() );
+        StudentChecking account = new StudentChecking(new Money(new BigDecimal(2000)), user, null, new BigDecimal("0.4"), "secretKey");
+        StudentChecking savedAccount = studentCheckingRepository.save(account);
+        Optional<StudentChecking> optionalStudentChecking = studentCheckingRepository.findById(savedAccount.getId());
+
+        assertTrue(optionalStudentChecking.isPresent());
+        assertEquals("antonia34", optionalStudentChecking.get().getPrimaryOwner().getUsername() );
     }
-
 
 }
