@@ -1,4 +1,4 @@
-package com.ironhack.demo.User.UserTypes;
+package com.ironhack.demo.User.UserTypes.AccountHolder;
 
 import com.ironhack.demo.Address.Address;
 import com.ironhack.demo.User.User;
@@ -9,17 +9,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class AccountHolder extends User {
 
     @Column(nullable = false)
-    private Date dateBirth;
+    private LocalDate dateBirth;
 
     @Embedded
     @Column(nullable = false)
@@ -32,4 +32,11 @@ public class AccountHolder extends User {
             @AttributeOverride(name = "postalCode", column = @Column(name = "postal_code_mailing"))
     })
     private Address mailingAddress;
+
+    public AccountHolder(String username, String password, LocalDate dateBirth, Address primaryAddress, Address mailingAddress) {
+        super(username, password);
+        this.dateBirth = dateBirth;
+        this.primaryAddress = primaryAddress;
+        this.mailingAddress = mailingAddress;
+    }
 }

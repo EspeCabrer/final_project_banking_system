@@ -1,7 +1,7 @@
 package com.ironhack.demo.Account;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ironhack.demo.Money.Money;
-import com.ironhack.demo.User.UserTypes.AccountHolder;
+import com.ironhack.demo.User.UserTypes.AccountHolder.AccountHolder;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

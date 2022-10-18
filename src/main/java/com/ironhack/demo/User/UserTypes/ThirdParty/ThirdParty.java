@@ -1,4 +1,4 @@
-package com.ironhack.demo.User.UserTypes;
+package com.ironhack.demo.User.UserTypes.ThirdParty;
 
 import com.ironhack.demo.User.User;
 import lombok.Getter;
