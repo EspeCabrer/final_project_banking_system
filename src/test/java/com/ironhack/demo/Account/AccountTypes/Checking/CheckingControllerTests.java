@@ -20,11 +20,19 @@ import org.springframework.web.context.WebApplicationContext;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 public class CheckingControllerTests {
+
+    @Autowired
+    private StudentCheckingRepository studentCheckingRepository;
+
+    @Autowired
+    private CheckingRepository checkingRepository;
 
     @Autowired
     private AccountHolderRepository accountHolderRepository;
@@ -40,6 +48,21 @@ public class CheckingControllerTests {
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         address = new Address("Roma n25", "Madrid", 06754);
+    }
+
+    @Test
+    void post_CheckingAccount_validValues_WorksOk() throws Exception {
+        AccountHolder primaryOwner = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null );
+        AccountHolder secundaryOwner = new AccountHolder("maria63", "password", LocalDate.parse("1984-02-05"), address, null );
+
+        accountHolderRepository.save(primaryOwner);
+        accountHolderRepository.save(secundaryOwner);
+        CheckingDTO checkingDTO = new CheckingDTO(new Money(new BigDecimal("2000")), "pepe87", "maria63", new BigDecimal(0.3), "secretKey");
+        String body = objectMapper.writeValueAsString(checkingDTO);
+
+        MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated()).andReturn();
+
     }
 
     @Test
@@ -71,5 +94,33 @@ public class CheckingControllerTests {
 
         MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
+    }
+
+    @Test
+    void post_CheckingAccount_userAgeLess24_createStudentCheckingAccount_WorksOk() throws Exception {
+        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("2000-06-02"), address, null );
+        accountHolderRepository.save(user);
+        CheckingDTO checkingDTO = new CheckingDTO(new Money(new BigDecimal("2000")), "pepe87", null, new BigDecimal(0.3), "secretKey");
+        String body = objectMapper.writeValueAsString(checkingDTO);
+
+        MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated()).andReturn();
+
+        assertEquals(1, studentCheckingRepository.findAll().size());
+        assertEquals(0, checkingRepository.findAll().size());
+    }
+
+    @Test
+    void post_CheckingAccount_userAgeGreater24_createCheckingAccount_WorksOk() throws Exception {
+        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1985-06-02"), address, null );
+        accountHolderRepository.save(user);
+        CheckingDTO checkingDTO = new CheckingDTO(new Money(new BigDecimal("2000")), "pepe87", null, new BigDecimal(0.3), "secretKey");
+        String body = objectMapper.writeValueAsString(checkingDTO);
+
+        MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated()).andReturn();
+
+        assertEquals(0, studentCheckingRepository.findAll().size());
+        assertEquals(1, checkingRepository.findAll().size());
     }
 }

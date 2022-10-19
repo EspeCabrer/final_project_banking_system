@@ -20,15 +20,19 @@ public class CheckingController {
     @Autowired
     AccountHolderService accountHolderService;
 
+    @Autowired
+    StudentCheckingService studentCheckingService;
+
     @PostMapping("accounts/new/checking")
     @ResponseStatus(HttpStatus.CREATED)
-    public Checking addCheckingAccount(@Valid @RequestBody CheckingDTO checkingDTO) {
+    public void addCheckingAccount(@Valid @RequestBody CheckingDTO checkingDTO) {
        AccountHolder primaryOwner = accountHolderService.getByUsername(checkingDTO.getUserNamePrimaryOwner());
-       AccountHolder secondOwner = null;
+       AccountHolder secondaryOwner = null;
        if(checkingDTO.getUserNameSecondaryOwner() != null) {
-           secondOwner = accountHolderService.getByUsername(checkingDTO.getUserNameSecondaryOwner());
+           secondaryOwner = accountHolderService.getByUsername(checkingDTO.getUserNameSecondaryOwner());
        }
-
-       return null;
+       int primaryOwnerAge = accountHolderService.ageCalculator(primaryOwner.getDateBirth());
+       if (primaryOwnerAge < 24) studentCheckingService.add(checkingDTO, primaryOwner, secondaryOwner);
+       else checkingService.add(checkingDTO, primaryOwner, secondaryOwner);
     }
 }

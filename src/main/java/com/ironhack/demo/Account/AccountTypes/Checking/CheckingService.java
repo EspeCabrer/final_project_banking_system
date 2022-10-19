@@ -18,11 +18,8 @@ public class CheckingService {
     @Autowired
     AccountHolderRepository accountHolderRepository;
 
-    public Checking add(CheckingDTO checkingDTO ){
-
-
-        return null;
+    public Checking add(CheckingDTO checkingDTO, AccountHolder primaryOwner, AccountHolder secondaryOwner ){
+        return checkingRepository.save(new Checking(checkingDTO.getBalance(), primaryOwner, secondaryOwner, checkingDTO.getPenaltyFee(), checkingDTO.getSecretKey()));
     }
-
 
 }

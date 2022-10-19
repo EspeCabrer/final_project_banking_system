@@ -3,7 +3,6 @@ package com.ironhack.demo.Account.AccountTypes.Checking;
 import com.ironhack.demo.Address.Address;
 import com.ironhack.demo.Money.Money;
 import com.ironhack.demo.User.UserTypes.AccountHolder.AccountHolder;
-import com.ironhack.demo.User.UserTypes.AccountHolder.AccountHolderDTO;
 import com.ironhack.demo.User.UserTypes.AccountHolder.AccountHolderRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,33 +17,31 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-public class CheckingServiceTests {
+public class StudentCheckingServiceTests {
 
     @Autowired
-    CheckingService checkingService;
+    StudentCheckingService studentCheckingService;
 
     @Autowired
     AccountHolderRepository accountHolderRepository;
 
     @Autowired
-    CheckingRepository checkingRepository;
+    StudentCheckingRepository studentCheckingRepository;
+
 
     @Test
     @DisplayName("Save new checking account - works ok")
     void add_WorksOk() {
         Address address = new Address("Roma n25", "Madrid", 06754);
-        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null );
+        AccountHolder user = new AccountHolder("pepe2000", "password", LocalDate.parse("2000-06-02"), address, null );
         accountHolderRepository.save(user);
         CheckingDTO accountInfo = new CheckingDTO(new Money(new BigDecimal("2000")), "pepe87", "anton763", new BigDecimal(0.3), "secretKey");
 
-        Checking checkingAccountSaved = checkingService.add(accountInfo, user, null);
+        StudentChecking studentCheckingSaved = studentCheckingService.add(accountInfo, user, null);
 
-        Optional<Checking> optionalChecking = checkingRepository.findById(checkingAccountSaved.getId());
+        Optional<StudentChecking> optionalChecking = studentCheckingRepository.findById(studentCheckingSaved.getId());
 
         assertTrue(optionalChecking.isPresent());
-        assertEquals("pepe87", optionalChecking.get().getPrimaryOwner().getUsername());
+        assertEquals("pepe2000", optionalChecking.get().getPrimaryOwner().getUsername());
     }
-
-
-
 }

@@ -7,6 +7,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.Period;
+import java.util.Date;
 
 @Service
 public class AccountHolderService {
@@ -32,6 +34,10 @@ public class AccountHolderService {
 
     public AccountHolder getByUsername(String username) {
         return accountHolderRepository.findByUsername(username).orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Primary owner not found"));
+    }
+
+    public int ageCalculator(LocalDate birthDate) {
+        return Period.between(birthDate, LocalDate.now()).getYears();
     }
 
 }

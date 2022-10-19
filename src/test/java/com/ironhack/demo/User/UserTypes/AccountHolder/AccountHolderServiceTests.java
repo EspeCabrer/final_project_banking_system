@@ -33,7 +33,7 @@ public class AccountHolderServiceTests {
 
     @Test
     @DisplayName("Save new account holder user - works ok")
-    void addAccountHolder() {
+    void add_WorksOk() {
         AccountHolderDTO userInfo = new AccountHolderDTO("Miqui657", "password", "1999-01-06", address, null);
 
         AccountHolder savedUser = accountHolderService.add(userInfo);
@@ -54,5 +54,12 @@ public class AccountHolderServiceTests {
 
         assertTrue(optionalAccountHolder.isPresent());
         assertEquals("pepe87", optionalAccountHolder.get().getUsername());
+    }
+
+    @Test
+    @DisplayName("Get user age - works ok")
+    void ageCalculator_WorksOk()  {
+        LocalDate birthDate = LocalDate.parse("2000-05-07");
+        assertEquals(22, accountHolderService.ageCalculator(birthDate));
     }
 }
