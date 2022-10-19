@@ -1,6 +1,7 @@
 package com.ironhack.banksystem.account.accountTypes.savings;
 
 import com.ironhack.banksystem.address.Address;
+import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -11,12 +12,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-public class SavingsServiceTests {
+public class SavingsRepositoryTests {
 
     @Autowired
     SavingsRepository savingsRepository;
@@ -24,30 +25,27 @@ public class SavingsServiceTests {
     @Autowired
     AccountHolderRepository accountHolderRepository;
 
-    @Autowired
-    SavingsService savingsService;
-
-
     @BeforeEach
-    void setUp() {
+    public void setUp(){
         savingsRepository.deleteAll();
         accountHolderRepository.deleteAll();
     }
-
     @AfterEach
-    void clean(){
+    public void clean(){
         savingsRepository.deleteAll();
         accountHolderRepository.deleteAll();
     }
 
     @Test
-    public void add_WorksOk() {
+    void addSavingAccount_worksOk() {
         Address address = new Address("Roma n25", "Madrid", 06754);
-        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null );
+        AccountHolder user = new AccountHolder("antonia34", "password", LocalDate.parse("2000-06-02"), address, null );
         accountHolderRepository.save(user);
-        SavingsDTO savingsDTO = new SavingsDTO(BigDecimal.valueOf(1000), "pepe87", null, BigDecimal.valueOf(0.4), null, null, "secretKey");
+        Savings savings = savingsRepository.save(new Savings(new Money(BigDecimal.valueOf(3000)), user, null, BigDecimal.valueOf(0.6),
+                null, null, "secretKey"));
 
-        Savings savingsAccountSaved = savingsService.add(savingsDTO, user, null);
-        assertTrue(savingsRepository.findById(savingsAccountSaved.getId()).isPresent());
+        Optional<Savings> savingsOptional = savingsRepository.findById(savings.getId());
+
+        assertTrue(savingsOptional.isPresent());
     }
 }

@@ -1,5 +1,6 @@
 package com.ironhack.banksystem.account.accountTypes.savings;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
@@ -49,11 +50,20 @@ public class SavingsControllerTests {
         accountHolderRepository.deleteAll();
     }
 
+    @Test
+    void post_SavingsAccount_WorksOk() throws Exception {
+        SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000), "maria", "maria", BigDecimal.valueOf(0.3), BigDecimal.valueOf(0.2), BigDecimal.valueOf(400), "secretKey");
+        String body = objectMapper.writeValueAsString(savingsDto);
+
+        mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated()).andReturn();
+    }
+
 
     @Test
-    void post_SavingsAccount_nullBalance_ThrowsError() throws Exception {
+    void post_SavingsAccount_NullBalance_ThrowsError() throws Exception {
 
-        SavingsDTO savingsDto = new SavingsDTO(null, "pepe", "maria", BigDecimal.valueOf(0.3), BigDecimal.valueOf(0.2), BigDecimal.valueOf(400), "secretKey");
+        SavingsDTO savingsDto = new SavingsDTO(null, "maria", "maria", BigDecimal.valueOf(0.3), BigDecimal.valueOf(0.2), BigDecimal.valueOf(400), "secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
 
         mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -61,7 +71,7 @@ public class SavingsControllerTests {
     }
 
     @Test
-    void post_SavingsAccount_nullPrimaryOwner_ThrowsError() throws Exception {
+    void post_SavingsAccount_NullPrimaryOwner_ThrowsError() throws Exception {
 
         SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000), null, "maria", BigDecimal.valueOf(0.3), BigDecimal.valueOf(0.2), BigDecimal.valueOf(400), "secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
