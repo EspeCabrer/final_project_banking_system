@@ -1,8 +1,8 @@
 package com.ironhack.demo.security;
 
 
-import com.ironhack.demo.Role.Role;
-import com.ironhack.demo.User.User;
+import com.ironhack.demo.role.Role;
+import com.ironhack.demo.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

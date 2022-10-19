@@ -1,9 +1,7 @@
 package com.ironhack.demo;
 
-import com.ironhack.demo.Role.Role;
-import com.ironhack.demo.User.User;
-import com.ironhack.demo.Role.RoleRepository;
-import com.ironhack.demo.User.UserRepository;
+import com.ironhack.demo.role.RoleRepository;
+import com.ironhack.demo.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
