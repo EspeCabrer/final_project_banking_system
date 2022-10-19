@@ -19,10 +19,8 @@ import java.util.Date;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Savings extends Account {
-
 
     @DecimalMax(value = "0.5", inclusive = true)
     private BigDecimal interestRate = new BigDecimal("0.0025");
@@ -56,8 +54,8 @@ public class Savings extends Account {
                    Money minimumBalance,
                    String secretKey) {
         super(balance, primaryOwner, secondaryOwner, penaltyFee);
-        this.interestRate = interestRate;
-        this.minimumBalance = minimumBalance;
+        setInterestRate(interestRate);
+        setMinimumBalance(minimumBalance);
         this.secretKey = secretKey;
     }
 
@@ -68,7 +66,7 @@ public class Savings extends Account {
                    Money minimumBalance,
                    String secretKey) {
         super(balance, primaryOwner, secondaryOwner, penaltyFee);
-        this.minimumBalance = minimumBalance;
+        setMinimumBalance(minimumBalance);
         this.secretKey = secretKey;
     }
 
@@ -79,7 +77,43 @@ public class Savings extends Account {
                    BigDecimal interestRate,
                    String secretKey) {
         super(balance, primaryOwner, secondaryOwner, penaltyFee);
-        this.interestRate = interestRate;
+        setInterestRate(interestRate);
         this.secretKey = secretKey;
+    }
+
+    public void setInterestRate(BigDecimal interestRate) {
+        if(interestRate.compareTo(new BigDecimal("0.5")) > 0) {
+            throw new IllegalArgumentException("Interest rate can't be greater than 0.5");
+        } else {
+            this.interestRate = interestRate;
+        }
+    }
+
+    public void setMinimumBalance(Money minimumBalance) {
+        if(minimumBalance.getAmount().compareTo(new BigDecimal(100)) < 0
+                || minimumBalance.getAmount().compareTo(new BigDecimal(1000)) > 0) {
+            throw new IllegalArgumentException("Minimum balance must be between 100 and 1000");
+         } else {
+            this.minimumBalance = minimumBalance;
+        }
+    }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
+
+    public void setStatus(EnumStatusAccount status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Savings{" +
+                "interestRate=" + interestRate +
+                ", minimumBalance=" + minimumBalance +
+                ", secretKey='" + secretKey + '\'' +
+                ", CREATION_DATE=" + CREATION_DATE +
+                ", status=" + status +
+                '}';
     }
 }
