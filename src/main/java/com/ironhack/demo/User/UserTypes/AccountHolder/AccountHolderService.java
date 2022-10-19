@@ -2,6 +2,7 @@ package com.ironhack.demo.User.UserTypes.AccountHolder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -16,6 +17,9 @@ public class AccountHolderService {
     @Autowired
     AccountHolderRepository accountHolderRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     public boolean isValidDateFormat(String date) {
         try {
             LocalDate.parse(date);
@@ -28,7 +32,7 @@ public class AccountHolderService {
 
     public AccountHolder add(AccountHolderDTO accountHolderDTO){
 
-        AccountHolder user = new AccountHolder(accountHolderDTO.getUsername(), accountHolderDTO.getPassword(),LocalDate.parse(accountHolderDTO.getDateBirth()), accountHolderDTO.getPrimaryAddress(), accountHolderDTO.getMailingAddress());
+        AccountHolder user = new AccountHolder(accountHolderDTO.getUsername(), passwordEncoder.encode(accountHolderDTO.getPassword()),LocalDate.parse(accountHolderDTO.getDateBirth()), accountHolderDTO.getPrimaryAddress(), accountHolderDTO.getMailingAddress());
         return accountHolderRepository.save(user);
     }
 
