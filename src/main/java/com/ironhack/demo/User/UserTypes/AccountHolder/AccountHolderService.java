@@ -32,6 +32,10 @@ public class AccountHolderService {
 
     public AccountHolder add(AccountHolderDTO accountHolderDTO){
 
+        if(accountHolderRepository.findByUsername(accountHolderDTO.getUsername()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This user already exists");
+        }
+
         AccountHolder user = new AccountHolder(accountHolderDTO.getUsername(), passwordEncoder.encode(accountHolderDTO.getPassword()),LocalDate.parse(accountHolderDTO.getDateBirth()), accountHolderDTO.getPrimaryAddress(), accountHolderDTO.getMailingAddress());
         return accountHolderRepository.save(user);
     }
