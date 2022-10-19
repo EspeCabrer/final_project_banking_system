@@ -39,10 +39,10 @@ public class SavingsSettersTests {
         Money minimumBalanceLessThan100 = new Money(new BigDecimal("90"));
 
 
-      assertThrows(IllegalArgumentException.class,
-                ()-> new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.4"), new BigDecimal(0.3), minimumBalanceGreaterThan1000, "secretKey"));
+        assertThrows(IllegalArgumentException.class,
+                ()-> new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.4"), new BigDecimal("0.3"), minimumBalanceGreaterThan1000, "secretKey"));
 
-      assertThrows(IllegalArgumentException.class,
-                ()-> new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.4"),new BigDecimal(0.3), minimumBalanceLessThan100, "secretKey"));
+        assertThrows(IllegalArgumentException.class,
+                ()-> new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.4"),new BigDecimal("0.3"), minimumBalanceLessThan100, "secretKey"));
     }
 }

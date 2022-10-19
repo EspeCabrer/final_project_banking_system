@@ -17,8 +17,8 @@ public class CheckingDTO {
     @NotNull
     private Money balance;
     @NotBlank
-    private String userNamePrimaryOwner;
-    private String userNameSecondaryOwner;
+    private String primaryOwnerUserName;
+    private String secondaryOwnerUserName;
     @NotNull
     private BigDecimal penaltyFee;
     @NotBlank

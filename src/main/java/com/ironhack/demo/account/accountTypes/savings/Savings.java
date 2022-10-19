@@ -22,11 +22,11 @@ import java.util.Date;
 public class Savings extends Account {
 
     @DecimalMax(value = "0.5", inclusive = true)
-    private BigDecimal interestRate = new BigDecimal("0.0025");
+    private BigDecimal interestRate;
 
     @Max(1000)
     @Min(100)
-    private Money minimumBalance = new Money(new BigDecimal(1000));
+    private Money minimumBalance;
 
     @NotNull
     @Column(nullable = false)
@@ -44,7 +44,8 @@ public class Savings extends Account {
     }
 
     public void setInterestRate(BigDecimal interestRate) {
-        if(interestRate.compareTo(new BigDecimal("0.5")) > 0) {
+        if (interestRate == null) this.interestRate = new BigDecimal("0.0025");
+        else if(interestRate.compareTo(new BigDecimal("0.5")) > 0) {
             throw new IllegalArgumentException("Interest rate can't be greater than 0.5");
         } else {
             this.interestRate = interestRate;
@@ -52,7 +53,8 @@ public class Savings extends Account {
     }
 
     public void setMinimumBalance(Money minimumBalance) {
-        if(minimumBalance.getAmount().compareTo(new BigDecimal(100)) < 0
+        if (minimumBalance == null) this.minimumBalance = new Money(BigDecimal.valueOf(1000));
+        else if(minimumBalance.getAmount().compareTo(new BigDecimal(100)) < 0
                 || minimumBalance.getAmount().compareTo(new BigDecimal(1000)) > 0) {
             throw new IllegalArgumentException("Minimum balance must be between 100 and 1000");
          } else {

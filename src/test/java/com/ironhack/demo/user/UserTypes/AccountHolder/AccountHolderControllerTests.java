@@ -34,10 +34,11 @@ public class AccountHolderControllerTests {
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         address = new Address("Roma n25", "Madrid", 06754);
+        accountHolderRepository.deleteAll();
     }
 
     @Test
-    void post_AccountHolder_isCreated_WorksOk() throws Exception {
+    void post_AccountHolder_IsCreated_WorksOk() throws Exception {
 
         AccountHolderDTO userInfo = new AccountHolderDTO("Miqui657", "password", "1999-01-06", address, null);
 
@@ -46,8 +47,65 @@ public class AccountHolderControllerTests {
         MvcResult mvcResult = mockMvc.perform(post("/users/new/accountholder").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
     }
+
+
     @Test
-    void post_AccountHolder_userNameAlreadyExistsInDB_ThrowError() throws Exception {
+    void post_AccountHolder_NullOrBlankUsername_ThrowError() throws Exception {
+
+        AccountHolderDTO userInfo1 = new AccountHolderDTO("", "password", "1999-01-06", address, null);
+        AccountHolderDTO userInfo2 = new AccountHolderDTO(null, "password", "1999-01-06", address, null);
+
+        String body1 = objectMapper.writeValueAsString(userInfo1);
+        String body2 = objectMapper.writeValueAsString(userInfo2);
+
+        mockMvc.perform(post("/users/new/accountholder").content(body1).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest()).andReturn();
+
+        mockMvc.perform(post("/users/new/accountholder").content(body2).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest()).andReturn();
+    }
+
+    @Test
+    void post_AccountHolder_NullOrBlankPassword_ThrowError() throws Exception {
+
+        AccountHolderDTO userInfo1 = new AccountHolderDTO("Miqui657", "", "1999-01-06", address, null);
+        AccountHolderDTO userInfo2 = new AccountHolderDTO("Miqui657", null, "1999-01-06", address, null);
+
+        String body1 = objectMapper.writeValueAsString(userInfo1);
+        String body2 = objectMapper.writeValueAsString(userInfo2);
+
+        mockMvc.perform(post("/users/new/accountholder").content(body1).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest()).andReturn();
+
+        mockMvc.perform(post("/users/new/accountholder").content(body2).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest()).andReturn();
+    }
+
+
+    @Test
+    void post_AccountHolder_NullDateBirth_ThrowError() throws Exception {
+
+        AccountHolderDTO userInfo1 = new AccountHolderDTO("Miqui657", "password", null , address, null);
+
+        String body1 = objectMapper.writeValueAsString(userInfo1);
+
+        mockMvc.perform(post("/users/new/accountholder").content(body1).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest()).andReturn();
+    }
+
+    @Test
+    void post_AccountHolder_NullPrimaryAddress_ThrowError() throws Exception {
+
+        AccountHolderDTO userInfo1 = new AccountHolderDTO("Miqui657", "password", "1999-01-06", null, null);
+
+        String body1 = objectMapper.writeValueAsString(userInfo1);
+
+        mockMvc.perform(post("/users/new/accountholder").content(body1).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest()).andReturn();
+    }
+
+    @Test
+    void post_AccountHolder_UserNameAlreadyExistsInDB_ThrowError() throws Exception {
 
         accountHolderRepository.save(new AccountHolder("Miqui657", "password", LocalDate.parse("1999-01-06"), address, null));
         AccountHolderDTO userInfo = new AccountHolderDTO("Miqui657", "password", "1999-01-06", address, null);
@@ -67,36 +125,4 @@ public class AccountHolderControllerTests {
         MvcResult mvcResult = mockMvc.perform(post("/users/new/accountholder").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest()).andReturn();
     }
-
-    @Test
-    void post_AccountHolder_NullPassword_ThrowsError() throws Exception {
-
-        AccountHolderDTO userInfo = new AccountHolderDTO("Miqui657", null, "1999-01-06", address, null);
-        String body = objectMapper.writeValueAsString(userInfo);
-
-        MvcResult mvcResult = mockMvc.perform(post("/users/new/accountholder").content(body).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest()).andReturn();
-    }
-
-    @Test
-    void post_AccountHolder_NullUserName_ThrowsError() throws Exception {
-
-        AccountHolderDTO userInfo = new AccountHolderDTO(null, "password", "1999-01-06", address, null);
-        String body = objectMapper.writeValueAsString(userInfo);
-
-        MvcResult mvcResult = mockMvc.perform(post("/users/new/accountholder").content(body).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest()).andReturn();
-    }
-
-    @Test
-    void post_AccountHolder_NullAddressPrimary_ThrowsError() throws Exception {
-
-        AccountHolderDTO userInfo = new AccountHolderDTO("userName", "password", "1999-01-06", null, null);
-        String body = objectMapper.writeValueAsString(userInfo);
-
-        MvcResult mvcResult = mockMvc.perform(post("/users/new/accountholder").content(body).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest()).andReturn();
-    }
-
-
 }

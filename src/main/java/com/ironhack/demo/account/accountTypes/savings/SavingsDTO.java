@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.*;
+import java.math.BigDecimal;
 
 @AllArgsConstructor
 @Getter
@@ -12,20 +13,20 @@ import javax.validation.constraints.*;
 public class SavingsDTO {
 
     @NotNull(message = "The balance is required.")
-    private Double balance;
+    private BigDecimal balance;
     @NotBlank(message = "The primary owner user name is required.")
     private String primaryOwnerUserName;
     //optional
     private String secondaryOwnerUserName;
     @NotNull(message = "The penalty fee is required.")
-    private Double penaltyFee;
+    private BigDecimal penaltyFee;
     //optional
     @DecimalMax(value = "0.5", inclusive = true)
-    private Double interestRate;
+    private BigDecimal interestRate;
     //optional
     @Max(value = 1000, message = "The minimum balance must be between 100 and 1000.")
     @Min(value= 100, message = "The minimum balance must be between 100 and 1000.")
-    private Double minimumBalance;
+    private BigDecimal minimumBalance;
     @NotBlank(message = "The secretKey is required.")
     private String secretKey;
 

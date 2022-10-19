@@ -11,14 +11,14 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class AccountHolderDTO {
 
-    @NotBlank
+    @NotBlank(message = "username is required")
     private String username;
 
-    @NotBlank
+    @NotBlank(message = "password is required")
     private String password;
-    @NotNull
+    @NotNull(message = "dateBirth is required")
     private String dateBirth;
-    @NotNull
+    @NotNull(message = "primaryAddress is required")
     private Address primaryAddress;
 
     private Address mailingAddress;
