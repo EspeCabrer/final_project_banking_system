@@ -11,11 +11,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.time.LocalDate;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 public class AccountHolderControllerTests {
+
+    @Autowired
+    AccountHolderRepository accountHolderRepository;
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -39,6 +45,17 @@ public class AccountHolderControllerTests {
 
         MvcResult mvcResult = mockMvc.perform(post("/users/new/accountholder").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
+    }
+    @Test
+    void post_AccountHolder_userNameAlreadyExistsInDB_ThrowError() throws Exception {
+
+        accountHolderRepository.save(new AccountHolder("Miqui657", "password", LocalDate.parse("1999-01-06"), address, null));
+        AccountHolderDTO userInfo = new AccountHolderDTO("Miqui657", "password", "1999-01-06", address, null);
+
+        String body = objectMapper.writeValueAsString(userInfo);
+
+        MvcResult mvcResult = mockMvc.perform(post("/users/new/accountholder").content(body).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest()).andReturn();
     }
 
     @Test
