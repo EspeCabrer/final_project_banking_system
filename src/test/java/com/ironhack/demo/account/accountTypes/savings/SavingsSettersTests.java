@@ -25,7 +25,7 @@ public class SavingsSettersTests {
         BigDecimal interestRate = new BigDecimal("0.6");
 
         assertThrows(IllegalArgumentException.class,
-                ()-> new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.4"),  interestRate, "secretKey"));
+                ()-> new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.4"),  interestRate, new Money(), "secretKey"));
     }
 
     @Test
@@ -40,9 +40,9 @@ public class SavingsSettersTests {
 
 
       assertThrows(IllegalArgumentException.class,
-                ()-> new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.4"), minimumBalanceGreaterThan1000, "secretKey"));
+                ()-> new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.4"), new BigDecimal(0.3), minimumBalanceGreaterThan1000, "secretKey"));
 
       assertThrows(IllegalArgumentException.class,
-                ()-> new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.4"), minimumBalanceLessThan100, "secretKey"));
+                ()-> new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.4"),new BigDecimal(0.3), minimumBalanceLessThan100, "secretKey"));
     }
 }
