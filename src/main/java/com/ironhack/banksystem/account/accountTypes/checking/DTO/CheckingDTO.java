@@ -1,6 +1,5 @@
 package com.ironhack.banksystem.account.accountTypes.checking.DTO;
 
-import com.ironhack.banksystem.money.Money;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +17,7 @@ public class CheckingDTO {
     private BigDecimal balance;
     @NotBlank(message = "The primaryOwnerUserName is required.")
     private String primaryOwnerUserName;
+    //optional
     private String secondaryOwnerUserName;
     @NotBlank(message = "The secretKey is required.")
     private String secretKey;

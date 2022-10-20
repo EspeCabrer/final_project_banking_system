@@ -1,9 +1,7 @@
 package com.ironhack.banksystem.account.accountTypes.creditCard;
 
-import com.ironhack.banksystem.money.Money;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.*;
