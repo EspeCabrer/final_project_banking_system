@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.banksystem.account.accountTypes.savings.SavingsDTO;
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.money.Money;
+import com.ironhack.banksystem.role.EnumRole;
+import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleRepository;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -35,11 +38,15 @@ public class CreditCardControllerTests {
     CreditCardRepository creditCardRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
 
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    Role role;
 
 
     @BeforeEach
@@ -48,10 +55,11 @@ public class CreditCardControllerTests {
         creditCardRepository.deleteAll();
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         Address address = new Address("Roma n25", "Madrid", 06754);
-        AccountHolder user1 = new AccountHolder("maria", "password", LocalDate.parse("1987-06-02"), address, null );
-        AccountHolder user2 = new AccountHolder("pepe", "password", LocalDate.parse("1987-06-02"), address, null );
+        AccountHolder user1 = new AccountHolder("maria", "password", LocalDate.parse("1987-06-02"), address, null, role );
+        AccountHolder user2 = new AccountHolder("pepe", "password", LocalDate.parse("1987-06-02"), address, null, role );
 
         accountHolderRepository.saveAll(List.of(user1, user2));
+        role = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
     }
 
     @AfterEach
@@ -59,16 +67,6 @@ public class CreditCardControllerTests {
         accountHolderRepository.deleteAll();
         creditCardRepository.deleteAll();
     }
-
-    //REQUIRED
-    //Balance --
-    //Primary Owner --
-    //penaltyFee --
-
-    //OPTIONAL
-    //secundaryOwner --
-    //creditLimit --
-    //interestRate --
 
     @Test
     void post_CreditCardAccount_WorksOk() throws Exception {

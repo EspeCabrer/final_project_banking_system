@@ -4,6 +4,9 @@ import com.ironhack.banksystem.account.accountTypes.checking.DTO.AddCheckingAcco
 import com.ironhack.banksystem.account.accountTypes.checking.DTO.CheckingDTO;
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.money.Money;
+import com.ironhack.banksystem.role.EnumRole;
+import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleRepository;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -32,10 +35,16 @@ public class StudentCheckingServiceTests {
     @Autowired
     StudentCheckingRepository studentCheckingRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
+    Role role;
+
     @BeforeEach
     public void setUp(){
         studentCheckingRepository.deleteAll();
         accountHolderRepository.deleteAll();
+        role = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
     }
 
     @AfterEach
@@ -49,7 +58,7 @@ public class StudentCheckingServiceTests {
     @DisplayName("Save new student checking account - works ok")
     void add_WorksOk() {
         Address address = new Address("Roma n25", "Madrid", 06754);
-        AccountHolder user = new AccountHolder("pepe2000", "password", LocalDate.parse("2000-06-02"), address, null );
+        AccountHolder user = new AccountHolder("pepe2000", "password", LocalDate.parse("2000-06-02"), address, null, role );
         accountHolderRepository.save(user);
         CheckingDTO accountInfo = new CheckingDTO(new BigDecimal("2000"), "pepe87", "anton763", "secretKey");
 

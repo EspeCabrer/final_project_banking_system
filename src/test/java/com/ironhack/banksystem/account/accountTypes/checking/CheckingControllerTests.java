@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.banksystem.account.accountTypes.checking.DTO.CheckingDTO;
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.money.Money;
+import com.ironhack.banksystem.role.EnumRole;
+import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleRepository;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -12,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -20,6 +24,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -39,11 +44,16 @@ public class CheckingControllerTests {
     private AccountHolderRepository accountHolderRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
 
     ObjectMapper objectMapper = new ObjectMapper();
     Address address;
+
+    Role role;
 
     @BeforeEach
     public void setUp() {
@@ -52,6 +62,7 @@ public class CheckingControllerTests {
         checkingRepository.deleteAll();
         studentCheckingRepository.deleteAll();
         accountHolderRepository.deleteAll();
+        role = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
     }
 
     @AfterEach
@@ -63,8 +74,9 @@ public class CheckingControllerTests {
 
     @Test
     void post_CheckingAccount_validValues_WorksOk() throws Exception {
-        AccountHolder primaryOwner = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null );
-        AccountHolder secundaryOwner = new AccountHolder("maria63", "password", LocalDate.parse("1984-02-05"), address, null );
+
+       AccountHolder primaryOwner = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null, role );
+       AccountHolder secundaryOwner = new AccountHolder("maria63", "password", LocalDate.parse("1984-02-05"), address, null, role );
 
         accountHolderRepository.save(primaryOwner);
         accountHolderRepository.save(secundaryOwner);
@@ -87,7 +99,7 @@ public class CheckingControllerTests {
 
     @Test
     void post_CheckingAccount_invalidSecondOwnerUserName_ThrowsError() throws Exception {
-        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null );
+        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null, role );
         accountHolderRepository.save(user);
         CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", "anton763", "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
@@ -98,7 +110,7 @@ public class CheckingControllerTests {
 
     @Test
     void post_CheckingAccount_nullSecondOwnerUserName_WorksOk() throws Exception {
-        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null );
+        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null, role );
         accountHolderRepository.save(user);
         CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", null, "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
@@ -109,7 +121,7 @@ public class CheckingControllerTests {
 
     @Test
     void post_CheckingAccount_userAgeLess24_createStudentCheckingAccount_WorksOk() throws Exception {
-        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("2000-06-02"), address, null );
+        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("2000-06-02"), address, null, role );
         accountHolderRepository.save(user);
         CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", null, "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
@@ -123,7 +135,7 @@ public class CheckingControllerTests {
 
     @Test
     void post_CheckingAccount_userAgeGreater24_createCheckingAccount_WorksOk() throws Exception {
-        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1985-06-02"), address, null );
+        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1985-06-02"), address, null, role );
         accountHolderRepository.save(user);
         CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", null, "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);

@@ -2,6 +2,9 @@ package com.ironhack.banksystem.account.accountTypes.savings;
 
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.money.Money;
+import com.ironhack.banksystem.role.EnumRole;
+import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleRepository;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -25,10 +28,16 @@ public class SavingsRepositoryTests {
     @Autowired
     AccountHolderRepository accountHolderRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
+    Role role;
+
     @BeforeEach
     public void setUp(){
         savingsRepository.deleteAll();
         accountHolderRepository.deleteAll();
+        role = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
     }
     @AfterEach
     public void clean(){
@@ -39,7 +48,7 @@ public class SavingsRepositoryTests {
     @Test
     void addSavingAccount_worksOk() {
         Address address = new Address("Roma n25", "Madrid", 06754);
-        AccountHolder user = new AccountHolder("antonia34", "password", LocalDate.parse("2000-06-02"), address, null );
+        AccountHolder user = new AccountHolder("antonia34", "password", LocalDate.parse("2000-06-02"), address, null, role );
         accountHolderRepository.save(user);
         Savings savings = savingsRepository.save(new Savings(new Money(BigDecimal.valueOf(3000)), user, null,
                 null, null, "secretKey"));

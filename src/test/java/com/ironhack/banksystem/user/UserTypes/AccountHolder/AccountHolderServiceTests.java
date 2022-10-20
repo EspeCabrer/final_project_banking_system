@@ -1,6 +1,9 @@
 package com.ironhack.banksystem.user.UserTypes.AccountHolder;
 
 import com.ironhack.banksystem.address.Address;
+import com.ironhack.banksystem.role.EnumRole;
+import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,13 +26,18 @@ public class AccountHolderServiceTests {
     @Autowired
     AccountHolderRepository accountHolderRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     Address address;
+    Role role;
+
 
     @BeforeEach
     void setUp() {
         accountHolderRepository.deleteAll();
         address = new Address("Roma n25", "Madrid", 06754);
-
+        role = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
     }
 
     @AfterEach
@@ -64,7 +72,7 @@ public class AccountHolderServiceTests {
     @DisplayName("Find accountHolder by username - works ok")
     void findByUsername_WorksOk()  {
 
-        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null );
+        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null, role );
         accountHolderRepository.save(user);
 
         Optional<AccountHolder> optionalAccountHolder = accountHolderRepository.findByUsername("pepe87");

@@ -2,6 +2,9 @@ package com.ironhack.banksystem.account.accountTypes.checking;
 
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.money.Money;
+import com.ironhack.banksystem.role.EnumRole;
+import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleRepository;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -27,9 +30,16 @@ public class CheckingRepositoryTests {
     @Autowired
     AccountHolderRepository accountHolderRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
+    Role role;
+
     @BeforeEach
     void setUp() {
         checkingRepository.deleteAll();
+        role = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
+
     }
 
     @AfterEach
@@ -41,7 +51,7 @@ public class CheckingRepositoryTests {
     @DisplayName("Save new checking account - works ok")
     void addCheckingAccount() {
         Address address = new Address("Roma n25", "Madrid", 06754);
-        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null );
+        AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null, role );
         accountHolderRepository.save(user);
         Checking account = new Checking(new Money(new BigDecimal(2000)), user, null, "secretKey");
 

@@ -2,10 +2,14 @@ package com.ironhack.banksystem.account.accountTypes.savings;
 
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.money.Money;
+import com.ironhack.banksystem.role.EnumRole;
+import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleRepository;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
@@ -17,12 +21,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 public class SavingsSettersTests {
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     AccountHolder user;
 
     @BeforeEach
     public void setUp(){
+        Role role = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
         Address address = new Address("Roma n25", "Madrid", 06754);
-        user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null );
+        user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null, role );
     }
 
     @Test

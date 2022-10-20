@@ -3,6 +3,9 @@ package com.ironhack.banksystem.account.accountTypes.savings;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.banksystem.address.Address;
+import com.ironhack.banksystem.role.EnumRole;
+import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleRepository;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -33,9 +36,13 @@ public class SavingsControllerTests {
     SavingsRepository savingsRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
 
+    Role role;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -46,8 +53,9 @@ public class SavingsControllerTests {
         accountHolderRepository.deleteAll();
         savingsRepository.deleteAll();
         Address address = new Address("Roma n25", "Madrid", 06754);
-        AccountHolder user = new AccountHolder("maria", "password", LocalDate.parse("1987-06-02"), address, null );
+        AccountHolder user = new AccountHolder("maria", "password", LocalDate.parse("1987-06-02"), address, null, role );
         accountHolderRepository.save(user);
+        role = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
     }
 
     @AfterEach

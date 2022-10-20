@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -36,12 +38,12 @@ public class DemoApplication implements CommandLineRunner {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
-	public static void main(String[] args) {
+	public static void main(String[] args)  {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 
 	@Override
-	public void run(String... args) throws Exception {
+	public void run(String... args)  {
 		Address address = new Address("Roma n25", "Madrid", 06754);
 
 		roleRepository.saveAll(List.of(new Role(EnumRole.ADMIN), new Role(EnumRole.ACCOUNT_HOLDER)));
