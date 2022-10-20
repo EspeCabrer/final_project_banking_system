@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class CreditCard extends Account {
 
     @DecimalMax("0.2")
