@@ -48,8 +48,8 @@ public class DemoApplication implements CommandLineRunner {
 		Role accountHolderRole = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
 		Role adminRole = roleRepository.findByName(EnumRole.ADMIN).get();
 		AccountHolder user1 = accountHolderRepository.save(new AccountHolder("maria", passwordEncoder.encode("password"), LocalDate.parse("1987-06-02"), address, null, accountHolderRole ));
-		AccountHolder user2 = accountHolderRepository.save(new AccountHolder("pepe", passwordEncoder.encode("password"), LocalDate.parse("1987-06-02"), address, null, adminRole ));
+		AccountHolder user2 = accountHolderRepository.save(new AccountHolder("pepe", passwordEncoder.encode("password"), LocalDate.parse("1980-03-05"), address, null, adminRole ));
 		Savings savings = savingsRepository.save(new Savings(new Money(BigDecimal.valueOf(3000)), user1, null, null, null, passwordEncoder.encode("secretKey")));
-		Savings savings1 = savingsRepository.save(new Savings(new Money(BigDecimal.valueOf(3000)), user2, null, null, null, passwordEncoder.encode("secretKey")));
+		Savings savings1 = savingsRepository.save(new Savings(new Money(BigDecimal.valueOf(1500)), user2, null, null, null, passwordEncoder.encode("secretKey")));
 	}
 }
