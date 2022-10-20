@@ -22,7 +22,6 @@ public class CreditCardService {
                         new Money(creditCardDTO.getBalance()),
                         primaryOwner,
                         secondaryOwner,
-                        creditCardDTO.getPenaltyFee(),
                         creditCardDTO.getInterestRate(),
                         creditLimit)
         );

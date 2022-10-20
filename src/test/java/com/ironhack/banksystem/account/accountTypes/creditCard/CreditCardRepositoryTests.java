@@ -42,7 +42,7 @@ public class CreditCardRepositoryTests {
         Address address = new Address("Roma n25", "Madrid", 06754);
         AccountHolder user = new AccountHolder("antonia34", "password", LocalDate.parse("2000-06-02"), address, null );
         accountHolderRepository.save(user);
-        CreditCard creditCard = creditCardRepository.save(new CreditCard(new Money(BigDecimal.valueOf(3000)), user, null, BigDecimal.valueOf(0.6),
+        CreditCard creditCard = creditCardRepository.save(new CreditCard(new Money(BigDecimal.valueOf(3000)), user, null,
                 null, null));
 
         Optional<CreditCard> creditCardOptional = creditCardRepository.findById(creditCard.getId());

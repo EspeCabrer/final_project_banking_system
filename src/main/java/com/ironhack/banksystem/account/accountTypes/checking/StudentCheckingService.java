@@ -23,7 +23,6 @@ public class StudentCheckingService {
                             new Money(checkingDTO.getBalance()),
                             primaryOwner,
                             secondaryOwner,
-                            checkingDTO.getPenaltyFee(),
                             passwordEncoder.encode(checkingDTO.getSecretKey())
                     )
         );
@@ -38,7 +37,7 @@ public class StudentCheckingService {
                 studentChecking.getBalance(),
                 studentChecking.getPrimaryOwner().getUsername(),
                 secondaryOwnerUserName,
-                studentChecking.getPenaltyFee(),
+                studentChecking.getPENALTY_FEE(),
                 studentChecking.getCREATION_DATE());
             }
 }

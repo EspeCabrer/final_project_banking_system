@@ -35,12 +35,11 @@ public abstract class Account {
     @JsonIgnore
     private AccountHolder secondaryOwner;
 
-    private BigDecimal penaltyFee;
+    private final BigDecimal PENALTY_FEE = BigDecimal.valueOf(40);
 
-    public Account(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal penaltyFee) {
+    public Account(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
         this.balance = balance;
         this.primaryOwner = primaryOwner;
         this.secondaryOwner = secondaryOwner;
-        this.penaltyFee = penaltyFee;
     }
 }

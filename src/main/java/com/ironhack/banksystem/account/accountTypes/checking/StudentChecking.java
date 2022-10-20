@@ -22,8 +22,8 @@ public class StudentChecking extends Account {
     private final Date CREATION_DATE = new Date(System.currentTimeMillis());
     private EnumStatusAccount status;
 
-    public StudentChecking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal penaltyFee, String secretKey) {
-        super(balance, primaryOwner, secondaryOwner, penaltyFee);
+    public StudentChecking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
+        super(balance, primaryOwner, secondaryOwner);
         this.secretKey = secretKey;
     }
 }

@@ -24,7 +24,4 @@ public class CreditCardDTO {
     //optional
     @DecimalMax(value = "0.5", inclusive = true)
     private BigDecimal interestRate;
-    @NotNull(message = "The penaltyFee is required.")
-    private BigDecimal penaltyFee;
-
 }

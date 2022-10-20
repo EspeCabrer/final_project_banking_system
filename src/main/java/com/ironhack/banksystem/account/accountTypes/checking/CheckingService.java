@@ -28,7 +28,6 @@ public class CheckingService {
                         new Money(checkingDTO.getBalance()),
                         primaryOwner,
                         secondaryOwner,
-                        checkingDTO.getPenaltyFee(),
                         passwordEncoder.encode(checkingDTO.getSecretKey())
                 )
         );
@@ -43,7 +42,7 @@ public class CheckingService {
                 checking.getBalance(),
                 checking.getPrimaryOwner().getUsername(),
                 secondaryOwnerUserName,
-                checking.getPenaltyFee(),
+                checking.getPENALTY_FEE(),
                 checking.getCREATION_DATE());
     }
 }

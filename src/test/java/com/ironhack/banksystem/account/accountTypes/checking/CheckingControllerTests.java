@@ -68,7 +68,7 @@ public class CheckingControllerTests {
 
         accountHolderRepository.save(primaryOwner);
         accountHolderRepository.save(secundaryOwner);
-        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", "maria63", new BigDecimal(0.3), "secretKey");
+        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", "maria63", "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
         MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -78,7 +78,7 @@ public class CheckingControllerTests {
 
     @Test
     void post_CheckingAccount_invalidPrimaryOwnerUserName_ThrowsError() throws Exception {
-        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "anto76", null, new BigDecimal(0.3), "secretKey");
+        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "anto76", null, "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
         MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -89,7 +89,7 @@ public class CheckingControllerTests {
     void post_CheckingAccount_invalidSecondOwnerUserName_ThrowsError() throws Exception {
         AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null );
         accountHolderRepository.save(user);
-        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", "anton763", new BigDecimal(0.3), "secretKey");
+        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", "anton763", "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
         MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -100,7 +100,7 @@ public class CheckingControllerTests {
     void post_CheckingAccount_nullSecondOwnerUserName_WorksOk() throws Exception {
         AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null );
         accountHolderRepository.save(user);
-        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", null, new BigDecimal(0.3), "secretKey");
+        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", null, "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
         MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -111,7 +111,7 @@ public class CheckingControllerTests {
     void post_CheckingAccount_userAgeLess24_createStudentCheckingAccount_WorksOk() throws Exception {
         AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("2000-06-02"), address, null );
         accountHolderRepository.save(user);
-        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", null, new BigDecimal(0.3), "secretKey");
+        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", null, "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
         MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -125,7 +125,7 @@ public class CheckingControllerTests {
     void post_CheckingAccount_userAgeGreater24_createCheckingAccount_WorksOk() throws Exception {
         AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1985-06-02"), address, null );
         accountHolderRepository.save(user);
-        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", null, new BigDecimal(0.3), "secretKey");
+        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", null, "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
         MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))

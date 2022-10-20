@@ -41,7 +41,7 @@ public class SavingsRepositoryTests {
         Address address = new Address("Roma n25", "Madrid", 06754);
         AccountHolder user = new AccountHolder("antonia34", "password", LocalDate.parse("2000-06-02"), address, null );
         accountHolderRepository.save(user);
-        Savings savings = savingsRepository.save(new Savings(new Money(BigDecimal.valueOf(3000)), user, null, BigDecimal.valueOf(0.6),
+        Savings savings = savingsRepository.save(new Savings(new Money(BigDecimal.valueOf(3000)), user, null,
                 null, null, "secretKey"));
 
         Optional<Savings> savingsOptional = savingsRepository.findById(savings.getId());

@@ -45,7 +45,7 @@ public class SavingsServiceTests {
         Address address = new Address("Roma n25", "Madrid", 06754);
         AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null );
         accountHolderRepository.save(user);
-        SavingsDTO savingsDTO = new SavingsDTO(BigDecimal.valueOf(1000), "pepe87", null, BigDecimal.valueOf(0.4), null, null, "secretKey");
+        SavingsDTO savingsDTO = new SavingsDTO(BigDecimal.valueOf(1000), "pepe87", null,null, null, "secretKey");
 
         Savings savingsAccountSaved = savingsService.add(savingsDTO, user, null);
         assertTrue(savingsRepository.findById(savingsAccountSaved.getId()).isPresent());

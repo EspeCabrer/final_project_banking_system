@@ -19,8 +19,6 @@ public class CheckingDTO {
     @NotBlank(message = "The primaryOwnerUserName is required.")
     private String primaryOwnerUserName;
     private String secondaryOwnerUserName;
-    @NotNull(message = "The penaltyFee is required.")
-    private BigDecimal penaltyFee;
     @NotBlank(message = "The secretKey is required.")
     private String secretKey;
 }

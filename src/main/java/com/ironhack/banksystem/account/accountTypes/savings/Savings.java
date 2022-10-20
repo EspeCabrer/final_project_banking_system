@@ -32,8 +32,8 @@ public class Savings extends Account {
 
     private EnumStatusAccount status = EnumStatusAccount.ACTIVE;
 
-    public Savings(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal penaltyFee, BigDecimal interestRate, Money minimumBalance, String secretKey) {
-        super(balance, primaryOwner, secondaryOwner, penaltyFee);
+    public Savings(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal interestRate, Money minimumBalance, String secretKey) {
+        super(balance, primaryOwner, secondaryOwner);
         setInterestRate(interestRate);
         setMinimumBalance(minimumBalance);
         this.secretKey = secretKey;

@@ -50,7 +50,7 @@ public class CreditCardServiceTests {
         Address address = new Address("Roma n25", "Madrid", 06754);
         AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null );
         accountHolderRepository.save(user);
-        CreditCardDTO creditCardDTO = new CreditCardDTO(BigDecimal.valueOf(2000), "maria", null, BigDecimal.valueOf(300), BigDecimal.valueOf(0.2), BigDecimal.valueOf(20));
+        CreditCardDTO creditCardDTO = new CreditCardDTO(BigDecimal.valueOf(2000), "maria", null, BigDecimal.valueOf(300), BigDecimal.valueOf(0.2));
 
         CreditCard creditCardSaved = creditCardService.add(creditCardDTO, user, null);
         assertTrue(creditCardRepository.findById(creditCardSaved.getId()).isPresent());

@@ -18,8 +18,6 @@ public class SavingsDTO {
     private String primaryOwnerUserName;
     //optional
     private String secondaryOwnerUserName;
-    @NotNull(message = "The penalty fee is required.")
-    private BigDecimal penaltyFee;
     //optional
     @DecimalMax(value = "0.5", inclusive = true)
     private BigDecimal interestRate;
@@ -36,7 +34,6 @@ public class SavingsDTO {
                 "balance=" + balance +
                 ", primaryOwnerUserName='" + primaryOwnerUserName + '\'' +
                 ", secondaryOwnerUserName='" + secondaryOwnerUserName + '\'' +
-                ", penaltyFee=" + penaltyFee +
                 ", interestRate=" + interestRate +
                 ", minimumBalance=" + minimumBalance +
                 ", secretKey='" + secretKey + '\'' +

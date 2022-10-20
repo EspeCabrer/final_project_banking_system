@@ -32,7 +32,7 @@ public class SavingsSettersTests {
         BigDecimal interestRate = new BigDecimal("0.6");
 
         assertThrows(IllegalArgumentException.class,
-                ()-> new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.4"),  interestRate, new Money(), "secretKey"));
+                ()-> new Savings(new Money(new BigDecimal(1000)), user, null,  interestRate, new Money(), "secretKey"));
     }
 
     @Test
@@ -44,10 +44,10 @@ public class SavingsSettersTests {
 
 
         assertThrows(IllegalArgumentException.class,
-                ()-> new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.4"), new BigDecimal("0.3"), minimumBalanceGreaterThan1000, "secretKey"));
+                ()-> new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.3"), minimumBalanceGreaterThan1000, "secretKey"));
 
         assertThrows(IllegalArgumentException.class,
-                ()-> new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.4"),new BigDecimal("0.3"), minimumBalanceLessThan100, "secretKey"));
+                ()-> new Savings(new Money(new BigDecimal(1000)), user, null,new BigDecimal("0.3"), minimumBalanceLessThan100, "secretKey"));
     }
 
     @Test
@@ -55,7 +55,7 @@ public class SavingsSettersTests {
     public void setMinimumBalance_NullValue_AssignDefaultValue(){
 
         Money minimumBalance = null;
-        Savings savings = new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.4"), new BigDecimal("0.3"), minimumBalance, "secretKey");
+        Savings savings = new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.3"), minimumBalance, "secretKey");
 
         assertEquals(new Money(BigDecimal.valueOf(1000)), savings.getMinimumBalance());
     }
@@ -65,7 +65,7 @@ public class SavingsSettersTests {
     public void setInterestRate_NullValue_AssignDefaultValue(){
 
         BigDecimal interestRate = null;
-        Savings savings = new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.4"), interestRate, new Money(new BigDecimal("150")), "secretKey");
+        Savings savings = new Savings(new Money(new BigDecimal(1000)), user, null, interestRate, new Money(new BigDecimal("150")), "secretKey");
 
         assertEquals(BigDecimal.valueOf(0.0025), savings.getInterestRate());
     }

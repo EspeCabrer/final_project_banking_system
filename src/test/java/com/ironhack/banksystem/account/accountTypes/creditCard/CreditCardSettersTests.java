@@ -34,10 +34,10 @@ public class CreditCardSettersTests {
         BigDecimal interestRateLessThanMin = BigDecimal.valueOf(0.09);
 
         assertThrows(IllegalArgumentException.class,
-                ()-> new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, BigDecimal.valueOf(0.4), interestRateGreaterThanMax, new Money(BigDecimal.valueOf(1000))));
+                ()-> new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, interestRateGreaterThanMax, new Money(BigDecimal.valueOf(1000))));
 
         assertThrows(IllegalArgumentException.class,
-                ()-> new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, BigDecimal.valueOf(0.4), interestRateLessThanMin, new Money(BigDecimal.valueOf(1000))));
+                ()-> new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, interestRateLessThanMin, new Money(BigDecimal.valueOf(1000))));
 
     }
 
@@ -46,7 +46,7 @@ public class CreditCardSettersTests {
     public void setInterestRate_NullValue_AssignDefaultValue(){
 
         BigDecimal interestRate = null;
-        CreditCard creditCard = new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, BigDecimal.valueOf(0.4), interestRate, new Money(BigDecimal.valueOf(1000)));
+        CreditCard creditCard = new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, interestRate, new Money(BigDecimal.valueOf(1000)));
 
         assertEquals(BigDecimal.valueOf(0.2), creditCard.getInterestRate());
     }
@@ -59,10 +59,10 @@ public class CreditCardSettersTests {
         Money creditLimitGreaterLessThanMin = new Money(BigDecimal.valueOf(99.9));
 
         assertThrows(IllegalArgumentException.class,
-                ()-> new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, BigDecimal.valueOf(0.4), null, creditLimitGreaterLessThanMin));
+                ()-> new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, null, creditLimitGreaterLessThanMin));
 
         assertThrows(IllegalArgumentException.class,
-                ()-> new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, BigDecimal.valueOf(0.4), null, creditLimitGreaterThanMax));
+                ()-> new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, null, creditLimitGreaterThanMax));
     }
 
     @Test
@@ -70,7 +70,7 @@ public class CreditCardSettersTests {
     public void setCreditLimit_NullValue_AssignDefaultValue(){
 
         Money creditLimit = null;
-        CreditCard creditCard = new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, BigDecimal.valueOf(0.4), null, creditLimit);
+        CreditCard creditCard = new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, null, creditLimit);
 
         assertEquals(new Money(BigDecimal.valueOf(100)), creditCard.getCreditLimit());
     }

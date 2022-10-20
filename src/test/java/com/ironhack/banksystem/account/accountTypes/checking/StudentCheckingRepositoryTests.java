@@ -45,7 +45,7 @@ public class StudentCheckingRepositoryTests {
         accountHolderRepository.save(user);
 
 
-        StudentChecking account = new StudentChecking(new Money(new BigDecimal(2000)), user, null, new BigDecimal("0.4"), "secretKey");
+        StudentChecking account = new StudentChecking(new Money(new BigDecimal(2000)), user, null, "secretKey");
         StudentChecking savedAccount = studentCheckingRepository.save(account);
         Optional<StudentChecking> optionalStudentChecking = studentCheckingRepository.findById(savedAccount.getId());
 

@@ -58,7 +58,7 @@ public class SavingsControllerTests {
 
     @Test
     void post_SavingsAccount_WorksOk() throws Exception {
-        SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000), "maria", "maria", BigDecimal.valueOf(0.3), BigDecimal.valueOf(0.2), BigDecimal.valueOf(400), "secretKey");
+        SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000), "maria", "maria", BigDecimal.valueOf(0.3), BigDecimal.valueOf(200), "secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
 
         mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -72,7 +72,7 @@ public class SavingsControllerTests {
     @Test
     void post_SavingsAccount_NullBalance_ThrowsError() throws Exception {
 
-        SavingsDTO savingsDto = new SavingsDTO(null, "maria", "maria", BigDecimal.valueOf(0.3), BigDecimal.valueOf(0.2), BigDecimal.valueOf(400), "secretKey");
+        SavingsDTO savingsDto = new SavingsDTO(null, "maria", "maria", BigDecimal.valueOf(0.3), BigDecimal.valueOf(200), "secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
 
         mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -82,7 +82,7 @@ public class SavingsControllerTests {
     @Test
     void post_SavingsAccount_NullPrimaryOwner_ThrowsError() throws Exception {
 
-        SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000), null, "maria", BigDecimal.valueOf(0.3), BigDecimal.valueOf(0.2), BigDecimal.valueOf(400), "secretKey");
+        SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000), null, "maria", BigDecimal.valueOf(0.3), BigDecimal.valueOf(200), "secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
 
         mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -92,27 +92,18 @@ public class SavingsControllerTests {
     @Test
     void post_SavingsAccount_nullSecondaryOwner_WorksOk() throws Exception {
 
-        SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000), "maria", null, BigDecimal.valueOf(0.3), BigDecimal.valueOf(0.2), BigDecimal.valueOf(400), "secretKey");
+        SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000), "maria", null, BigDecimal.valueOf(0.3), BigDecimal.valueOf(200), "secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
 
         mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
     }
 
-    @Test
-    void post_SavingsAccount_nullPenaltyFee_ThrowsError() throws Exception {
-
-        SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000),  "maria", null, null, BigDecimal.valueOf(0.2), BigDecimal.valueOf(400), "secretKey");
-        String body = objectMapper.writeValueAsString(savingsDto);
-
-        mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest()).andReturn();
-    }
 
     @Test
     void post_SavingsAccount_nullInterestRate_WorksOk() throws Exception {
 
-        SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000),  "maria", null, BigDecimal.valueOf(0.3), null, BigDecimal.valueOf(400), "secretKey");
+        SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000),  "maria", null, BigDecimal.valueOf(0.3), null, "secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
 
         mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -122,7 +113,7 @@ public class SavingsControllerTests {
     @Test
     void post_SavingsAccount_nullMinimumBalance_WorksOk() throws Exception {
 
-        SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000),  "maria", null, BigDecimal.valueOf(0.3), BigDecimal.valueOf(0.2), null, "secretKey");
+        SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000),  "maria", null, BigDecimal.valueOf(0.3), null, "secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
 
         mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -132,7 +123,7 @@ public class SavingsControllerTests {
     @Test
     void post_SavingsAccount_MinimumBalanceGreaterThanMaxValue_ThrowError() throws Exception {
 
-        SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000),  "maria", null, BigDecimal.valueOf(0.3), BigDecimal.valueOf(0.2), BigDecimal.valueOf(1000.5),"secretKey");
+        SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000),  "maria", null, BigDecimal.valueOf(0.3), BigDecimal.valueOf(1000.5),"secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
 
         mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -142,7 +133,7 @@ public class SavingsControllerTests {
     @Test
     void post_SavingsAccount_MinimumBalanceLessThanMinValue_ThrowError() throws Exception {
 
-        SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000),  "maria", null, BigDecimal.valueOf(0.3), BigDecimal.valueOf(0.2), BigDecimal.valueOf(50), "secretKey");
+        SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000),  "maria", null, BigDecimal.valueOf(0.3), BigDecimal.valueOf(50), "secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
 
         mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -152,9 +143,9 @@ public class SavingsControllerTests {
     @Test
     void post_SavingsAccount_NullOrBlankSecretKey_ThrowError() throws Exception {
 
-        SavingsDTO savingsDto1 = new SavingsDTO(BigDecimal.valueOf(2000),  "maria", null, BigDecimal.valueOf(0.3), BigDecimal.valueOf(0.2), BigDecimal.valueOf(400), "");
+        SavingsDTO savingsDto1 = new SavingsDTO(BigDecimal.valueOf(2000),  "maria", null, BigDecimal.valueOf(0.3), BigDecimal.valueOf(400), "");
         String body1 = objectMapper.writeValueAsString(savingsDto1);
-        SavingsDTO savingsDto2 = new SavingsDTO(BigDecimal.valueOf(2000), "maria", null, BigDecimal.valueOf(0.3), BigDecimal.valueOf(0.2), BigDecimal.valueOf(400), null);
+        SavingsDTO savingsDto2 = new SavingsDTO(BigDecimal.valueOf(2000), "maria", null, BigDecimal.valueOf(0.3), BigDecimal.valueOf(400), null);
         String body2 = objectMapper.writeValueAsString(savingsDto2);
 
         mockMvc.perform(post("/accounts/new/savings").content(body1).contentType(MediaType.APPLICATION_JSON))

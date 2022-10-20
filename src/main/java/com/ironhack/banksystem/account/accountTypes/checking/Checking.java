@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -19,13 +22,15 @@ import java.util.Date;
 public class Checking extends Account {
 
     private String secretKey;
-    private final Money MINIMUM_BALANCE = new Money(new BigDecimal(250));
-    private final BigDecimal MONTHLY_MAINTENANCE_FEE = new BigDecimal(12);
+    @AttributeOverride(name = "amount", column = @Column(name = "minimum_balance_amount"))
+    @AttributeOverride(name = "currency", column = @Column(name = "minimum_balance_currency"))
+    private final Money MINIMUM_BALANCE = new Money(BigDecimal.valueOf(250));
+    private final BigDecimal MONTHLY_MAINTENANCE_FEE = BigDecimal.valueOf(12);
     private final Date CREATION_DATE = new Date(System.currentTimeMillis());
     private EnumStatusAccount status = EnumStatusAccount.ACTIVE;
 
-    public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal penaltyFee, String secretKey) {
-        super(balance, primaryOwner, secondaryOwner, penaltyFee);
+    public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
+        super(balance, primaryOwner, secondaryOwner);
         this.secretKey = secretKey;
     }
 }
