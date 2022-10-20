@@ -44,9 +44,9 @@ public class CreditCardControllerTests {
 
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         accountHolderRepository.deleteAll();
         creditCardRepository.deleteAll();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         Address address = new Address("Roma n25", "Madrid", 06754);
         AccountHolder user1 = new AccountHolder("maria", "password", LocalDate.parse("1987-06-02"), address, null );
         AccountHolder user2 = new AccountHolder("pepe", "password", LocalDate.parse("1987-06-02"), address, null );

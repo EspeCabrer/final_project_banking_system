@@ -14,13 +14,13 @@ import java.math.BigDecimal;
 @Setter
 public class CheckingDTO {
 
-    @NotNull
-    private Money balance;
-    @NotBlank
+    @NotNull(message = "The balance is required.")
+    private BigDecimal balance;
+    @NotBlank(message = "The primaryOwnerUserName is required.")
     private String primaryOwnerUserName;
     private String secondaryOwnerUserName;
-    @NotNull
+    @NotNull(message = "The penaltyFee is required.")
     private BigDecimal penaltyFee;
-    @NotBlank
+    @NotBlank(message = "The secretKey is required.")
     private String secretKey;
 }

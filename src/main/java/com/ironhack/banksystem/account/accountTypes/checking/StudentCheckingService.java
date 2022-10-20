@@ -2,6 +2,7 @@ package com.ironhack.banksystem.account.accountTypes.checking;
 
 import com.ironhack.banksystem.account.accountTypes.checking.DTO.AddCheckingAccountReturnedDTO;
 import com.ironhack.banksystem.account.accountTypes.checking.DTO.CheckingDTO;
+import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +20,7 @@ public class StudentCheckingService {
     public AddCheckingAccountReturnedDTO add(CheckingDTO checkingDTO, AccountHolder primaryOwner, AccountHolder secondaryOwner ){
         StudentChecking studentChecking = studentCheckingRepository.save(
                     new StudentChecking(
-                            checkingDTO.getBalance(),
+                            new Money(checkingDTO.getBalance()),
                             primaryOwner,
                             secondaryOwner,
                             checkingDTO.getPenaltyFee(),

@@ -16,7 +16,7 @@ public class CreditCardDTO {
 
     @NotNull(message = "The balance is required.")
     private BigDecimal balance;
-    @NotBlank(message = "The primary owner user name is required.")
+    @NotBlank(message = "The primaryOwnerUserName is required.")
     private String primaryOwnerUserName;
     //optional
     private String secondaryOwnerUserName;
@@ -24,7 +24,7 @@ public class CreditCardDTO {
     //optional
     @DecimalMax(value = "0.5", inclusive = true)
     private BigDecimal interestRate;
-    @NotNull(message = "The penalty fee is required.")
+    @NotNull(message = "The penaltyFee is required.")
     private BigDecimal penaltyFee;
 
 }

@@ -13,6 +13,10 @@ public class CreditCardService {
 
     public CreditCard add(CreditCardDTO creditCardDTO, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
 
+        Money creditLimit = null;
+        if (creditCardDTO.getCreditLimit() != null){
+            creditLimit = new Money(creditCardDTO.getCreditLimit());
+        }
 
         return creditCardRepository.save(new CreditCard(
                         new Money(creditCardDTO.getBalance()),
@@ -20,7 +24,7 @@ public class CreditCardService {
                         secondaryOwner,
                         creditCardDTO.getPenaltyFee(),
                         creditCardDTO.getInterestRate(),
-                        new Money(creditCardDTO.getCreditLimit()))
+                        creditLimit)
         );
     }
 }

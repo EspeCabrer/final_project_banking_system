@@ -2,6 +2,7 @@ package com.ironhack.banksystem.account.accountTypes.checking;
 
 import com.ironhack.banksystem.account.accountTypes.checking.DTO.AddCheckingAccountReturnedDTO;
 import com.ironhack.banksystem.account.accountTypes.checking.DTO.CheckingDTO;
+import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class CheckingService {
     public AddCheckingAccountReturnedDTO add(CheckingDTO checkingDTO, AccountHolder primaryOwner, AccountHolder secondaryOwner ){
         Checking checking = checkingRepository.save(
                 new Checking(
-                        checkingDTO.getBalance(),
+                        new Money(checkingDTO.getBalance()),
                         primaryOwner,
                         secondaryOwner,
                         checkingDTO.getPenaltyFee(),

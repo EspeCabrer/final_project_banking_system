@@ -51,7 +51,7 @@ public class StudentCheckingServiceTests {
         Address address = new Address("Roma n25", "Madrid", 06754);
         AccountHolder user = new AccountHolder("pepe2000", "password", LocalDate.parse("2000-06-02"), address, null );
         accountHolderRepository.save(user);
-        CheckingDTO accountInfo = new CheckingDTO(new Money(new BigDecimal("2000")), "pepe87", "anton763", new BigDecimal(0.3), "secretKey");
+        CheckingDTO accountInfo = new CheckingDTO(new BigDecimal("2000"), "pepe87", "anton763", new BigDecimal(0.3), "secretKey");
 
         AddCheckingAccountReturnedDTO studentCheckingSaved = studentCheckingService.add(accountInfo, user, null);
 
