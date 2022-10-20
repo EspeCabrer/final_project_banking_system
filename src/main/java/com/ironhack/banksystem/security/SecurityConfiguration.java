@@ -1,5 +1,6 @@
 package com.ironhack.banksystem.security;
 
+import com.ironhack.banksystem.role.EnumRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +36,9 @@ public class SecurityConfiguration {
         httpSecurity.httpBasic();
 
         httpSecurity.authorizeRequests()
-                .mvcMatchers(HttpMethod.GET, "/users").hasAnyRole("USER")
+                //.mvcMatchers(HttpMethod.GET, "/users").hasAnyRole("USER")
+                .mvcMatchers(HttpMethod.GET, "/account/**").hasAnyRole(String.valueOf(EnumRole.ACCOUNT_HOLDER))
+                .mvcMatchers(HttpMethod.GET, "/users").hasAnyRole(String.valueOf(EnumRole.ADMIN))
                 .mvcMatchers(HttpMethod.GET,"/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll();
 

@@ -2,10 +2,14 @@ package com.ironhack.banksystem.user.UserTypes.AccountHolder;
 
 import com.ironhack.banksystem.account.Account;
 import com.ironhack.banksystem.address.Address;
+import com.ironhack.banksystem.role.EnumRole;
+import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleRepository;
 import com.ironhack.banksystem.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -39,10 +43,12 @@ public class AccountHolder extends User {
     private Set<Account> accountsBySecondOwner;
 
 
-    public AccountHolder(String username, String password, LocalDate dateBirth, Address primaryAddress, Address mailingAddress) {
-        super(username, password);
+    public AccountHolder(String username, String password, LocalDate dateBirth, Address primaryAddress, Address mailingAddress, Role role) {
+        super(username, password, role);
         this.dateBirth = dateBirth;
         this.primaryAddress = primaryAddress;
         this.mailingAddress = mailingAddress;
     }
+
+
 }

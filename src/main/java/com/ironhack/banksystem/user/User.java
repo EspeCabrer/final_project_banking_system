@@ -2,10 +2,13 @@ package com.ironhack.banksystem.user;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ironhack.banksystem.role.EnumRole;
 import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleRepository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,9 +16,9 @@ import java.util.List;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
-@Setter
 @NoArgsConstructor
 public abstract class User {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,17 +30,24 @@ public abstract class User {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="user_role",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")}
-    )
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name="role_id")
     @JsonIgnore
-    private List<Role> roles;
+    private Role role;
 
 
-    public User(String username, String password) {
+    public User(String username, String password, Role role) {
         this.username = username;
         this.password = password;
+        this.role = role;
     }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 }

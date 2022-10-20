@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -20,15 +21,22 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String role;
+    @Column(unique = true, nullable = false)
+    @Enumerated(EnumType.STRING)
+    private EnumRole name;
+    //private String name;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
     @JsonIgnore
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
 
-    public Role(String role, Set<User> users) {
-        this.role = role;
+
+    public Role(EnumRole role, Set<User> users) {
+        this.name = role;
         this.users = users;
+    }
+
+    public Role(EnumRole role) {
+        this.name = role;
     }
 }
