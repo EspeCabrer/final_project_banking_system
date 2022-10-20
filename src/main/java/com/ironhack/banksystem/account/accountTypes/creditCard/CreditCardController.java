@@ -20,20 +20,20 @@ public class CreditCardController {
 
     @Autowired
     AccountHolderService accountHolderService;
+    @Autowired
+    CreditCardService creditCardService;
 
     @PostMapping("/accounts/new/creditcard")
     @ResponseStatus(HttpStatus.CREATED)
-    public Savings addCreditCard(@Valid @RequestBody CreditCardDTO creditCardDTO) {
+    public CreditCard addCreditCard(@Valid @RequestBody CreditCardDTO creditCardDTO) {
         AccountHolder primaryOwner = accountHolderService.getByUsername(creditCardDTO.getPrimaryOwnerUserName());
         AccountHolder secondaryOwner = null;
         if(creditCardDTO.getSecondaryOwnerUserName() != null) {
             secondaryOwner = accountHolderService.getByUsername(creditCardDTO.getSecondaryOwnerUserName());
         }
-        return null;
 
-        //return savingsService.add(savingsDTO, primaryOwner, secondaryOwner);
+        return creditCardService.add(creditCardDTO, primaryOwner, secondaryOwner);
     }
-
 }
 
 

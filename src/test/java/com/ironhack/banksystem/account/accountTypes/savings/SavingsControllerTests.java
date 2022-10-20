@@ -18,6 +18,8 @@ import org.springframework.web.context.WebApplicationContext;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,6 +28,9 @@ public class SavingsControllerTests {
 
     @Autowired
     AccountHolderRepository accountHolderRepository;
+
+    @Autowired
+    SavingsRepository savingsRepository;
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -39,6 +44,7 @@ public class SavingsControllerTests {
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         accountHolderRepository.deleteAll();
+        savingsRepository.deleteAll();
         Address address = new Address("Roma n25", "Madrid", 06754);
         AccountHolder user = new AccountHolder("maria", "password", LocalDate.parse("1987-06-02"), address, null );
         accountHolderRepository.save(user);
@@ -47,6 +53,7 @@ public class SavingsControllerTests {
     @AfterEach
     public void clean(){
         accountHolderRepository.deleteAll();
+        savingsRepository.deleteAll();
     }
 
     @Test
@@ -56,6 +63,9 @@ public class SavingsControllerTests {
 
         mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
+
+        assertTrue(savingsRepository.findById(1L).isPresent());
+        assertEquals("maria", savingsRepository.findById(1L).get().getPrimaryOwner().getUsername());
     }
 
 
