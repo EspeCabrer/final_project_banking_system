@@ -65,7 +65,7 @@ public class CreditCardControllerTests {
     @Test
     void post_CreditCardAccount_NullBalance_ThrowsError() throws Exception {
         BigDecimal balance = null;
-        CreditCardDTO creditCardDTO = new CreditCardDTO(balance, "maria", "maria", new Money(BigDecimal.valueOf(300)), BigDecimal.valueOf(0.2), BigDecimal.valueOf(20));
+        CreditCardDTO creditCardDTO = new CreditCardDTO(balance, "maria", "maria", BigDecimal.valueOf(300), BigDecimal.valueOf(0.2), BigDecimal.valueOf(20));
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
         mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -76,7 +76,7 @@ public class CreditCardControllerTests {
     void post_CreditCardAccount_NullPrimaryOwner_ThrowsError() throws Exception {
 
         String primaryOwnerUserName = null;
-        CreditCardDTO creditCardDTO = new CreditCardDTO(BigDecimal.valueOf(2000), primaryOwnerUserName, "maria", new Money(BigDecimal.valueOf(300)), BigDecimal.valueOf(0.2), BigDecimal.valueOf(20));
+        CreditCardDTO creditCardDTO = new CreditCardDTO(BigDecimal.valueOf(2000), primaryOwnerUserName, "maria", BigDecimal.valueOf(300), BigDecimal.valueOf(0.2), BigDecimal.valueOf(20));
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
         mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -87,7 +87,7 @@ public class CreditCardControllerTests {
     void post_CreditCardAccount_nullSecondaryOwner_WorksOk() throws Exception {
 
         String secondaryOwnerUserName = null;
-        CreditCardDTO creditCardDTO = new CreditCardDTO(BigDecimal.valueOf(2000), "maria", secondaryOwnerUserName, new Money(BigDecimal.valueOf(300)), BigDecimal.valueOf(0.2), BigDecimal.valueOf(20));
+        CreditCardDTO creditCardDTO = new CreditCardDTO(BigDecimal.valueOf(2000), "maria", secondaryOwnerUserName, BigDecimal.valueOf(300), BigDecimal.valueOf(0.2), BigDecimal.valueOf(20));
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
         mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -99,7 +99,7 @@ public class CreditCardControllerTests {
     void post_CreditCardAccount_nullPenaltyFee_ThrowsError() throws Exception {
 
         BigDecimal penaltyFee = null;
-        CreditCardDTO creditCardDTO = new CreditCardDTO(BigDecimal.valueOf(2000), "maria", null, new Money(BigDecimal.valueOf(300)), BigDecimal.valueOf(0.2), penaltyFee);
+        CreditCardDTO creditCardDTO = new CreditCardDTO(BigDecimal.valueOf(2000), "maria", null, BigDecimal.valueOf(300), BigDecimal.valueOf(0.2), penaltyFee);
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
         mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -109,7 +109,7 @@ public class CreditCardControllerTests {
     @Test
     void post_CreditCardAccount_nullCreditLimit_WorksOk() throws Exception {
 
-        Money creditLimit = null;
+        BigDecimal creditLimit = null;
         CreditCardDTO creditCardDTO = new CreditCardDTO(BigDecimal.valueOf(2000), "maria", null, creditLimit, BigDecimal.valueOf(0.2), BigDecimal.valueOf(20));
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
@@ -121,7 +121,7 @@ public class CreditCardControllerTests {
     void post_CreditCardAccount_nullInterestRate_WorksOk() throws Exception {
 
         BigDecimal interestRate = null;
-        CreditCardDTO creditCardDTO = new CreditCardDTO(BigDecimal.valueOf(2000), "maria", null, new Money(BigDecimal.valueOf(300)), interestRate, BigDecimal.valueOf(20));
+        CreditCardDTO creditCardDTO = new CreditCardDTO(BigDecimal.valueOf(2000), "maria", null, BigDecimal.valueOf(300), interestRate, BigDecimal.valueOf(20));
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
         mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
