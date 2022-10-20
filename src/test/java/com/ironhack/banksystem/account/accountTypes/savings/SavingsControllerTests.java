@@ -35,7 +35,6 @@ public class SavingsControllerTests {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
 
-
     @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();

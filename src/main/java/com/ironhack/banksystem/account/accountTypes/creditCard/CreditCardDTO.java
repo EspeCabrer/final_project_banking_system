@@ -20,9 +20,7 @@ public class CreditCardDTO {
     private String primaryOwnerUserName;
     //optional
     private String secondaryOwnerUserName;
-    @Max(100000)
-    @Min(100)
-    private Money creditLimit = new Money(new BigDecimal(100));
+    private Money creditLimit;
     //optional
     @DecimalMax(value = "0.5", inclusive = true)
     private BigDecimal interestRate;

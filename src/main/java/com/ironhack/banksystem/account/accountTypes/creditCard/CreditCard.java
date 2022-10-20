@@ -22,8 +22,6 @@ public class CreditCard extends Account {
     @DecimalMin("0.1")
     private BigDecimal interestRate;
 
-    @Max(100000)
-    @Min(100)
     private Money creditLimit;
 
     public CreditCard(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal penaltyFee, BigDecimal interestRate, Money creditLimit) {
