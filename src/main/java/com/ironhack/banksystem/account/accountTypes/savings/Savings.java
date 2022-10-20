@@ -50,8 +50,8 @@ public class Savings extends Account {
 
     public void setMinimumBalance(Money minimumBalance) {
         if (minimumBalance == null) this.minimumBalance = new Money(BigDecimal.valueOf(1000));
-        else if(minimumBalance.getAmount().compareTo(new BigDecimal(100)) < 0
-                || minimumBalance.getAmount().compareTo(new BigDecimal(1000)) > 0) {
+        else if(minimumBalance.getAmount().compareTo(BigDecimal.valueOf(100)) < 0
+                || minimumBalance.getAmount().compareTo(BigDecimal.valueOf(1000)) > 0) {
             throw new IllegalArgumentException("Minimum balance must be between 100 and 1000");
          } else {
             this.minimumBalance = minimumBalance;

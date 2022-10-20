@@ -37,7 +37,7 @@ public class SavingsSettersTests {
 
     @Test
     @DisplayName("SetMinimumBalance -- minimum balance is greater than 1000 or less than 100, throws error")
-    public void setMinimumBalance_GreaterThanMaxPermitted_ThrowsError(){
+    public void setMinimumBalance_ValueOutOfRang_ThrowsError(){
 
         Money minimumBalanceGreaterThan1000 = new Money(new BigDecimal("1100"));
         Money minimumBalanceLessThan100 = new Money(new BigDecimal("90"));
