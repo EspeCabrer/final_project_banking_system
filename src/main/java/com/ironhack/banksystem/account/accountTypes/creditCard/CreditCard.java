@@ -25,7 +25,9 @@ public class CreditCard extends Account {
 
     private Money creditLimit;
 
-    public CreditCard(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal penaltyFee, BigDecimal interestRate, Money creditLimit) {
+    public CreditCard(Money balance, AccountHolder primaryOwner,
+                      AccountHolder secondaryOwner, BigDecimal penaltyFee,
+                      BigDecimal interestRate, Money creditLimit) {
         super(balance, primaryOwner, secondaryOwner, penaltyFee);
         setInterestRate(interestRate);
         setCreditLimit(creditLimit);
