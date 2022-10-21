@@ -6,6 +6,8 @@ import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -24,7 +26,6 @@ public abstract class Account {
     @Embedded
     private Money balance;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name="primary_owner_id")
     @JsonIgnore
@@ -42,4 +43,16 @@ public abstract class Account {
         this.primaryOwner = primaryOwner;
         this.secondaryOwner = secondaryOwner;
     }
+
+
+    public void withdraw(BigDecimal amount) {
+        if(this.getBalance().getAmount().compareTo(amount) > 0) {
+            this.balance.setAmount(this.balance.getAmount().subtract(amount));
+        } else throw new IllegalArgumentException("Insufficient funds");
+    }
+
+    public void deposit(BigDecimal amount) {
+        this.balance.setAmount(this.balance.getAmount().add(amount));
+    }
+
 }

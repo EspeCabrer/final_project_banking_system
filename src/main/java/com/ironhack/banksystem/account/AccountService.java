@@ -2,6 +2,8 @@ package com.ironhack.banksystem.account;
 
 import com.ironhack.banksystem.account.DTOs.AmountDTO;
 import com.ironhack.banksystem.account.DTOs.TransferDTO;
+import com.ironhack.banksystem.account.accountTypes.checking.Checking;
+import com.ironhack.banksystem.account.accountTypes.savings.Savings;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.role.EnumRole;
 import com.ironhack.banksystem.security.CustomUserDetails;
@@ -38,10 +40,10 @@ public class AccountService {
     }
 
 
-    public boolean hasEnoughMoney(Account account, BigDecimal amountToTransfer) {
+    /*public boolean hasEnoughMoney(Account account, BigDecimal amountToTransfer) {
         if(account.getBalance().getAmount().compareTo(amountToTransfer) > 0) return true;
         else throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient funds");
-    }
+    }*/
 
 
     public Money getBalanceByAccountId(Long id, String userName){
@@ -54,8 +56,8 @@ public class AccountService {
             else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         return account.getBalance();
-    }
 
+    }
 
     public Account updateBalanceByAccountId(Long id, AmountDTO amountDTO) {
         Account account = accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
@@ -66,19 +68,19 @@ public class AccountService {
     public Money doTransfer(String senderUserName, Long senderAccountId, TransferDTO transferDTO) {
         Account senderAccount = accountRepository.findById(senderAccountId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account " + senderAccountId + " not found"));
         Account receiverAccount = accountRepository.findById(transferDTO.getReceiverAccountId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account " +transferDTO.getReceiverAccountId() + " not found"));
-        if (isUserAccount(senderAccount, senderUserName)
-            && hasEnoughMoney(senderAccount, transferDTO.getAmountToTransfer())
-            && isUserAccount(receiverAccount, transferDTO.getReceiverOwnerUserName())) {
-
+        if (isUserAccount(senderAccount, senderUserName) && isUserAccount(receiverAccount, transferDTO.getReceiverOwnerUserName())) {
             BigDecimal moneyToTransfer = transferDTO.getAmountToTransfer();
-
-            senderAccount.getBalance().setAmount(senderAccount.getBalance().getAmount().subtract(moneyToTransfer));
-            receiverAccount.getBalance().setAmount(receiverAccount.getBalance().getAmount().add(moneyToTransfer));
-
-            accountRepository.saveAll(List.of(senderAccount, receiverAccount));
+           try {
+               senderAccount.withdraw(moneyToTransfer);
+               receiverAccount.deposit(moneyToTransfer);
+               accountRepository.saveAll(List.of(senderAccount, receiverAccount));
+           } catch (IllegalArgumentException e) {
+               throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient funds");
+           }
         }
         else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 
         return senderAccount.getBalance();
     }
+
 }

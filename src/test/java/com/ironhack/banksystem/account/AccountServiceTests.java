@@ -204,23 +204,4 @@ public class AccountServiceTests {
         assertThrows(ResponseStatusException.class,
                 ()-> accountService.doTransfer(senderUserName, accountUserAlex.getId(),transferDTO));
     }
-
-    @Test
-    void hasEnoughtMoney_PositiveBalance_ReturnTrue(){
-        Money balance = new Money(BigDecimal.valueOf(1000));
-        BigDecimal amountToTransfer = BigDecimal.valueOf(500);
-        CreditCard accountUserAntonia = creditCardRepository.save(new CreditCard(balance, userAntonia, null, null, null));
-
-        assertTrue(accountService.hasEnoughMoney(accountUserAntonia, amountToTransfer));
-    }
-
-    @Test
-    void hasEnoughtMoney_NegativeBalance_ThrowError(){
-        Money balance = new Money(BigDecimal.valueOf(500));
-        BigDecimal amountToTransfer = BigDecimal.valueOf(1000);
-        CreditCard accountUserAntonia = creditCardRepository.save(new CreditCard(balance, userAntonia, null, null, null));
-
-        assertThrows(ResponseStatusException.class,
-                () -> accountService.hasEnoughMoney(accountUserAntonia, amountToTransfer));
-    }
 }

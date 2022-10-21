@@ -1,7 +1,8 @@
 package com.ironhack.banksystem.account.accountTypes.savings;
 
 import com.ironhack.banksystem.account.Account;
-import com.ironhack.banksystem.account.EnumStatusAccount;
+import com.ironhack.banksystem.account.EnumAccountStatus;
+import com.ironhack.banksystem.account.accountTypes.PenaltyFeeInterface;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
 import lombok.Getter;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -17,7 +20,7 @@ import java.util.Date;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Savings extends Account {
+public class Savings extends Account implements PenaltyFeeInterface {
 
     @DecimalMax(value = "0.5", inclusive = true)
     private BigDecimal interestRate;
@@ -30,7 +33,8 @@ public class Savings extends Account {
 
     private final Date CREATION_DATE = new Date(System.currentTimeMillis());
 
-    private EnumStatusAccount status = EnumStatusAccount.ACTIVE;
+    @Enumerated(EnumType.STRING)
+    private EnumAccountStatus status = EnumAccountStatus.ACTIVE;
 
     public Savings(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal interestRate, Money minimumBalance, String secretKey) {
         super(balance, primaryOwner, secondaryOwner);
@@ -62,8 +66,17 @@ public class Savings extends Account {
         this.secretKey = secretKey;
     }
 
-    public void setStatus(EnumStatusAccount status) {
-        this.status = status;
+
+    @Override
+    public boolean isMinimumBalanceGreaterThanBalance() {
+        return this.minimumBalance.getAmount().compareTo(this.getBalance().getAmount()) > 0;
+    }
+
+    @Override
+    public void applyPenaltyFee() {
+        if (isMinimumBalanceGreaterThanBalance()) {
+            this.getBalance().setAmount(this.getBalance().getAmount().subtract(this.getPENALTY_FEE()));
+        }
     }
 
     @Override

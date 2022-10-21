@@ -1,5 +1,5 @@
 package com.ironhack.banksystem.account;
 
-public enum EnumStatusAccount {
+public enum EnumAccountStatus {
     FROZEN, ACTIVE
 }

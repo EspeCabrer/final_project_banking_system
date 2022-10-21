@@ -5,13 +5,10 @@ import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 
 @Entity
