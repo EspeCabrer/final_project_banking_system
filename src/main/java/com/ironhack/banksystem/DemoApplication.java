@@ -10,6 +10,8 @@ import com.ironhack.banksystem.role.RoleRepository;
 import com.ironhack.banksystem.user.UserRepository;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
+import com.ironhack.banksystem.user.UserTypes.Admin.Admin;
+import com.ironhack.banksystem.user.UserTypes.Admin.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -33,6 +35,9 @@ public class DemoApplication implements CommandLineRunner {
 	AccountHolderRepository accountHolderRepository;
 
 	@Autowired
+	AdminRepository adminRepository;
+
+	@Autowired
 	RoleRepository roleRepository;
 
 	@Autowired
@@ -49,9 +54,10 @@ public class DemoApplication implements CommandLineRunner {
 		roleRepository.saveAll(List.of(new Role(EnumRole.ADMIN), new Role(EnumRole.ACCOUNT_HOLDER)));
 		Role accountHolderRole = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
 		Role adminRole = roleRepository.findByName(EnumRole.ADMIN).get();
-		AccountHolder user1 = accountHolderRepository.save(new AccountHolder("maria", passwordEncoder.encode("password"), LocalDate.parse("1987-06-02"), address, null, accountHolderRole ));
-		AccountHolder user2 = accountHolderRepository.save(new AccountHolder("pepe", passwordEncoder.encode("password"), LocalDate.parse("1980-03-05"), address, null, adminRole ));
-		Savings savings = savingsRepository.save(new Savings(new Money(BigDecimal.valueOf(3000)), user1, null, null, null, passwordEncoder.encode("secretKey")));
-		Savings savings1 = savingsRepository.save(new Savings(new Money(BigDecimal.valueOf(1500)), user2, null, null, null, passwordEncoder.encode("secretKey")));
+		adminRepository.save(new Admin("maria", passwordEncoder.encode("password"), adminRole ));
+		AccountHolder user2 = accountHolderRepository.save(new AccountHolder("pepe", passwordEncoder.encode("password"), LocalDate.parse("1980-03-05"), address, null, accountHolderRole ));
+		AccountHolder user3 = accountHolderRepository.save(new AccountHolder("antonia", passwordEncoder.encode("password"), LocalDate.parse("1980-03-05"), address, null, accountHolderRole ));
+		savingsRepository.save(new Savings(new Money(BigDecimal.valueOf(3000)), user2, null, null, null, passwordEncoder.encode("secretKey")));
+		savingsRepository.save(new Savings(new Money(BigDecimal.valueOf(1500)), user3, null, null, null, passwordEncoder.encode("secretKey")));
 	}
 }
