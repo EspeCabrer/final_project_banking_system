@@ -20,12 +20,11 @@ public class AccountService {
     AccountRepository accountRepository;
 
 
-    public Money getBalanceByAccountId(Long id, CustomUserDetails user){
-        String role = String.valueOf(user.getAuthorities().toArray()[0]);
+    public Money getBalanceByAccountId(Long id, String roleName, String userName){
         Account account = accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
 
-        if (role.equals("ROLE_" + EnumRole.ACCOUNT_HOLDER)) {
-            if(isUserAccount(account, user.getUsername())) return account.getBalance();
+        if (roleName.equals("ROLE_" + EnumRole.ACCOUNT_HOLDER)) {
+            if(isUserAccount(account, userName)) return account.getBalance();
             else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         return account.getBalance();
