@@ -1,9 +1,8 @@
 package com.ironhack.banksystem.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ironhack.banksystem.account.accountTypes.checking.DTO.CheckingDTO;
+import com.ironhack.banksystem.account.DTOs.AmountDTO;
 import com.ironhack.banksystem.account.accountTypes.creditCard.CreditCard;
-import com.ironhack.banksystem.account.accountTypes.creditCard.CreditCardDTO;
 import com.ironhack.banksystem.account.accountTypes.creditCard.CreditCardRepository;
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.money.Money;
@@ -19,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -83,15 +81,4 @@ public class AccountControllerTests {
 
        assertEquals(new BigDecimal("500.00"), accountRepository.findById(existentAccountId).get().getBalance().getAmount());
     }
-
-
-    /*@Test
-    public void getBalanceByAccountId_WorksOK() throws Exception {
-
-        mockMvc.perform(get("/account/1"))
-                .andExpect(status().isOk()).andReturn();
-
-        mockMvc.perform(get("/account/2"))
-                .andExpect(status().isNotFound()).andReturn();
-    }*/
 }

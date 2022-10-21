@@ -1,7 +1,7 @@
 package com.ironhack.banksystem.account;
 
-import com.ironhack.banksystem.account.Account;
-import com.ironhack.banksystem.account.AccountRepository;
+import com.ironhack.banksystem.account.DTOs.AmountDTO;
+import com.ironhack.banksystem.account.DTOs.TransferDTO;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.role.EnumRole;
 import com.ironhack.banksystem.security.CustomUserDetails;
@@ -25,13 +25,13 @@ public class AccountService {
         Account account = accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
 
         if (role.equals("ROLE_" + EnumRole.ACCOUNT_HOLDER)) {
-            if(isOwnAccount(account, user)) return account.getBalance();
+            if(isUserAccount(account, user.getUsername())) return account.getBalance();
             else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         return account.getBalance();
     }
 
-    public boolean isOwnAccount(Account account, CustomUserDetails user) {
+    public boolean isUserAccount(Account account, String userName) {
         String primaryOwnerUserName = account.getPrimaryOwner().getUsername();
         String secondaryOwnerUserName = "";
         if(account.getSecondaryOwner() != null) {
@@ -40,7 +40,7 @@ public class AccountService {
 
         List<String> ownersUsersNames = List.of(primaryOwnerUserName, secondaryOwnerUserName);
 
-        return ownersUsersNames.contains(user.getUsername());
+        return ownersUsersNames.contains(userName);
     }
 
     public Account updateBalanceByAccountId(Long id, AmountDTO amountDTO) {
@@ -48,4 +48,39 @@ public class AccountService {
         account.getBalance().setAmount(amountDTO.getAmount());
         return accountRepository.save(account);
     }
+
+    public Money doTransfer(String senderUserName, Long senderAccountId, TransferDTO transferDTO) {
+        Account senderAccount = accountRepository.findById(senderAccountId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account " + senderAccountId + " not found"));
+        Account receiverAccount = accountRepository.findById(transferDTO.getReceiverAccountId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account " +transferDTO.getReceiverAccountId() + " not found"));
+        if (isUserAccount(senderAccount, senderUserName)
+            && hasEnoughMoney(senderAccount, transferDTO.getAmountToTransfer())
+            && isUserAccount(receiverAccount, transferDTO.getReceiverOwnerUserName())) {
+
+            BigDecimal moneyToTransfer = transferDTO.getAmountToTransfer();
+
+            senderAccount.getBalance().setAmount(senderAccount.getBalance().getAmount().subtract(moneyToTransfer));
+            receiverAccount.getBalance().setAmount(receiverAccount.getBalance().getAmount().add(moneyToTransfer));
+
+            accountRepository.saveAll(List.of(senderAccount, receiverAccount));
+        }
+        else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+
+        return senderAccount.getBalance();
+    }
+
+
+    public boolean hasEnoughMoney(Account account, BigDecimal amountToTransfer) {
+        return account.getBalance().getAmount().compareTo(amountToTransfer) > 0;
+    }
+
+    //**TRANSFER MONEY FROM OWN ACCOUNTS TO OTHER ACCOUNT
+    //Need
+    //AccountId OWN ACCOUNT
+    //User provide Primary or Secondary owner name and id of the account that should receive the transfer --Destinatary
+
+    //Check if accountID belongs user.
+    //Check enough founds
+
+    // AccountId OWN ACCOUNT
+    //User provide Primary or Secondary owner name and id of the account that should receive the transfer
 }

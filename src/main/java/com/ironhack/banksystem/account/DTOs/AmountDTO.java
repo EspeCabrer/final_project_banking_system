@@ -1,4 +1,4 @@
-package com.ironhack.banksystem.account;
+package com.ironhack.banksystem.account.DTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
