@@ -36,10 +36,11 @@ public class SecurityConfiguration {
         httpSecurity.httpBasic();
 
         httpSecurity.authorizeRequests()
+                .mvcMatchers(HttpMethod.PATCH, "admin/account/balance/{id}").hasAnyRole(String.valueOf(EnumRole.ADMIN))
                 //.mvcMatchers(HttpMethod.GET, "/users").hasAnyRole("USER")
                 //.mvcMatchers(HttpMethod.GET, "/account/**").hasAnyRole(String.valueOf(EnumRole.ACCOUNT_HOLDER))
-                .mvcMatchers(HttpMethod.GET, "/users").hasAnyRole(String.valueOf(EnumRole.ADMIN))
-                .mvcMatchers(HttpMethod.GET,"/admin/**").hasRole("ADMIN")
+               // .mvcMatchers(HttpMethod.GET, "/users").hasAnyRole(String.valueOf(EnumRole.ADMIN))
+              //  .mvcMatchers(HttpMethod.GET,"/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll();
 
         httpSecurity.csrf().disable();

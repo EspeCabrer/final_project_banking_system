@@ -1,4 +1,4 @@
-package com.ironhack.banksystem.account.accountTypes;
+package com.ironhack.banksystem.account;
 
 import com.ironhack.banksystem.account.Account;
 import com.ironhack.banksystem.account.AccountRepository;
@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -40,5 +41,11 @@ public class AccountService {
         List<String> ownersUsersNames = List.of(primaryOwnerUserName, secondaryOwnerUserName);
 
         return ownersUsersNames.contains(user.getUsername());
+    }
+
+    public Account updateBalanceByAccountId(Long id, AmountDTO amountDTO) {
+        Account account = accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+        account.getBalance().setAmount(amountDTO.getAmount());
+        return accountRepository.save(account);
     }
 }
