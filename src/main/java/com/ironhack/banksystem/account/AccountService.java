@@ -52,7 +52,7 @@ public class AccountService {
         EnumRole roleName = user.getRole().getName();
 
         if (roleName == EnumRole.ACCOUNT_HOLDER) {
-            if(isUserAccount(account, userName)) return account.getBalance();
+            if(isUserAccount(account, userName)) return account.checkBalance();
             else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         return account.getBalance();

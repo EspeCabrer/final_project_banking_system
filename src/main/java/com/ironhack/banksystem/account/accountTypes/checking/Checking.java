@@ -33,10 +33,22 @@ public class Checking extends Account {
     }
 
     @Override
-    public Money checkBalance() {
+    public void withdraw(BigDecimal amount) {
+        checkPenaltyFee();
+        if(this.getBalance().getAmount().compareTo(amount) > 0) {
+            super.getBalance().setAmount(super.getBalance().getAmount().subtract(amount));
+        } else throw new IllegalArgumentException("Insufficient funds");
+    }
+
+    @Override
+    public Money checkBalance(){
+        checkPenaltyFee();
+        return this.getBalance();
+    }
+
+    private void checkPenaltyFee() {
         if(super.getBalance().getAmount().compareTo(MINIMUM_BALANCE.getAmount()) < 0) {
             super.withdraw(super.getPENALTY_FEE());
         }
-        return super.checkBalance();
     }
 }

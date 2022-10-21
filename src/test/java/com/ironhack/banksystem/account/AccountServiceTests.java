@@ -2,6 +2,8 @@ package com.ironhack.banksystem.account;
 
 import com.ironhack.banksystem.account.DTOs.AmountDTO;
 import com.ironhack.banksystem.account.DTOs.TransferDTO;
+import com.ironhack.banksystem.account.accountTypes.checking.Checking;
+import com.ironhack.banksystem.account.accountTypes.checking.CheckingRepository;
 import com.ironhack.banksystem.account.accountTypes.creditCard.CreditCard;
 import com.ironhack.banksystem.account.accountTypes.creditCard.CreditCardRepository;
 import com.ironhack.banksystem.address.Address;
@@ -45,6 +47,9 @@ public class AccountServiceTests {
 
     @Autowired
     CreditCardRepository creditCardRepository;
+
+    @Autowired
+    CheckingRepository checkingRepository;
 
     @Autowired
     RoleRepository roleRepository;
@@ -110,6 +115,17 @@ public class AccountServiceTests {
         Money moneyOwnAccount = accountService.getBalanceByAccountId(accountUserAlex.getId(), userAccessName);
 
         assertEquals(balance.getAmount(), moneyOwnAccount.getAmount());
+    }
+
+    @Test
+    void getBalanceByAccountId_AccountHolderPermission_BalanceLowerThanMinimumBalance_ApplyPenaltyFee(){
+        String userAccessName = userAlex.getUsername();
+        //Checking MinimumBalance is 250
+        Money balance = new Money(BigDecimal.valueOf(200));
+        Checking accountUserAlex = checkingRepository.save(new Checking(balance, userAlex, null, "secretKey"));
+        Money moneyOwnAccount = accountService.getBalanceByAccountId(accountUserAlex.getId(), userAccessName);
+        //Expect 250 (initialBalance) - 40 (penalty fee) = 210
+        assertEquals(new BigDecimal("160.00"), moneyOwnAccount.getAmount());
     }
 
     @Test
@@ -203,5 +219,23 @@ public class AccountServiceTests {
 
         assertThrows(ResponseStatusException.class,
                 ()-> accountService.doTransfer(senderUserName, accountUserAlex.getId(),transferDTO));
+    }
+
+    @Test
+    void doTransfer_BalanceLowerThanMinimumBalance_ApplyPenaltyFee(){
+        Money balanceAlex = new Money(BigDecimal.valueOf(200));
+        Money balanceAntonia = new Money(BigDecimal.valueOf(10));
+        //Checking MinimumBalance is 250
+        Checking accountUserAlex = checkingRepository.save(new Checking(balanceAlex, userAlex, null, "secretKey"));
+        CreditCard accountUserAntonia = creditCardRepository.save(new CreditCard(balanceAntonia, userAntonia, null, null, null));
+        String senderUserName = "alex";
+        String receiverUserName = "antonia";
+        BigDecimal amountToTransfer = BigDecimal.valueOf(10);
+        TransferDTO transferDTO = new TransferDTO(receiverUserName, accountUserAntonia.getId(), amountToTransfer);
+
+        Money newSenderAccountBalance = accountService.doTransfer(senderUserName, accountUserAlex.getId(),transferDTO);
+        //Expected --> 200 (initialBalance) - 10 (amountToTransfer) - 40 (PenaltyFee) = 150
+        assertEquals(new BigDecimal("150.00"), accountRepository.findById(accountUserAlex.getId()).get().getBalance().getAmount());
+        assertEquals(new BigDecimal("150.00"), newSenderAccountBalance.getAmount());
     }
 }
