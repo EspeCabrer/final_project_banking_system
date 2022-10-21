@@ -24,6 +24,25 @@ public class AccountService {
     @Autowired
     UserRepository userRepository;
 
+    public boolean isUserAccount(Account account, String userName) {
+
+        String primaryOwnerUserName = account.getPrimaryOwner().getUsername();
+        String secondaryOwnerUserName = "";
+        if(account.getSecondaryOwner() != null) {
+            secondaryOwnerUserName = account.getSecondaryOwner().getUsername();
+        }
+
+        List<String> ownersUsersNames = List.of(primaryOwnerUserName, secondaryOwnerUserName);
+
+        return ownersUsersNames.contains(userName);
+    }
+
+
+    public boolean hasEnoughMoney(Account account, BigDecimal amountToTransfer) {
+        if(account.getBalance().getAmount().compareTo(amountToTransfer) > 0) return true;
+        else throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient funds");
+    }
+
 
     public Money getBalanceByAccountId(Long id, String userName){
         Account account = accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
@@ -37,17 +56,6 @@ public class AccountService {
         return account.getBalance();
     }
 
-    public boolean isUserAccount(Account account, String userName) {
-        String primaryOwnerUserName = account.getPrimaryOwner().getUsername();
-        String secondaryOwnerUserName = "";
-        if(account.getSecondaryOwner() != null) {
-            secondaryOwnerUserName = account.getSecondaryOwner().getUsername();
-        }
-
-        List<String> ownersUsersNames = List.of(primaryOwnerUserName, secondaryOwnerUserName);
-
-        return ownersUsersNames.contains(userName);
-    }
 
     public Account updateBalanceByAccountId(Long id, AmountDTO amountDTO) {
         Account account = accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
@@ -73,20 +81,4 @@ public class AccountService {
 
         return senderAccount.getBalance();
     }
-
-
-    public boolean hasEnoughMoney(Account account, BigDecimal amountToTransfer) {
-        return account.getBalance().getAmount().compareTo(amountToTransfer) > 0;
-    }
-
-    //**TRANSFER MONEY FROM OWN ACCOUNTS TO OTHER ACCOUNT
-    //Need
-    //AccountId OWN ACCOUNT
-    //User provide Primary or Secondary owner name and id of the account that should receive the transfer --Destinatary
-
-    //Check if accountID belongs user.
-    //Check enough founds
-
-    // AccountId OWN ACCOUNT
-    //User provide Primary or Secondary owner name and id of the account that should receive the transfer
 }

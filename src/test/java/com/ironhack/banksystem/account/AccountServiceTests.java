@@ -1,5 +1,7 @@
 package com.ironhack.banksystem.account;
 
+import com.ironhack.banksystem.account.DTOs.AmountDTO;
+import com.ironhack.banksystem.account.DTOs.TransferDTO;
 import com.ironhack.banksystem.account.accountTypes.creditCard.CreditCard;
 import com.ironhack.banksystem.account.accountTypes.creditCard.CreditCardRepository;
 import com.ironhack.banksystem.address.Address;
@@ -7,6 +9,7 @@ import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.role.EnumRole;
 import com.ironhack.banksystem.role.Role;
 import com.ironhack.banksystem.role.RoleRepository;
+import com.ironhack.banksystem.user.UserRepository;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
 import com.ironhack.banksystem.user.UserTypes.Admin.Admin;
@@ -16,17 +19,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class AccountServiceTests {
+
+    @Autowired
+    AccountService accountService;
 
     @Autowired
     AccountHolderRepository accountHolderRepository;
@@ -35,7 +41,7 @@ public class AccountServiceTests {
     AdminRepository adminRepository;
 
     @Autowired
-    AccountService accountService;
+    AccountRepository accountRepository;
 
     @Autowired
     CreditCardRepository creditCardRepository;
@@ -43,8 +49,11 @@ public class AccountServiceTests {
     @Autowired
     RoleRepository roleRepository;
 
-    Admin userMaria;
-    AccountHolder userPepe;
+    @Autowired
+    UserRepository userRepository;
+
+    Admin userJose;
+    AccountHolder userAlex;
     AccountHolder userAntonia;
 
     @BeforeEach
@@ -54,25 +63,26 @@ public class AccountServiceTests {
         Role accountHolderRole = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
         Role adminRole = roleRepository.findByName(EnumRole.ADMIN).get();
         Address address = new Address("Roma n25", "Madrid", 06754);
-        userMaria = new Admin("maria", "password", adminRole );
-        userPepe = new AccountHolder("pepe", "password", LocalDate.parse("1987-06-02"), address, null, accountHolderRole );
+        userJose = new Admin("jose", "password", adminRole );
+        userAlex = new AccountHolder("alex", "password", LocalDate.parse("1987-06-02"), address, null, accountHolderRole );
         userAntonia = new AccountHolder("antonia", "password", LocalDate.parse("1987-06-02"), address, null, accountHolderRole );
-        adminRepository.save(userMaria);
-        accountHolderRepository.saveAll(List.of(userPepe, userAntonia));
+        adminRepository.save(userJose);
+        accountHolderRepository.saveAll(List.of(userAlex, userAntonia));
     }
 
 
     @AfterEach
     public void clean(){
-
+        userRepository.deleteAll();
+        accountRepository.deleteAll();
     }
 
     @Test
-    void getBalanceByAccountId_HasAdminPermission_CanCheckAllBalances(){
+    void getBalanceByAccountId_AdminPermission_CanCheckAllBalances(){
 
-        String userAccessName = userMaria.getUsername();
+        String userAccessName = userJose.getUsername();
         Money balance = new Money(BigDecimal.valueOf(10500));
-        CreditCard accountUserPepe = creditCardRepository.save(new CreditCard(balance, userPepe, null, null, null));
+        CreditCard accountUserPepe = creditCardRepository.save(new CreditCard(balance, userAlex, null, null, null));
 
         Money moneyOtherAccount = accountService.getBalanceByAccountId(accountUserPepe.getId(), userAccessName);
 
@@ -80,13 +90,137 @@ public class AccountServiceTests {
     }
 
     @Test
-    void getBalanceByAccountId_HasAccountHolderPermission_CheckOtherBalance_ThrowError(){
+    void getBalanceByAccountId_AccountHolderPermission_CheckOtherBalance_ThrowError(){
 
         String userAccessName = userAntonia.getUsername();
         Money balance = new Money(BigDecimal.valueOf(10500));
-        CreditCard accountUserPepe = creditCardRepository.save(new CreditCard(balance, userPepe, null, null, null));
+        CreditCard accountUserAlex = creditCardRepository.save(new CreditCard(balance, userAlex, null, null, null));
 
         assertThrows(ResponseStatusException.class,
-                ()-> accountService.getBalanceByAccountId(accountUserPepe.getId(), userAccessName));
+                ()-> accountService.getBalanceByAccountId(accountUserAlex.getId(), userAccessName));
+    }
+
+    @Test
+    void getBalanceByAccountId_AccountHolderPermission_CheckOwnAccountBalance_WorksOk(){
+
+        String userAccessName = userAlex.getUsername();
+        Money balance = new Money(BigDecimal.valueOf(10500));
+        CreditCard accountUserAlex = creditCardRepository.save(new CreditCard(balance, userAlex, null, null, null));
+
+        Money moneyOwnAccount = accountService.getBalanceByAccountId(accountUserAlex.getId(), userAccessName);
+
+        assertEquals(balance.getAmount(), moneyOwnAccount.getAmount());
+    }
+
+    @Test
+    void isUserAccount_AccountNotBelongsUser_ReturnFalse(){
+        CreditCard accountUserAlex = creditCardRepository.save(new CreditCard(new Money(BigDecimal.valueOf(10500)), userAlex, null, null, null));
+
+        assertFalse(accountService.isUserAccount(accountUserAlex, "jose"));;
+    }
+
+    @Test
+    void isUserAccount_AccountBelongsUser_ReturnTrue(){
+        CreditCard accountUserAlex = creditCardRepository.save(new CreditCard(new Money(BigDecimal.valueOf(10500)), userAlex, null, null, null));
+
+        assertTrue(accountService.isUserAccount(accountUserAlex, "alex"));;
+    }
+
+    @Test
+    void updateBalanceByAccountId_ValidAccountId_WorksOk(){
+        Money balance = new Money(BigDecimal.valueOf(500));
+        AmountDTO amountDTO = new AmountDTO(BigDecimal.valueOf(1000));
+        CreditCard accountUserAlex = creditCardRepository.save(new CreditCard(balance, userAlex, null, null, null));
+        Account updatedAccount = accountService.updateBalanceByAccountId(accountUserAlex.getId(), amountDTO);
+
+        assertEquals(amountDTO.getAmount(), updatedAccount.getBalance().getAmount());
+    }
+
+    @Test
+    void updateBalanceByAccountId_NonExistentAccountId_ThrowsError(){
+        AmountDTO amountDTO = new AmountDTO(BigDecimal.valueOf(1000));
+        List<Account> accounts = accountRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        long nonExistentId = 1;
+        if (accounts.size() > 0){
+            nonExistentId = accounts.get(0).getId() + 1;
+        }
+        long finalNonExistentId1 = nonExistentId;
+        assertThrows(ResponseStatusException.class, ()-> accountService.updateBalanceByAccountId(finalNonExistentId1, amountDTO));
+    }
+
+    @Test
+    void doTransfer_ValidSenderInfo_And_ValidReceiverInfo_WorksOk(){
+      Money balanceAlex = new Money(BigDecimal.valueOf(2500));
+      Money balanceAntonia = new Money(BigDecimal.valueOf(5000));
+      CreditCard accountUserAlex = creditCardRepository.save(new CreditCard(balanceAlex, userAlex, null, null, null));
+      CreditCard accountUserAntonia = creditCardRepository.save(new CreditCard(balanceAntonia, userAntonia, null, null, null));
+      String senderUserName = "alex";
+      String receiverUserName = "antonia";
+      BigDecimal amountToTransfer = BigDecimal.valueOf(500);
+      TransferDTO transferDTO = new TransferDTO(receiverUserName, accountUserAntonia.getId(), amountToTransfer);
+
+      Money newSenderAccountBalance = accountService.doTransfer(senderUserName, accountUserAlex.getId(),transferDTO);
+
+      assertEquals(new BigDecimal("2000.00"), accountRepository.findById(accountUserAlex.getId()).get().getBalance().getAmount());
+      assertEquals(new BigDecimal("5500.00"), accountRepository.findById(accountUserAntonia.getId()).get().getBalance().getAmount());
+      assertEquals(new BigDecimal("2000.00"), newSenderAccountBalance.getAmount());
+    }
+
+    @Test
+    void doTransfer_SenderUserName_NotBelongs_SenderAccountId_ThrowsError(){
+        Money balanceAntonia = new Money(BigDecimal.valueOf(5000));
+        CreditCard accountUserAntonia = creditCardRepository.save(new CreditCard(balanceAntonia, userAntonia, null, null, null));
+        String senderUserName = "alex";
+        String receiverUserName = "antonia";
+        BigDecimal amountToTransfer = BigDecimal.valueOf(500);
+        TransferDTO transferDTO = new TransferDTO(receiverUserName, accountUserAntonia.getId(), amountToTransfer);
+
+        assertThrows(ResponseStatusException.class,
+                ()-> accountService.doTransfer(senderUserName, accountUserAntonia.getId(), transferDTO));
+    }
+
+    @Test
+    void doTransfer_ReceiverUserName_NotBelongs_ReceiverAccountId_ThrowsError(){
+        Money balanceAlex = new Money(BigDecimal.valueOf(2500));
+        CreditCard accountUserAlex = creditCardRepository.save(new CreditCard(balanceAlex, userAlex, null, null, null));
+        BigDecimal amountToTransfer = BigDecimal.valueOf(500);
+        TransferDTO transferDTO = new TransferDTO("antonia", accountUserAlex.getId(), amountToTransfer);
+
+        assertThrows(ResponseStatusException.class,
+                ()-> accountService.doTransfer("alex", accountUserAlex.getId(),transferDTO));
+    }
+
+    @Test
+    void doTransfer_InsufficientFunds_ThrowsError(){
+        Money balanceAlex = new Money(BigDecimal.valueOf(2500));
+        Money balanceAntonia = new Money(BigDecimal.valueOf(5000));
+        CreditCard accountUserAlex = creditCardRepository.save(new CreditCard(balanceAlex, userAlex, null, null, null));
+        CreditCard accountUserAntonia = creditCardRepository.save(new CreditCard(balanceAntonia, userAntonia, null, null, null));
+        String senderUserName = "alex";
+        String receiverUserName = "antonia";
+        BigDecimal amountToTransfer = BigDecimal.valueOf(5000);
+        TransferDTO transferDTO = new TransferDTO(receiverUserName, accountUserAntonia.getId(), amountToTransfer);
+
+        assertThrows(ResponseStatusException.class,
+                ()-> accountService.doTransfer(senderUserName, accountUserAlex.getId(),transferDTO));
+    }
+
+    @Test
+    void hasEnoughtMoney_PositiveBalance_ReturnTrue(){
+        Money balance = new Money(BigDecimal.valueOf(1000));
+        BigDecimal amountToTransfer = BigDecimal.valueOf(500);
+        CreditCard accountUserAntonia = creditCardRepository.save(new CreditCard(balance, userAntonia, null, null, null));
+
+        assertTrue(accountService.hasEnoughMoney(accountUserAntonia, amountToTransfer));
+    }
+
+    @Test
+    void hasEnoughtMoney_NegativeBalance_ThrowError(){
+        Money balance = new Money(BigDecimal.valueOf(500));
+        BigDecimal amountToTransfer = BigDecimal.valueOf(1000);
+        CreditCard accountUserAntonia = creditCardRepository.save(new CreditCard(balance, userAntonia, null, null, null));
+
+        assertThrows(ResponseStatusException.class,
+                () -> accountService.hasEnoughMoney(accountUserAntonia, amountToTransfer));
     }
 }
