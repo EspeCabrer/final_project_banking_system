@@ -50,13 +50,20 @@ Al iniciar la aplicación se crean automáticamente usando CommandLineRunner:
 
 ### FUNCIONAMIENTO
 
-Existen dos roles, el rol admin se vincula a los usuarios de typo admin y tienen acceso a los siguientes endpoints:
-- Endpoint1
-- Endpoint2
+Existen dos roles con diferentes accesos permitidos:
 
-El rol account holder se vincula a los usuarios de typo accountHolder y tienen acceso a los siguientes endpoints:
+El rol admin se vincula a los usuarios tipo Admin y el role de AccountHolder a los tipo AccountHolder.
+#### Admin
 - Endpoint1
+  - Acceso al balance de todas las cuentas.
 - Endpoint2
+  - Modificación del balance de todas la cuentas. 
+
+#### Account holder
+- Endpoint1
+  - Acceso al balance de sus propias cuentas. 
+- Endpoint2
+  - Transacciones
 
 
 ## API DOCUMENTATION
@@ -66,4 +73,25 @@ http://localhost:8080/swagger-ui/index.html
 
 PENDING TESTS WITH SECURITY
 - get_getBalanceByAccountId_WorksOK()
+
+## Descripción de los tipos de cuentas
+
+### Savings
+- Interest rate: cómo máximo permitido 0.5. Por defecto es de 0.0025.
+- Balance mínimo: rango entre 100 y 1000. Por defecto es 1000.
+- PenaltyFee: 40
+
+### CreditCards
+- Límite de crédito: rango entre 100 y 100000. Por defecto es 100.
+- Interest rate: rango entre 0.1 y 0.2. Por defecto es 0.2
+- PenaltyFee: 40
+
+### CheckingAccounts
+- Si el titular de la cuenta es menor de 24 años se crea una "StudentCheckingAccount" automáticamente, de lo contrario se crea una CheckingAccount general.
+- Balance mínimo: 250.
+- Fee de mantenimiento mensual: 12.
+- PenaltyFee: 40
+
+Cuando el balance de una cuenta cae por debajo del balance mínimo se 
+deduce el penaltyFee automáticamente cada vez que se usa (transacciones, ver balance). 
 
