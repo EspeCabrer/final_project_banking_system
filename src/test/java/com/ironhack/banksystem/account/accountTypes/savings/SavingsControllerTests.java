@@ -71,9 +71,10 @@ public class SavingsControllerTests {
 
         mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
+        System.out.println(savingsRepository.findAll().get(0).getId());
 
-        assertTrue(savingsRepository.findById(1L).isPresent());
-        assertEquals("maria", savingsRepository.findById(1L).get().getPrimaryOwner().getUsername());
+        assertEquals(1, savingsRepository.findAll().size());
+        assertEquals("maria", savingsRepository.findAll().get(0).getPrimaryOwner().getUsername());
     }
 
 

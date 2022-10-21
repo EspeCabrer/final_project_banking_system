@@ -76,8 +76,8 @@ public class CreditCardControllerTests {
         mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
 
-        assertTrue(creditCardRepository.findById(1L).isPresent());
-        assertEquals("maria", creditCardRepository.findById(1L).get().getPrimaryOwner().getUsername());
+        assertEquals(1, creditCardRepository.findAll().size());
+        assertEquals("maria", creditCardRepository.findAll().get(0).getPrimaryOwner().getUsername());
     }
 
     @Test
