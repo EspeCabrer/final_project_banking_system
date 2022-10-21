@@ -5,6 +5,8 @@ import com.ironhack.banksystem.account.DTOs.TransferDTO;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.role.EnumRole;
 import com.ironhack.banksystem.security.CustomUserDetails;
+import com.ironhack.banksystem.user.User;
+import com.ironhack.banksystem.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,11 +21,16 @@ public class AccountService {
     @Autowired
     AccountRepository accountRepository;
 
+    @Autowired
+    UserRepository userRepository;
 
-    public Money getBalanceByAccountId(Long id, String roleName, String userName){
+
+    public Money getBalanceByAccountId(Long id, String userName){
         Account account = accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+        User user = userRepository.findByUsername(userName).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        EnumRole roleName = user.getRole().getName();
 
-        if (roleName.equals("ROLE_" + EnumRole.ACCOUNT_HOLDER)) {
+        if (roleName == EnumRole.ACCOUNT_HOLDER) {
             if(isUserAccount(account, userName)) return account.getBalance();
             else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }

@@ -20,7 +20,7 @@ public class AccountController {
     public Money getBalanceByAccountId(
             @AuthenticationPrincipal CustomUserDetails user,
             @PathVariable Long id){
-        return accountService.getBalanceByAccountId(id, String.valueOf(user.getAuthorities().toArray()[0]), user.getUsername());
+        return accountService.getBalanceByAccountId(id, user.getUsername());
     }
 
     @PatchMapping("admin/account/balance/{id}")
