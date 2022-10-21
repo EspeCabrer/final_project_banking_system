@@ -31,4 +31,12 @@ public class Checking extends Account {
         super(balance, primaryOwner, secondaryOwner);
         this.secretKey = secretKey;
     }
+
+    @Override
+    public Money checkBalance() {
+        if(super.getBalance().getAmount().compareTo(MINIMUM_BALANCE.getAmount()) < 0) {
+            super.withdraw(super.getPENALTY_FEE());
+        }
+        return super.checkBalance();
+    }
 }

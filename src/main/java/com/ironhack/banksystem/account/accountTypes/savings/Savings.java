@@ -2,7 +2,6 @@ package com.ironhack.banksystem.account.accountTypes.savings;
 
 import com.ironhack.banksystem.account.Account;
 import com.ironhack.banksystem.account.EnumAccountStatus;
-import com.ironhack.banksystem.account.accountTypes.PenaltyFeeInterface;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
 import lombok.Getter;
@@ -20,7 +19,7 @@ import java.util.Date;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Savings extends Account implements PenaltyFeeInterface {
+public class Savings extends Account {
 
     @DecimalMax(value = "0.5", inclusive = true)
     private BigDecimal interestRate;
@@ -68,15 +67,11 @@ public class Savings extends Account implements PenaltyFeeInterface {
 
 
     @Override
-    public boolean isMinimumBalanceGreaterThanBalance() {
-        return this.minimumBalance.getAmount().compareTo(this.getBalance().getAmount()) > 0;
-    }
-
-    @Override
-    public void applyPenaltyFee() {
-        if (isMinimumBalanceGreaterThanBalance()) {
-            this.getBalance().setAmount(this.getBalance().getAmount().subtract(this.getPENALTY_FEE()));
+    public Money checkBalance() {
+        if(super.getBalance().getAmount().compareTo(minimumBalance.getAmount()) < 0) {
+            super.withdraw(super.getPENALTY_FEE());
         }
+        return super.checkBalance();
     }
 
     @Override

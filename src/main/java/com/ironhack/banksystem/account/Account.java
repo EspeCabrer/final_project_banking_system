@@ -46,13 +46,21 @@ public abstract class Account {
 
 
     public void withdraw(BigDecimal amount) {
+        this.checkBalance();
         if(this.getBalance().getAmount().compareTo(amount) > 0) {
             this.balance.setAmount(this.balance.getAmount().subtract(amount));
         } else throw new IllegalArgumentException("Insufficient funds");
     }
 
     public void deposit(BigDecimal amount) {
+        this.checkBalance();
         this.balance.setAmount(this.balance.getAmount().add(amount));
     }
+
+    //Used in subclasses to override and apply penalty Fee
+    public Money checkBalance() {
+        return this.balance;
+    }
+
 
 }
