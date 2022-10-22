@@ -4,10 +4,7 @@ import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
 import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -20,17 +17,32 @@ public class CreditCardController {
     @Autowired
     CreditCardService creditCardService;
 
-    @PostMapping("/accounts/new/creditcard")
+    @PostMapping("/account/new/creditcard")
     @ResponseStatus(HttpStatus.CREATED)
-    public CreditCard addCreditCard(@Valid @RequestBody CreditCardCreateDTO creditCardDTO) {
-        AccountHolder primaryOwner = accountHolderService.getByUsername(creditCardDTO.getPrimaryOwnerUserName());
+    public CreditCard addCreditCard(@Valid @RequestBody CreditCardCreateDTO creditCardCreateDTO) {
+        AccountHolder primaryOwner = accountHolderService.getByUsername(creditCardCreateDTO.getPrimaryOwnerUserName());
         AccountHolder secondaryOwner = null;
-        if(creditCardDTO.getSecondaryOwnerUserName() != null) {
-            secondaryOwner = accountHolderService.getByUsername(creditCardDTO.getSecondaryOwnerUserName());
+        if(creditCardCreateDTO.getSecondaryOwnerUserName() != null) {
+            secondaryOwner = accountHolderService.getByUsername(creditCardCreateDTO.getSecondaryOwnerUserName());
         }
 
-        return creditCardService.add(creditCardDTO, primaryOwner, secondaryOwner);
+        return creditCardService.add(creditCardCreateDTO, primaryOwner, secondaryOwner);
     }
+
+    @PutMapping("/account/update/creditcard/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public CreditCard updateCreditCard(@PathVariable Long id,
+                                       @RequestBody CreditCardCreateDTO creditCardCreateDTO) {
+
+        AccountHolder primaryOwner = accountHolderService.getByUsername(creditCardCreateDTO.getPrimaryOwnerUserName());
+        AccountHolder secondaryOwner = null;
+        if(creditCardCreateDTO.getSecondaryOwnerUserName() != null) {
+            secondaryOwner = accountHolderService.getByUsername(creditCardCreateDTO.getSecondaryOwnerUserName());
+        }
+
+        return creditCardService.updateCreditCard(id, creditCardCreateDTO, primaryOwner, secondaryOwner);
+    }
+
 }
 
 

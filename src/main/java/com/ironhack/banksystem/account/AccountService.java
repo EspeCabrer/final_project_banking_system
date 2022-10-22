@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AccountService {
@@ -80,4 +81,9 @@ public class AccountService {
         return senderAccount.getBalance();
     }
 
+    public void delete(Long accountId) {
+        Optional<Account> accountToRemove = accountRepository.findById(accountId);
+        if (accountToRemove.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found");
+        else accountRepository.delete(accountToRemove.get());
+    }
 }

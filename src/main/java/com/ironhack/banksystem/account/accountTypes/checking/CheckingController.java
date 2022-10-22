@@ -25,7 +25,7 @@ public class CheckingController {
     @Autowired
     StudentCheckingService studentCheckingService;
 
-    @PostMapping("accounts/new/checking")
+    @PostMapping("account/new/checking")
     @ResponseStatus(HttpStatus.CREATED)
     public AddCheckingAccountReturnedDTO addCheckingAccount(@Valid @RequestBody CheckingCreateDTO checkingDTO) {
        AccountHolder primaryOwner = accountHolderService.getByUsername(checkingDTO.getPrimaryOwnerUserName());

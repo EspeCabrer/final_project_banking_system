@@ -40,4 +40,10 @@ public class AccountController {
 
         return accountService.doTransfer(user.getUsername(), senderAccountId, transferDTO);
     }
+
+    @DeleteMapping("account/delete/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable("id") Long accountId) {
+        accountService.delete(accountId);
+    }
 }

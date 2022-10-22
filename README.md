@@ -1,7 +1,7 @@
 # PROYECTO FINAL BOOTCAMP BACKEND IRONHACK
 ## Banking system
 
-Proyecto realizado con spring boot donde se crea una API simple de un sistema bancario incorporando seguridad básica y testing.
+Proyecto realizado con spring boot donde se crea una API REST de un sistema bancario incorporando seguridad básica y testing.
 Cómo dependencias a destacar se han usado:
 - spring-boot-starter-web
 - spring-boot-devtools
@@ -59,15 +59,19 @@ vincula a los usuarios tipo **Admin** y el rol ACCOUNT_HOLDER a los tipo **Accou
 #### *ADMIN*
 - POST /thirdparty/new
   - Crea un **ThirdParty**.
-- POST /accounts/new/savings
+- POST /account/new/savings
   - Crea una cuenta tipo **Savings**
-- POST /accounts/new/creditcard
+- POST /account/new/creditcard
   - Crea una cuenta tipo **CreditCard**
-- POST /accounts/new/checking
+- POST /account/new/checking
   - Crea una cuenta tipo **Checking**, si el primaryOwner de la cuenta es menor de 24 años se crea una cuenta tipo
   **StudentChecking** de forma automática.
 - GET /account/balance/{id}
   - Acceso al balance de todas las cuentas.
+- PUT /account/update/creditcard/{id}
+  - Actualiza una cuenta **CreditCard**.
+- DELETE /account/delete/{id}
+  - Borra una cuenta.
 
 #### *ACCOUNT HOLDER*
 - GET /account/balance/{id}

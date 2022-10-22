@@ -26,6 +26,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -73,12 +74,24 @@ public class AccountControllerTests {
         long nonExistentAccountId = existentAccountId + 1;
 
 
-       mockMvc.perform(patch("/admin/account/balance/" + existentAccountId).content(body).contentType(MediaType.APPLICATION_JSON))
+       mockMvc.perform(patch("/account/balance/" + existentAccountId).content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
 
-       mockMvc.perform(patch("/admin/account/balance/"+ nonExistentAccountId).content(body).contentType(MediaType.APPLICATION_JSON))
+       mockMvc.perform(patch("/account/balance/"+ nonExistentAccountId).content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound()).andReturn();
 
        assertEquals(new BigDecimal("500.00"), accountRepository.findById(existentAccountId).get().getBalance().getAmount());
+    }
+
+    @Test
+    public void delete_deleteAccountById_WorksOk() throws Exception {
+
+        List<Account> accounts = accountRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        Account accountToRemove = accounts.get(0);
+
+        mockMvc.perform(delete("/account/delete/" + accountToRemove.getId()))
+                .andExpect(status().isOk()).andReturn();
+
+        assertTrue(accountRepository.findById(accountToRemove.getId()).isEmpty());
     }
 }

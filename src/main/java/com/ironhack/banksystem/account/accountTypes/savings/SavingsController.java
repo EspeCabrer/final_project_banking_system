@@ -20,7 +20,7 @@ public class SavingsController {
     @Autowired
     AccountHolderService accountHolderService;
 
-    @PostMapping("/accounts/new/savings")
+    @PostMapping("/account/new/savings")
     @ResponseStatus(HttpStatus.CREATED)
     public Savings addSavingsAccount(@Valid @RequestBody SavingsDTO savingsDTO) {
         AccountHolder primaryOwner = accountHolderService.getByUsername(savingsDTO.getPrimaryOwnerUserName());

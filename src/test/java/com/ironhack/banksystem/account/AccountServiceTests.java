@@ -238,4 +238,5 @@ public class AccountServiceTests {
         assertEquals(new BigDecimal("150.00"), accountRepository.findById(accountUserAlex.getId()).get().getBalance().getAmount());
         assertEquals(new BigDecimal("150.00"), newSenderAccountBalance.getAmount());
     }
+
 }
