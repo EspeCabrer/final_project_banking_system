@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ThirdParty {
+public class ThirdPartyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,7 +23,7 @@ public class ThirdParty {
     @Column(unique = true)
     private String name;
 
-    public ThirdParty(String hashedKey, String name) {
+    public ThirdPartyEntity(String hashedKey, String name) {
         this.hashedKey = hashedKey;
         this.name = name;
     }
