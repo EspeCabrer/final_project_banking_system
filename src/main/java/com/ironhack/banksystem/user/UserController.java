@@ -15,7 +15,7 @@ public class UserController {
     UserRepository userRepository;
 
     @GetMapping("/users")
-    public List<User> findAll(@AuthenticationPrincipal UserDetails userDetails) {
+    public List<UserEntity> findAll(@AuthenticationPrincipal UserDetails userDetails) {
         System.out.println(userDetails.getUsername());
 
         return userRepository.findAll();

@@ -1,14 +1,13 @@
 package com.ironhack.banksystem.account.accountTypes.checking;
 
-import com.ironhack.banksystem.account.accountTypes.checking.DTO.AddCheckingAccountReturnedDTO;
-import com.ironhack.banksystem.account.accountTypes.checking.DTO.CheckingDTO;
+import com.ironhack.banksystem.account.accountTypes.checking.dto.AddCheckingAccountReturnedDTO;
+import com.ironhack.banksystem.account.accountTypes.checking.dto.CheckingCreateDTO;
 import com.ironhack.banksystem.address.Address;
-import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleEntity;
 import com.ironhack.banksystem.role.RoleRepository;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,7 +36,7 @@ public class CheckingServiceTests {
 
     @Autowired
     private RoleRepository roleRepository;
-    Role role;
+    RoleEntity role;
 
     @BeforeEach
     public void setUp(){
@@ -59,11 +58,11 @@ public class CheckingServiceTests {
         Address address = new Address("Roma n25", "Madrid", 06754);
         AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null, role );
         accountHolderRepository.save(user);
-        CheckingDTO accountInfo = new CheckingDTO(new BigDecimal("2000"), "pepe87", "anton763", "secretKey");
+        CheckingCreateDTO accountInfo = new CheckingCreateDTO(new BigDecimal("2000"), "pepe87", "anton763", "secretKey");
 
         AddCheckingAccountReturnedDTO checkingAccountSaved = checkingService.add(accountInfo, user, null);
 
-        Optional<Checking> optionalChecking = checkingRepository.findById(checkingAccountSaved.getId());
+        Optional<CheckingEntity> optionalChecking = checkingRepository.findById(checkingAccountSaved.getId());
 
         assertTrue(optionalChecking.isPresent());
         assertEquals("pepe87", optionalChecking.get().getPrimaryOwner().getUsername());

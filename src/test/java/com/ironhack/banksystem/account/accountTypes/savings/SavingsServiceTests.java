@@ -2,10 +2,10 @@ package com.ironhack.banksystem.account.accountTypes.savings;
 
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleEntity;
 import com.ironhack.banksystem.role.RoleRepository;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ public class SavingsServiceTests {
     @Autowired
     private RoleRepository roleRepository;
 
-    Role role;
+    RoleEntity role;
 
 
     @BeforeEach
@@ -56,7 +56,7 @@ public class SavingsServiceTests {
         accountHolderRepository.save(user);
         SavingsDTO savingsDTO = new SavingsDTO(BigDecimal.valueOf(1000), "pepe87", null,null, null, "secretKey");
 
-        Savings savingsAccountSaved = savingsService.add(savingsDTO, user, null);
+        SavingsEntity savingsAccountSaved = savingsService.add(savingsDTO, user, null);
         assertTrue(savingsRepository.findById(savingsAccountSaved.getId()).isPresent());
     }
 }

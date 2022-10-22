@@ -1,9 +1,9 @@
 package com.ironhack.banksystem.account.accountTypes.checking;
 
-import com.ironhack.banksystem.account.accountTypes.checking.DTO.AddCheckingAccountReturnedDTO;
-import com.ironhack.banksystem.account.accountTypes.checking.DTO.CheckingDTO;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderService;
+import com.ironhack.banksystem.account.accountTypes.checking.dto.AddCheckingAccountReturnedDTO;
+import com.ironhack.banksystem.account.accountTypes.checking.dto.CheckingCreateDTO;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +27,7 @@ public class CheckingController {
 
     @PostMapping("accounts/new/checking")
     @ResponseStatus(HttpStatus.CREATED)
-    public AddCheckingAccountReturnedDTO addCheckingAccount(@Valid @RequestBody CheckingDTO checkingDTO) {
+    public AddCheckingAccountReturnedDTO addCheckingAccount(@Valid @RequestBody CheckingCreateDTO checkingDTO) {
        AccountHolder primaryOwner = accountHolderService.getByUsername(checkingDTO.getPrimaryOwnerUserName());
        AccountHolder secondaryOwner = null;
        if(checkingDTO.getSecondaryOwnerUserName() != null) {

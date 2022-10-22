@@ -1,7 +1,7 @@
 package com.ironhack.banksystem.account.accountTypes.savings;
 
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderService;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +22,7 @@ public class SavingsController {
 
     @PostMapping("/accounts/new/savings")
     @ResponseStatus(HttpStatus.CREATED)
-    public Savings addSavingsAccount(@Valid @RequestBody SavingsDTO savingsDTO) {
+    public SavingsEntity addSavingsAccount(@Valid @RequestBody SavingsDTO savingsDTO) {
         AccountHolder primaryOwner = accountHolderService.getByUsername(savingsDTO.getPrimaryOwnerUserName());
         AccountHolder secondaryOwner = null;
         if(savingsDTO.getSecondaryOwnerUserName() != null) {

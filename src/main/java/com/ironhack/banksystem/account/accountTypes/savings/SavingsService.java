@@ -1,7 +1,7 @@
 package com.ironhack.banksystem.account.accountTypes.savings;
 
 import com.ironhack.banksystem.money.Money;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,14 +15,14 @@ public class SavingsService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public Savings add(SavingsDTO savingsDTO, AccountHolder primaryOwner, AccountHolder secondaryOwner){
+    public SavingsEntity add(SavingsDTO savingsDTO, AccountHolder primaryOwner, AccountHolder secondaryOwner){
 
         Money minimumBalance = null;
         if (savingsDTO.getMinimumBalance() != null){
             minimumBalance = new Money(savingsDTO.getMinimumBalance());
         }
 
-        return savingsRepository.save(new Savings(
+        return savingsRepository.save(new SavingsEntity(
                 new Money(savingsDTO.getBalance()),
                 primaryOwner,
                 secondaryOwner,

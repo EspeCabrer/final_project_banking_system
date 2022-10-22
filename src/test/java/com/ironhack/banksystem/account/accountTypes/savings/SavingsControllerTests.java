@@ -1,13 +1,12 @@
 package com.ironhack.banksystem.account.accountTypes.savings;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleEntity;
 import com.ironhack.banksystem.role.RoleRepository;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +41,7 @@ public class SavingsControllerTests {
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
 
-    Role role;
+    RoleEntity role;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 

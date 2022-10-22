@@ -1,10 +1,7 @@
 package com.ironhack.banksystem.account.accountTypes.creditCard;
 
-import com.ironhack.banksystem.account.accountTypes.savings.Savings;
-import com.ironhack.banksystem.account.accountTypes.savings.SavingsDTO;
-import com.ironhack.banksystem.account.accountTypes.savings.SavingsService;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderService;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +22,7 @@ public class CreditCardController {
 
     @PostMapping("/accounts/new/creditcard")
     @ResponseStatus(HttpStatus.CREATED)
-    public CreditCard addCreditCard(@Valid @RequestBody CreditCardDTO creditCardDTO) {
+    public CreditCardEntity addCreditCard(@Valid @RequestBody CreditCardCreateDTO creditCardDTO) {
         AccountHolder primaryOwner = accountHolderService.getByUsername(creditCardDTO.getPrimaryOwnerUserName());
         AccountHolder secondaryOwner = null;
         if(creditCardDTO.getSecondaryOwnerUserName() != null) {

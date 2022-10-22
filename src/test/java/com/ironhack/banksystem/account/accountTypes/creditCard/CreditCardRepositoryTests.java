@@ -1,13 +1,12 @@
 package com.ironhack.banksystem.account.accountTypes.creditCard;
 
-import com.ironhack.banksystem.account.accountTypes.savings.Savings;
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleEntity;
 import com.ironhack.banksystem.role.RoleRepository;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,7 @@ public class CreditCardRepositoryTests {
     @Autowired
     private RoleRepository roleRepository;
 
-    Role role;
+    RoleEntity role;
 
     @BeforeEach
     public void setUp(){
@@ -51,10 +50,10 @@ public class CreditCardRepositoryTests {
         Address address = new Address("Roma n25", "Madrid", 06754);
         AccountHolder user = new AccountHolder("antonia34", "password", LocalDate.parse("2000-06-02"), address, null, role );
         accountHolderRepository.save(user);
-        CreditCard creditCard = creditCardRepository.save(new CreditCard(new Money(BigDecimal.valueOf(3000)), user, null,
+        CreditCardEntity creditCard = creditCardRepository.save(new CreditCardEntity(new Money(BigDecimal.valueOf(3000)), user, null,
                 null, null));
 
-        Optional<CreditCard> creditCardOptional = creditCardRepository.findById(creditCard.getId());
+        Optional<CreditCardEntity> creditCardOptional = creditCardRepository.findById(creditCard.getId());
 
         assertTrue(creditCardOptional.isPresent());
     }

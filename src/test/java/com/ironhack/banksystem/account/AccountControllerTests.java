@@ -1,16 +1,16 @@
 package com.ironhack.banksystem.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ironhack.banksystem.account.DTOs.AmountDTO;
-import com.ironhack.banksystem.account.accountTypes.creditCard.CreditCard;
+import com.ironhack.banksystem.account.dto.AmountDTO;
+import com.ironhack.banksystem.account.accountTypes.creditCard.CreditCardEntity;
 import com.ironhack.banksystem.account.accountTypes.creditCard.CreditCardRepository;
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleEntity;
 import com.ironhack.banksystem.role.RoleRepository;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,13 +54,13 @@ public class AccountControllerTests {
     public void setUp() {
         accountHolderRepository.deleteAll();
         creditCardRepository.deleteAll();
-        Role role = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
+        RoleEntity role = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         Address address = new Address("Roma n25", "Madrid", 06754);
         AccountHolder user = new AccountHolder("cristina", "password", LocalDate.parse("1987-06-02"), address, null, role );
         accountHolderRepository.save(user);
-        creditCardRepository.save(new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, null, null));
-        creditCardRepository.save(new CreditCard(new Money(BigDecimal.valueOf(2000)), user, null, null, null));
+        creditCardRepository.save(new CreditCardEntity(new Money(BigDecimal.valueOf(1000)), user, null, null, null));
+        creditCardRepository.save(new CreditCardEntity(new Money(BigDecimal.valueOf(2000)), user, null, null, null));
     }
 
     @Test
@@ -68,7 +68,7 @@ public class AccountControllerTests {
         AmountDTO amountDTO = new AmountDTO(BigDecimal.valueOf(500));
         String body = objectMapper.writeValueAsString(amountDTO);
 
-        List<Account> accounts = accountRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        List<AccountEntity> accounts = accountRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         long existentAccountId = accounts.get(0).getId();
         long nonExistentAccountId = existentAccountId + 1;
 

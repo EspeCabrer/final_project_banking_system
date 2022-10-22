@@ -1,10 +1,10 @@
 package com.ironhack.banksystem.account.accountTypes.checking;
 
-import com.ironhack.banksystem.account.accountTypes.checking.DTO.AddCheckingAccountReturnedDTO;
-import com.ironhack.banksystem.account.accountTypes.checking.DTO.CheckingDTO;
+import com.ironhack.banksystem.account.accountTypes.checking.dto.AddCheckingAccountReturnedDTO;
+import com.ironhack.banksystem.account.accountTypes.checking.dto.CheckingCreateDTO;
 import com.ironhack.banksystem.money.Money;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,9 +22,9 @@ public class CheckingService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public AddCheckingAccountReturnedDTO add(CheckingDTO checkingDTO, AccountHolder primaryOwner, AccountHolder secondaryOwner ){
-        Checking checking = checkingRepository.save(
-                new Checking(
+    public AddCheckingAccountReturnedDTO add(CheckingCreateDTO checkingDTO, AccountHolder primaryOwner, AccountHolder secondaryOwner ){
+        CheckingEntity checking = checkingRepository.save(
+                new CheckingEntity(
                         new Money(checkingDTO.getBalance()),
                         primaryOwner,
                         secondaryOwner,

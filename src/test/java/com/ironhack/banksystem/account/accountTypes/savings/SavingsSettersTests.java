@@ -3,9 +3,9 @@ package com.ironhack.banksystem.account.accountTypes.savings;
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleEntity;
 import com.ironhack.banksystem.role.RoleRepository;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ public class SavingsSettersTests {
 
     @BeforeEach
     public void setUp(){
-        Role role = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
+        RoleEntity role = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
         Address address = new Address("Roma n25", "Madrid", 06754);
         user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null, role );
     }
@@ -43,7 +43,7 @@ public class SavingsSettersTests {
         BigDecimal interestRate = new BigDecimal("0.6");
 
         assertThrows(IllegalArgumentException.class,
-                ()-> new Savings(new Money(new BigDecimal(1000)), user, null,  interestRate, new Money(), "secretKey"));
+                ()-> new SavingsEntity(new Money(new BigDecimal(1000)), user, null,  interestRate, new Money(), "secretKey"));
     }
 
     @Test
@@ -55,10 +55,10 @@ public class SavingsSettersTests {
 
 
         assertThrows(IllegalArgumentException.class,
-                ()-> new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.3"), minimumBalanceGreaterThan1000, "secretKey"));
+                ()-> new SavingsEntity(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.3"), minimumBalanceGreaterThan1000, "secretKey"));
 
         assertThrows(IllegalArgumentException.class,
-                ()-> new Savings(new Money(new BigDecimal(1000)), user, null,new BigDecimal("0.3"), minimumBalanceLessThan100, "secretKey"));
+                ()-> new SavingsEntity(new Money(new BigDecimal(1000)), user, null,new BigDecimal("0.3"), minimumBalanceLessThan100, "secretKey"));
     }
 
     @Test
@@ -66,7 +66,7 @@ public class SavingsSettersTests {
     public void setMinimumBalance_NullValue_AssignDefaultValue() throws ParseException {
 
         Money minimumBalance = null;
-        Savings savings = new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.3"), minimumBalance, "secretKey");
+        SavingsEntity savings = new SavingsEntity(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.3"), minimumBalance, "secretKey");
         assertEquals(new Money(BigDecimal.valueOf(1000)), savings.getMinimumBalance());
     }
 
@@ -75,7 +75,7 @@ public class SavingsSettersTests {
     public void setInterestRate_NullValue_AssignDefaultValue(){
 
         BigDecimal interestRate = null;
-        Savings savings = new Savings(new Money(new BigDecimal(1000)), user, null, interestRate, new Money(new BigDecimal("150")), "secretKey");
+        SavingsEntity savings = new SavingsEntity(new Money(new BigDecimal(1000)), user, null, interestRate, new Money(new BigDecimal("150")), "secretKey");
 
         assertEquals(BigDecimal.valueOf(0.0025), savings.getInterestRate());
     }
@@ -88,8 +88,8 @@ public class SavingsSettersTests {
         Date currentFakeDate = formatter.parse("26-12-2022");
 
         BigDecimal interestRate = BigDecimal.valueOf(0.5);
-        Savings savings1 = new Savings(new Money(new BigDecimal(1000)), user, null, interestRate, new Money(new BigDecimal("150")), "secretKey");
-        Savings savings2 = new Savings(new Money(new BigDecimal(1000)), user, null, interestRate, new Money(new BigDecimal("150")), "secretKey");
+        SavingsEntity savings1 = new SavingsEntity(new Money(new BigDecimal(1000)), user, null, interestRate, new Money(new BigDecimal("150")), "secretKey");
+        SavingsEntity savings2 = new SavingsEntity(new Money(new BigDecimal(1000)), user, null, interestRate, new Money(new BigDecimal("150")), "secretKey");
 
 
         assertEquals(new BigDecimal("2250.0000"), savings1.applyInterestRate(creationAccountFakeDate, currentFakeDate, 0).getAmount());

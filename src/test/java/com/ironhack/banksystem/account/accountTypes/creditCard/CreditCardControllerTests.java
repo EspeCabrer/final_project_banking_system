@@ -1,14 +1,12 @@
 package com.ironhack.banksystem.account.accountTypes.creditCard;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ironhack.banksystem.account.accountTypes.savings.SavingsDTO;
 import com.ironhack.banksystem.address.Address;
-import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleEntity;
 import com.ironhack.banksystem.role.RoleRepository;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -46,7 +43,7 @@ public class CreditCardControllerTests {
 
 
     private final ObjectMapper objectMapper = new ObjectMapper();
-    Role role;
+    RoleEntity role;
 
 
     @BeforeEach
@@ -70,7 +67,7 @@ public class CreditCardControllerTests {
 
     @Test
     void post_CreditCardAccount_WorksOk() throws Exception {
-        CreditCardDTO creditCardDTO = new CreditCardDTO(BigDecimal.valueOf(2000), "maria", "pepe", BigDecimal.valueOf(300), BigDecimal.valueOf(0.2));
+        CreditCardCreateDTO creditCardDTO = new CreditCardCreateDTO(BigDecimal.valueOf(2000), "maria", "pepe", BigDecimal.valueOf(300), BigDecimal.valueOf(0.2));
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
         mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -83,7 +80,7 @@ public class CreditCardControllerTests {
     @Test
     void post_CreditCardAccount_NullBalance_ThrowsError() throws Exception {
         BigDecimal balance = null;
-        CreditCardDTO creditCardDTO = new CreditCardDTO(balance, "maria", "maria", BigDecimal.valueOf(300), BigDecimal.valueOf(0.2));
+        CreditCardCreateDTO creditCardDTO = new CreditCardCreateDTO(balance, "maria", "maria", BigDecimal.valueOf(300), BigDecimal.valueOf(0.2));
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
         mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -94,7 +91,7 @@ public class CreditCardControllerTests {
     void post_CreditCardAccount_NullPrimaryOwner_ThrowsError() throws Exception {
 
         String primaryOwnerUserName = null;
-        CreditCardDTO creditCardDTO = new CreditCardDTO(BigDecimal.valueOf(2000), primaryOwnerUserName, "maria", BigDecimal.valueOf(300), BigDecimal.valueOf(0.2));
+        CreditCardCreateDTO creditCardDTO = new CreditCardCreateDTO(BigDecimal.valueOf(2000), primaryOwnerUserName, "maria", BigDecimal.valueOf(300), BigDecimal.valueOf(0.2));
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
         mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -105,7 +102,7 @@ public class CreditCardControllerTests {
     void post_CreditCardAccount_nullSecondaryOwner_WorksOk() throws Exception {
 
         String secondaryOwnerUserName = null;
-        CreditCardDTO creditCardDTO = new CreditCardDTO(BigDecimal.valueOf(2000), "maria", secondaryOwnerUserName, BigDecimal.valueOf(300), BigDecimal.valueOf(0.2));
+        CreditCardCreateDTO creditCardDTO = new CreditCardCreateDTO(BigDecimal.valueOf(2000), "maria", secondaryOwnerUserName, BigDecimal.valueOf(300), BigDecimal.valueOf(0.2));
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
         mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -117,7 +114,7 @@ public class CreditCardControllerTests {
     void post_CreditCardAccount_nullCreditLimit_WorksOk() throws Exception {
 
         BigDecimal creditLimit = null;
-        CreditCardDTO creditCardDTO = new CreditCardDTO(BigDecimal.valueOf(2000), "maria", null, creditLimit, BigDecimal.valueOf(0.2));
+        CreditCardCreateDTO creditCardDTO = new CreditCardCreateDTO(BigDecimal.valueOf(2000), "maria", null, creditLimit, BigDecimal.valueOf(0.2));
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
         mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -128,7 +125,7 @@ public class CreditCardControllerTests {
     void post_CreditCardAccount_nullInterestRate_WorksOk() throws Exception {
 
         BigDecimal interestRate = null;
-        CreditCardDTO creditCardDTO = new CreditCardDTO(BigDecimal.valueOf(2000), "maria", null, BigDecimal.valueOf(300), interestRate);
+        CreditCardCreateDTO creditCardDTO = new CreditCardCreateDTO(BigDecimal.valueOf(2000), "maria", null, BigDecimal.valueOf(300), interestRate);
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
         mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))

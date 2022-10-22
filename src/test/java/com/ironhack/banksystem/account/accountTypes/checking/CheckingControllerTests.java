@@ -2,20 +2,18 @@ package com.ironhack.banksystem.account.accountTypes.checking;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ironhack.banksystem.account.accountTypes.checking.DTO.CheckingDTO;
+import com.ironhack.banksystem.account.accountTypes.checking.dto.CheckingCreateDTO;
 import com.ironhack.banksystem.address.Address;
-import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.role.RoleEntity;
 import com.ironhack.banksystem.role.RoleRepository;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
-import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
+import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -24,7 +22,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -53,7 +50,7 @@ public class CheckingControllerTests {
     ObjectMapper objectMapper = new ObjectMapper();
     Address address;
 
-    Role role;
+    RoleEntity role;
 
     @BeforeEach
     public void setUp() {
@@ -80,7 +77,7 @@ public class CheckingControllerTests {
 
         accountHolderRepository.save(primaryOwner);
         accountHolderRepository.save(secundaryOwner);
-        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", "maria63", "secretKey");
+        CheckingCreateDTO checkingDTO = new CheckingCreateDTO(new BigDecimal("2000"), "pepe87", "maria63", "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
         MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -90,7 +87,7 @@ public class CheckingControllerTests {
 
     @Test
     void post_CheckingAccount_invalidPrimaryOwnerUserName_ThrowsError() throws Exception {
-        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "anto76", null, "secretKey");
+        CheckingCreateDTO checkingDTO = new CheckingCreateDTO(new BigDecimal("2000"), "anto76", null, "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
         MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -101,7 +98,7 @@ public class CheckingControllerTests {
     void post_CheckingAccount_invalidSecondOwnerUserName_ThrowsError() throws Exception {
         AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null, role );
         accountHolderRepository.save(user);
-        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", "anton763", "secretKey");
+        CheckingCreateDTO checkingDTO = new CheckingCreateDTO(new BigDecimal("2000"), "pepe87", "anton763", "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
         MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -112,7 +109,7 @@ public class CheckingControllerTests {
     void post_CheckingAccount_nullSecondOwnerUserName_WorksOk() throws Exception {
         AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null, role );
         accountHolderRepository.save(user);
-        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", null, "secretKey");
+        CheckingCreateDTO checkingDTO = new CheckingCreateDTO(new BigDecimal("2000"), "pepe87", null, "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
         MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -123,7 +120,7 @@ public class CheckingControllerTests {
     void post_CheckingAccount_userAgeLess24_createStudentCheckingAccount_WorksOk() throws Exception {
         AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("2000-06-02"), address, null, role );
         accountHolderRepository.save(user);
-        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", null, "secretKey");
+        CheckingCreateDTO checkingDTO = new CheckingCreateDTO(new BigDecimal("2000"), "pepe87", null, "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
         MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
@@ -137,7 +134,7 @@ public class CheckingControllerTests {
     void post_CheckingAccount_userAgeGreater24_createCheckingAccount_WorksOk() throws Exception {
         AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1985-06-02"), address, null, role );
         accountHolderRepository.save(user);
-        CheckingDTO checkingDTO = new CheckingDTO(new BigDecimal("2000"), "pepe87", null, "secretKey");
+        CheckingCreateDTO checkingDTO = new CheckingCreateDTO(new BigDecimal("2000"), "pepe87", null, "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
         MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
