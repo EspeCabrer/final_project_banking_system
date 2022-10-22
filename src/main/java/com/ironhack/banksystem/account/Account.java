@@ -62,5 +62,9 @@ public abstract class Account {
         return this.balance;
     }
 
+    public String getSecretKey() {
+        return "";
+    }
+
 
 }

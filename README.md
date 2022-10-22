@@ -66,6 +66,9 @@ El rol admin se vincula a los usuarios tipo Admin y el role de AccountHolder a l
   - Transacciones
 
 #### Third party
+Son creadas por los admin. Al crear un third party se devuelve la hashed key encriptada que se utiliza para hacer
+las transferencias.
+Es necesario ponerla en el header de la petición http para poder hacer la transacción.
 Puede recibir y enviar dinero a otras cuentas, para ello se debe pasar la hashedKey 
 encriptada que se guarda en la base de datos
 una vez se crea la "Third party" en el header de la petición HTTP.

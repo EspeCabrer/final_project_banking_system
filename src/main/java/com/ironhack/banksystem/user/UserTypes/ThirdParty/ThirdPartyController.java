@@ -11,31 +11,17 @@ import javax.validation.Valid;
 @RestController
 public class ThirdPartyController {
 
-    @Autowired
-    ThirdPartyRepository thirdPartyRepository;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    ThirdPartyService thirdPartyService;
+
 
     @PatchMapping("account/thirdparty/deposit")
     @ResponseStatus(HttpStatus.OK)
     public void depositWithThidParty(
-            @RequestHeader String hashedKey,
+            @RequestHeader String encryptedHashedKey,
             @Valid @RequestBody ThirdPartyDTO thirdPartyDTO) {
 
-        System.err.println(hashedKey);
-
-
-        System.err.println(thirdPartyRepository.findByHashedKey(hashedKey).isPresent());
-        System.err.println(passwordEncoder.matches("hashedKey", hashedKey));
-        //passwordEncoder.matches(rawEnteredPassword, storedEncryptedPassword)
-//$2a$10$d8pirQ/C/1UOlb2CeWbNWezQ.1WwcFtOHstgAtsIBYGWok6oaHjKm
-
-        //ThirdParty thirdParty = thirdPartyRepository.findById(thirdPartyDTO.)
-
-
-        //return accountService.doTransfer(user.getUsername(), senderAccountId, transferDTO);
+        thirdPartyService.doTransaction(encryptedHashedKey, thirdPartyDTO);
     }
-
-
 }
