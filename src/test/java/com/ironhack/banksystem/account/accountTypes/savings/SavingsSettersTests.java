@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -60,11 +63,10 @@ public class SavingsSettersTests {
 
     @Test
     @DisplayName("SetMinimumBalance -- null value, assign default value")
-    public void setMinimumBalance_NullValue_AssignDefaultValue(){
+    public void setMinimumBalance_NullValue_AssignDefaultValue() throws ParseException {
 
         Money minimumBalance = null;
         Savings savings = new Savings(new Money(new BigDecimal(1000)), user, null, new BigDecimal("0.3"), minimumBalance, "secretKey");
-
         assertEquals(new Money(BigDecimal.valueOf(1000)), savings.getMinimumBalance());
     }
 
@@ -76,5 +78,24 @@ public class SavingsSettersTests {
         Savings savings = new Savings(new Money(new BigDecimal(1000)), user, null, interestRate, new Money(new BigDecimal("150")), "secretKey");
 
         assertEquals(BigDecimal.valueOf(0.0025), savings.getInterestRate());
+    }
+
+    @Test
+    @DisplayName("applyInterestRate -- works ok")
+    public void applyInterestRate_WorksOk() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Date creationAccountFakeDate = formatter.parse("26-11-2020");
+        Date currentFakeDate = formatter.parse("26-12-2022");
+
+        BigDecimal interestRate = BigDecimal.valueOf(0.5);
+        Savings savings1 = new Savings(new Money(new BigDecimal(1000)), user, null, interestRate, new Money(new BigDecimal("150")), "secretKey");
+        Savings savings2 = new Savings(new Money(new BigDecimal(1000)), user, null, interestRate, new Money(new BigDecimal("150")), "secretKey");
+
+
+        assertEquals(new BigDecimal("2250.0000"), savings1.applyInterestRate(creationAccountFakeDate, currentFakeDate, 0).getAmount());
+        assertEquals(new BigDecimal("2250.0000"), savings1.getBalance().getAmount());
+        assertEquals(2, savings1.getYearsOfInterestRateApplied());
+        assertEquals(new BigDecimal("1000.00"), savings2.applyInterestRate(creationAccountFakeDate, currentFakeDate, 2).getAmount());
+        assertEquals(new BigDecimal("1500.000"), savings2.applyInterestRate(creationAccountFakeDate, currentFakeDate, 1).getAmount());
     }
 }

@@ -57,7 +57,7 @@ public class AccountControllerTests {
         Role role = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         Address address = new Address("Roma n25", "Madrid", 06754);
-        AccountHolder user = new AccountHolder("maria", "password", LocalDate.parse("1987-06-02"), address, null, role );
+        AccountHolder user = new AccountHolder("cristina", "password", LocalDate.parse("1987-06-02"), address, null, role );
         accountHolderRepository.save(user);
         creditCardRepository.save(new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, null, null));
         creditCardRepository.save(new CreditCard(new Money(BigDecimal.valueOf(2000)), user, null, null, null));

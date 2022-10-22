@@ -96,5 +96,6 @@ Cuando el balance de una cuenta cae por debajo del balance mínimo se
 deduce el penaltyFee automáticamente cada vez que se usa (transacciones, ver balance). 
 
 ## Aclaraciones
-El método checkBalance de Account, aplica el penalty fee cada vez que el usuario accede a su balance, 
+El método checkBalance de Account, aplica el penalty fee cada vez que el usuario accede a su balance y 
+aplica el interest rate en savings anual. 
 el método withdraw aplica el penalty fee en caso necesario cada vez que se retira dinero de la cuenta.

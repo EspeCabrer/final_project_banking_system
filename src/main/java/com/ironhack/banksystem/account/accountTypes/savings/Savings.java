@@ -1,5 +1,6 @@
 package com.ironhack.banksystem.account.accountTypes.savings;
 
+import com.ironhack.banksystem.Utils;
 import com.ironhack.banksystem.account.Account;
 import com.ironhack.banksystem.account.EnumAccountStatus;
 import com.ironhack.banksystem.money.Money;
@@ -14,7 +15,16 @@ import javax.persistence.Enumerated;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+
+import static java.util.Calendar.*;
 
 @Entity
 @Getter
@@ -31,6 +41,8 @@ public class Savings extends Account {
     private String secretKey;
 
     private final Date CREATION_DATE = new Date(System.currentTimeMillis());
+
+    private int yearsOfInterestRateApplied = 0;
 
     @Enumerated(EnumType.STRING)
     private EnumAccountStatus status = EnumAccountStatus.ACTIVE;
@@ -75,7 +87,8 @@ public class Savings extends Account {
     }
 
     @Override
-    public Money checkBalance(){
+    public Money checkBalance() {
+        applyInterestRate();
         checkPenaltyFee();
         return this.getBalance();
     }
@@ -84,6 +97,33 @@ public class Savings extends Account {
         if(super.getBalance().getAmount().compareTo(minimumBalance.getAmount()) < 0) {
             super.withdraw(super.getPENALTY_FEE());
         }
+    }
+
+    private int checkYearsFromCreatedAccount() {
+        return Utils.getYearBetweenToDates(getCREATION_DATE(), new Date(System.currentTimeMillis()));
+    }
+
+    private void applyInterestRate() {
+        int yearsToPay = checkYearsFromCreatedAccount() - yearsOfInterestRateApplied;
+        if(yearsToPay > 0) {
+            deposit(getBalance().getAmount().multiply(new BigDecimal(yearsToPay).add(interestRate)));
+            yearsOfInterestRateApplied += yearsToPay;
+        }
+    }
+
+    //OverloadingToTest
+    public int checkYearsFromCreatedAccount(Date dateCreationAccount, Date currentDateToTest) {
+        return Utils.getYearBetweenToDates(dateCreationAccount, currentDateToTest);
+    }
+
+    public Money applyInterestRate(Date dateCreationAccountToTest, Date currentDateToTest, int yearsOfInterestRatePaid) {
+        int yearsToPay = checkYearsFromCreatedAccount(dateCreationAccountToTest, currentDateToTest) - yearsOfInterestRatePaid;
+        for (int i = yearsToPay; i > 0; i--) {
+            BigDecimal addToAccount = getBalance().getAmount().multiply(interestRate);
+            deposit(addToAccount);
+        }
+        yearsOfInterestRateApplied += yearsToPay;
+        return getBalance();
     }
 
     @Override
