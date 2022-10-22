@@ -23,7 +23,6 @@ public class Checking extends Account {
     @AttributeOverride(name = "currency", column = @Column(name = "minimum_balance_currency"))
     private final Money MINIMUM_BALANCE = new Money(BigDecimal.valueOf(250));
     private final BigDecimal MONTHLY_MAINTENANCE_FEE = BigDecimal.valueOf(12);
-    private final Date CREATION_DATE = new Date(System.currentTimeMillis());
     @Enumerated(EnumType.STRING)
     private EnumAccountStatus status = EnumAccountStatus.ACTIVE;
 

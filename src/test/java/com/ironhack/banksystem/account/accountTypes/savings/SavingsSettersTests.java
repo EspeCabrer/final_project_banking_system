@@ -81,7 +81,7 @@ public class SavingsSettersTests {
     }
 
     @Test
-    @DisplayName("applyInterestRate -- works ok")
+    @DisplayName("applyInterestRateMethod -- works ok")
     public void applyInterestRate_WorksOk() throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Date creationAccountFakeDate = formatter.parse("26-11-2020");

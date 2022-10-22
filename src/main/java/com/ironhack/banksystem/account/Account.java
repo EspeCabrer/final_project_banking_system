@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -37,6 +38,8 @@ public abstract class Account {
     private AccountHolder secondaryOwner;
 
     private final BigDecimal PENALTY_FEE = BigDecimal.valueOf(40);
+
+    private final Date CREATION_DATE = new Date(System.currentTimeMillis());
 
     public Account(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
         this.balance = balance;

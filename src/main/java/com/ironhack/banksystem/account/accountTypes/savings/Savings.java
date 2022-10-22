@@ -31,12 +31,12 @@ public class Savings extends Account {
     @Column(nullable = false)
     private String secretKey;
 
-    private final Date CREATION_DATE = new Date(System.currentTimeMillis());
-
     private int yearsOfInterestRateApplied = 0;
 
     @Enumerated(EnumType.STRING)
     private EnumAccountStatus status = EnumAccountStatus.ACTIVE;
+
+
 
     public Savings(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal interestRate, Money minimumBalance, String secretKey) {
         super(balance, primaryOwner, secondaryOwner);
@@ -96,10 +96,11 @@ public class Savings extends Account {
 
     private void applyInterestRate() {
         int yearsToPay = checkYearsFromCreatedAccount() - yearsOfInterestRateApplied;
-        if(yearsToPay > 0) {
-            deposit(getBalance().getAmount().multiply(new BigDecimal(yearsToPay).add(interestRate)));
-            yearsOfInterestRateApplied += yearsToPay;
+        for (int i = yearsToPay; i > 0; i--) {
+            BigDecimal addToAccount = getBalance().getAmount().multiply(interestRate);
+            deposit(addToAccount);
         }
+        yearsOfInterestRateApplied += yearsToPay;
     }
 
     //OverloadingToTest
@@ -123,7 +124,6 @@ public class Savings extends Account {
                 "interestRate=" + interestRate +
                 ", minimumBalance=" + minimumBalance +
                 ", secretKey='" + secretKey + '\'' +
-                ", CREATION_DATE=" + CREATION_DATE +
                 ", status=" + status +
                 '}';
     }

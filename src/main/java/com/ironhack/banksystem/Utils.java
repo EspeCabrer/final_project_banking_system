@@ -23,7 +23,7 @@ public class Utils {
         return diff;
     }
 
-    public static long getMonthsBetweenToDates(Date date1, Date date2) {
+    public static int getMonthsBetweenToDates(Date date1, Date date2) {
         Calendar calendar1 = getCalendar(date1);
         Calendar calendar2 = getCalendar(date2);
         int yearsInBetween = calendar2.get(Calendar.YEAR) -

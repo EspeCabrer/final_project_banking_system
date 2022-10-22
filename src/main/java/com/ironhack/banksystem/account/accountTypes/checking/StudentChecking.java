@@ -20,7 +20,6 @@ import java.util.Date;
 public class StudentChecking extends Account {
 
     private String secretKey;
-    private final Date CREATION_DATE = new Date(System.currentTimeMillis());
     @Enumerated(EnumType.STRING)
     private EnumAccountStatus status;
 

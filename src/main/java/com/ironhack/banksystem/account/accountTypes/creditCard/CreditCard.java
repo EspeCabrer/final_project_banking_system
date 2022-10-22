@@ -1,5 +1,6 @@
 package com.ironhack.banksystem.account.accountTypes.creditCard;
 
+import com.ironhack.banksystem.Utils;
 import com.ironhack.banksystem.account.Account;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
@@ -10,6 +11,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -22,12 +24,20 @@ public class CreditCard extends Account {
 
     private Money creditLimit;
 
+    private int monthsOfInterestRateApplied = 0;
+
     public CreditCard(Money balance, AccountHolder primaryOwner,
                       AccountHolder secondaryOwner,
                       BigDecimal interestRate, Money creditLimit) {
         super(balance, primaryOwner, secondaryOwner);
         setInterestRate(interestRate);
         setCreditLimit(creditLimit);
+    }
+
+    @Override
+    public Money checkBalance() {
+        applyInterestRate();
+        return this.getBalance();
     }
 
     public void setInterestRate(BigDecimal interestRate) {
@@ -49,4 +59,36 @@ public class CreditCard extends Account {
             this.creditLimit = creditLimit;
         }
     }
+
+    private int checkMonthsFromCreatedAccount() {
+        return Utils.getMonthsBetweenToDates(getCREATION_DATE(), new Date(System.currentTimeMillis()));
+    }
+
+    private void applyInterestRate() {
+        BigDecimal monthlyInterest = getInterestRate().divide(BigDecimal.valueOf(12));
+        int monthsToPay = checkMonthsFromCreatedAccount() - monthsOfInterestRateApplied;
+        for (int i = monthsToPay; i > 0; i--) {
+            BigDecimal addToAccount = getBalance().getAmount().multiply(monthlyInterest);
+            deposit(addToAccount);
+        }
+        monthsOfInterestRateApplied += monthsToPay;
+    }
+
+    //OverloadingToTest
+     int checkMonthsFromCreatedAccount(Date dateCreationAccount, Date currentDateToTest) {
+        return Utils.getMonthsBetweenToDates(dateCreationAccount, currentDateToTest);
+    }
+
+    public Money applyInterestRate(Date dateCreationAccountToTest, Date currentDateToTest, int monthsOfInterestRatePaid) {
+        BigDecimal monthlyInterest = getInterestRate().divide(BigDecimal.valueOf(12));
+        int monthsToPay = checkMonthsFromCreatedAccount(dateCreationAccountToTest, currentDateToTest) - monthsOfInterestRatePaid;
+        for (int i = monthsToPay; i > 0; i--) {
+            BigDecimal addToAccount = getBalance().getAmount().multiply(monthlyInterest);
+            deposit(addToAccount);
+        }
+        monthsOfInterestRateApplied += monthsToPay;
+        return getBalance();
+    }
+
+
 }
