@@ -1,4 +1,4 @@
-package com.ironhack.banksystem.user.UserTypes.ThirdParty;
+package com.ironhack.banksystem.user.UserTypes.ThirdParty.DTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 @Getter
 @AllArgsConstructor
-public class ThirdPartyDTO {
+public class ThirdPartyTransferDTO {
 
     private BigDecimal amount;
     @NotNull

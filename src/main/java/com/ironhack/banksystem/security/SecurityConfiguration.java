@@ -37,9 +37,9 @@ public class SecurityConfiguration {
 
         httpSecurity.authorizeRequests()
                 .mvcMatchers(HttpMethod.PATCH, "admin/account/balance/{id}").hasAnyRole(String.valueOf(EnumRole.ADMIN))
+                .mvcMatchers(HttpMethod.GET, "thirdparty/new").hasAnyRole(String.valueOf(EnumRole.ADMIN))
                 .mvcMatchers(HttpMethod.PATCH, "account/transfer/{id}").hasAnyRole(String.valueOf(EnumRole.ACCOUNT_HOLDER))
                 //.mvcMatchers(HttpMethod.GET, "/account/**").hasAnyRole(String.valueOf(EnumRole.ACCOUNT_HOLDER))
-               // .mvcMatchers(HttpMethod.GET, "/users").hasAnyRole(String.valueOf(EnumRole.ADMIN))
               //  .mvcMatchers(HttpMethod.GET,"/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll();
 

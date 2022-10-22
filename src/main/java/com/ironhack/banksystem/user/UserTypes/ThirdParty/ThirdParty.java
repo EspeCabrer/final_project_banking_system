@@ -21,6 +21,7 @@ public class ThirdParty {
     @Column(unique = true)
     private String hashedKey;
 
+    @Column(unique = true)
     private String name;
 
     public ThirdParty(String hashedKey, String name) {

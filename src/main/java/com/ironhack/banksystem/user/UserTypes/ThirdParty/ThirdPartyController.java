@@ -1,9 +1,9 @@
 package com.ironhack.banksystem.user.UserTypes.ThirdParty;
 
-import com.ironhack.banksystem.account.DTOs.TransferDTO;
+import com.ironhack.banksystem.user.UserTypes.ThirdParty.DTOs.ThirdPartyCreateDTO;
+import com.ironhack.banksystem.user.UserTypes.ThirdParty.DTOs.ThirdPartyTransferDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -11,17 +11,22 @@ import javax.validation.Valid;
 @RestController
 public class ThirdPartyController {
 
-
     @Autowired
     ThirdPartyService thirdPartyService;
 
+    @PostMapping("thirdparty/new")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ThirdParty addThirdParty(@Valid @RequestBody ThirdPartyCreateDTO thirdPartyCreateDTO) {
+        return thirdPartyService.add(thirdPartyCreateDTO);
+    }
 
-    @PatchMapping("account/thirdparty/deposit")
+
+    @PatchMapping("thirdparty/deposit")
     @ResponseStatus(HttpStatus.OK)
     public void depositWithThidParty(
-            @RequestHeader String encryptedHashedKey,
-            @Valid @RequestBody ThirdPartyDTO thirdPartyDTO) {
+            @RequestHeader String hashedKey,
+            @Valid @RequestBody ThirdPartyTransferDTO thirdPartyTransferDTO) {
 
-        thirdPartyService.doTransaction(encryptedHashedKey, thirdPartyDTO);
+        thirdPartyService.doTransaction(hashedKey, thirdPartyTransferDTO);
     }
 }

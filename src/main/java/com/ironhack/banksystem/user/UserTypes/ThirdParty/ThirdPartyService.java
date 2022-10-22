@@ -2,11 +2,15 @@ package com.ironhack.banksystem.user.UserTypes.ThirdParty;
 
 import com.ironhack.banksystem.account.Account;
 import com.ironhack.banksystem.account.AccountRepository;
+import com.ironhack.banksystem.user.UserTypes.ThirdParty.DTOs.ThirdPartyCreateDTO;
+import com.ironhack.banksystem.user.UserTypes.ThirdParty.DTOs.ThirdPartyTransferDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+@Service
 public class ThirdPartyService {
 
     @Autowired
@@ -17,6 +21,12 @@ public class ThirdPartyService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    public ThirdParty add(ThirdPartyCreateDTO dto) {
+        if (thirdPartyRepository.findByName(dto.getName()).isPresent())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This third party already exists");
+        return thirdPartyRepository.save(new ThirdParty(passwordEncoder.encode(dto.getName()), dto.getName()));
+    }
 
     public void checkIfThirdPartyExistsByEncryptedHashedKey(String encryptedHashedKey) {
         if (thirdPartyRepository.findByHashedKey(encryptedHashedKey).isEmpty())
@@ -30,9 +40,9 @@ public class ThirdPartyService {
         return account;
     }
 
-    public void doTransaction(String encryptedHashedKey, ThirdPartyDTO thirdPartyDTO) {
+    public void doTransaction(String encryptedHashedKey, ThirdPartyTransferDTO dto) {
         checkIfThirdPartyExistsByEncryptedHashedKey(encryptedHashedKey);
-        Account account = getAccountIfValidIdAndPassword(thirdPartyDTO.getAccountId(), thirdPartyDTO.getAccountKey());
-        account.deposit(thirdPartyDTO.getAmount());
+        Account account = getAccountIfValidIdAndPassword(dto.getAccountId(), dto.getAccountKey());
+        account.deposit(dto.getAmount());
     }
 }
