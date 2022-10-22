@@ -1,7 +1,7 @@
 # PROYECTO FINAL BOOTCAMP BACKEND IRONHACK
 ## Banking system
 
-Proyecto realizado con spring boot dónde se crea una API simple de un sistema de bancos incorporando seguridad básica y testing.
+Proyecto realizado con spring boot donde se crea una API simple de un sistema bancario incorporando seguridad básica y testing.
 Cómo dependencias a destacar se han usado:
 - spring-boot-starter-web
 - spring-boot-devtools
@@ -11,40 +11,42 @@ Cómo dependencias a destacar se han usado:
 - spring-boot-starter-security
 - lombok
 - jackson-datatype-jsr310
-- springdoc-openapi-ui
 
-- spring-boot-starter-test
-- spring-security-test
+## INICIO
+La applicación está por defecto conectada a un servidor local de mySQL apuntando a los esquemas *systembank* y *testbank*
+(para testing).
 
-### INICIO
-Al iniciar la aplicación se crean automáticamente usando CommandLineRunner:
+Al iniciar la app se insertan automáticamente usando CommandLineRunner los siguientes valores en la base de datos:
 
 #### Roles
 - ADMIN
 - ACCOUNT_HOLDER
 
 #### Usuarios
-- 1 User tipo Admin con role "ADMIN"
-  - Nombre: maria
-  - Contraseña: password*
+- Usuario tipo **Admin** con rol ADMIN
+  - Name: maria
+  - Password: password*
   
-- 2 User accountHolder con role "ACCOUNT_HOLDER"
+
+- Usuarios tipo **AccountHolder** con rol ACCOUNT_HOLDER
   - User1
-    - Nombre: pepe
-    - Contraseña: password*
+    - UserName: pepe
+    - Password: password*
   - User2
-    - Nombre: antonia
-    - Contraseña: password*
+    - UserName: antonia
+    - Password: password*
   
 *Se ha puesto la misma contraseña a los tres usuarios para simplificar.
 
 #### Cuentas
-- 1 Cuenta de Savings vinculada al user1
+- Cuenta tipo **Savings** vinculada a *user1*
   - Balance: 3000
-  - Secret Key: "secretKey"*
-- 1 Cuenta de Savings vinculada al user2
+  - SecretKey: secretKey*
+  
+
+- Cuenta tipo *Savings* vinculada a *user2*
   - Balance: 1500
-  - Secret Key: "secretKey"*
+  - SecretKey: secretKey*
 
 *Se ha puesto la misma contraseña a las dos cuentas para simplificar.
 
@@ -52,58 +54,109 @@ Al iniciar la aplicación se crean automáticamente usando CommandLineRunner:
 
 Existen dos roles con diferentes accesos permitidos:
 
-El rol admin se vincula a los usuarios tipo Admin y el role de AccountHolder a los tipo AccountHolder.
-#### Admin
-- Endpoint1
+El rol ADMIN se vincula a los usuarios tipo **Admin** y el rol ACCOUNT_HOLDER a los tipo **AccountHolder**.
+
+#### ENPOINTS
+#### *ADMIN*
+- POST /thirdparty/new
+  - Crea un **ThirdParty**.
+- POST /accounts/new/savings
+  - Crea una cuenta tipo **Savings**
+- POST /accounts/new/creditcard
+  - Crea una cuenta tipo **CreditCard**
+- POST /accounts/new/checking
+  - Crea una cuenta tipo **Checking**, si el primaryOwner de la cuenta es menor de 24 años se crea una cuenta tipo
+  **StudentChecking** de forma automática.
+- GET /account/balance/{id}
   - Acceso al balance de todas las cuentas.
-- Endpoint2
-  - Modificación del balance de todas la cuentas. 
 
-#### Account holder
-- Endpoint1
+#### *ACCOUNT HOLDER*
+- GET /account/balance/{id}
   - Acceso al balance de sus propias cuentas. 
-- Endpoint2
-  - Transacciones
-
-#### Third party
-Son creadas por los admin. Al crear un third party se devuelve la hashed key encriptada que se utiliza para hacer
-las transferencias.
-Es necesario ponerla en el header de la petición http para poder hacer la transacción.
-Puede recibir y enviar dinero a otras cuentas, para ello se debe pasar la hashedKey 
-encriptada que se guarda en la base de datos
-una vez se crea la "Third party" en el header de la petición HTTP.
+- PATCH /account/transfer/{id}
+  - Si hay suficientes fondos realiza una transferencia de una de sus cuentas a otra cuenta (suya o no).
 
 
-## API DOCUMENTATION
+####  *ACCESO PÚBLICO*
+  - POST /users/new/accountholder
+    - Crea un nuevo **AccountHolder**
 
-http://localhost:8080/swagger-ui/index.html
-## Diagrama de caso de uso
+####  *OTRO*
+- PATCH /thirdparty/deposit
+  - Realiza un depósito a una cuenta en concreto. Para permitir la operación es necesario pasar un hashedKey válido
+  por el header de la petición HTTP. *Ver más detalles. (vincular link).
+
+
+    
+
+
+## DOCUMENTATION
+
+### Swagger
+[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)*
+
+*Acceder una vez iniciada la applicación.
+
+### Diagrama de caso de uso
 ![](use_case.png)
 
-## Diagrama de clases
+### Diagrama de clases
 ![](uml_diagram.png)
 
 
-## Descripción de los tipos de cuentas
+## DETALLES
+
+### Third party
+Puede recibir y enviar dinero a otras cuentas.
+
+Las **ThirdParty** son creadas por los usuarios con rol ADMIN, para ello deben aportar simplemente un nombre.
+Una vez verificado que el nombre no está repetido en la base de datos se crea un código hashedKey que se devuelve 
+como respuesta a la petición http.
+
+Este código es necesario para poder hacer las transferencias vía *thirdParty* ya qué hay que proporcionarlo en el header
+de la petición http correspondiente.
+
 
 ### Savings
+**Propiedades**
+- balance: proporcionado por el usuario.
+- secretKey: proporcionado por el usuario.
+- PrimaryOwner: proporcionado por el usuario.
+- optional SecondaryOwner: proporcionado por el usuario.
+- minimumBalance: rango entre 100 y 1000. Por defecto es 1000.
+- penaltyFee: 40.
+- creationDate: se vincula de forma automática al crear la cuenta.
+- status (FROZEN, ACTIVE): se aplica el ACTIVE por defecto.
 - Interest rate: cómo máximo permitido 0.5. Por defecto es de 0.0025.
-- Balance mínimo: rango entre 100 y 1000. Por defecto es 1000.
-- PenaltyFee: 40
+
+
 
 ### CreditCards
-- Límite de crédito: rango entre 100 y 100000. Por defecto es 100.
-- Interest rate: rango entre 0.1 y 0.2. Por defecto es 0.2
-- PenaltyFee: 40
+- balance: proporcionado por el usuario.
+- PrimaryOwner: proporcionado por el usuario.
+- optional SecondaryOwner: proporcionado por el usuario.
+- creditLimit: rango entre 100 y 100000. Por defecto es 100.
+- interestRate: rango entre 0.1 y 0.2. Por defecto es 0.2
+- penaltyFee: 40
+
 
 ### CheckingAccounts
-- Si el titular de la cuenta es menor de 24 años se crea una "StudentCheckingAccount" automáticamente, de lo contrario se crea una CheckingAccount general.
-- Balance mínimo: 250.
-- Fee de mantenimiento mensual: 12.
-- PenaltyFee: 40
+**Propiedades**
+- balance: oroporcionado por el usuario.
+- secretKey: proporcionado por el usuario.
+- PrimaryOwner: proporcionado por el usuario.
+- optional SecondaryOwner: proporcionado por el usuario.
+- minimumBalance: 250.
+- penaltyFee: 40.
+- monthlyMaintenanceFee: 12.
+- creationDate: se vincula de forma automática al crear la cuenta.
+- status (FROZEN, ACTIVE): se aplica el ACTIVE por defecto.
 
-Cuando el balance de una cuenta cae por debajo del balance mínimo se 
-deduce el penaltyFee automáticamente cada vez que se usa (transacciones, ver balance). 
+Cuando el balance de una cuenta cae por debajo del balance mínimo se
+deduce el penaltyFee automáticamente cada vez que se accede a ella (transacciones, ver balance).
+
+Si el titular de la cuenta es menor de 24 años se crea una cuenta tipo
+**StudentCheckingAccount*** automáticamente que no tiene *monthlyMaintenanceFee* ni *minimumBalance*.
 
 ## Aclaraciones
 El método checkBalance de Account, aplica el penalty fee cada vez que el usuario accede a su balance y 
