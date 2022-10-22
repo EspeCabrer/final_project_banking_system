@@ -15,16 +15,7 @@ import javax.persistence.Enumerated;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
-
-import static java.util.Calendar.*;
 
 @Entity
 @Getter
@@ -100,7 +91,7 @@ public class Savings extends Account {
     }
 
     private int checkYearsFromCreatedAccount() {
-        return Utils.getYearBetweenToDates(getCREATION_DATE(), new Date(System.currentTimeMillis()));
+        return Utils.getYearsBetweenToDates(getCREATION_DATE(), new Date(System.currentTimeMillis()));
     }
 
     private void applyInterestRate() {
@@ -113,7 +104,7 @@ public class Savings extends Account {
 
     //OverloadingToTest
     public int checkYearsFromCreatedAccount(Date dateCreationAccount, Date currentDateToTest) {
-        return Utils.getYearBetweenToDates(dateCreationAccount, currentDateToTest);
+        return Utils.getYearsBetweenToDates(dateCreationAccount, currentDateToTest);
     }
 
     public Money applyInterestRate(Date dateCreationAccountToTest, Date currentDateToTest, int yearsOfInterestRatePaid) {
