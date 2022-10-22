@@ -19,9 +19,7 @@ public class AccountHolderController {
     @PostMapping("users/new/accountholder")
     @ResponseStatus(HttpStatus.CREATED)
     public AccountHolder addAccountHolderUser(@Valid @RequestBody AccountHolderDTO accountHolderDTO) {
-
         if(accountHolderService.isValidDateFormat(accountHolderDTO.getDateBirth())) return accountHolderService.add(accountHolderDTO);
         else throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid format for birth date. It must be 'yyyy-MM-dd'");
-        //if(LocalDate.parse(accountHolderDTO.getDateBirth())) return accountHolderService.add(accountHolderDTO);
     }
 }

@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 @Entity
@@ -65,7 +66,7 @@ public class CreditCard extends Account {
     }
 
     private void applyInterestRate() {
-        BigDecimal monthlyInterest = getInterestRate().divide(BigDecimal.valueOf(12));
+        BigDecimal monthlyInterest = getInterestRate().divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP);
         int monthsToPay = checkMonthsFromCreatedAccount() - monthsOfInterestRateApplied;
         for (int i = monthsToPay; i > 0; i--) {
             BigDecimal addToAccount = getBalance().getAmount().multiply(monthlyInterest);

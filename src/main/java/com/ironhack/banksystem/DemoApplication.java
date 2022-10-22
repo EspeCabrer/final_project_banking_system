@@ -12,6 +12,8 @@ import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolder;
 import com.ironhack.banksystem.user.UserTypes.AccountHolder.AccountHolderRepository;
 import com.ironhack.banksystem.user.UserTypes.Admin.Admin;
 import com.ironhack.banksystem.user.UserTypes.Admin.AdminRepository;
+import com.ironhack.banksystem.user.UserTypes.ThirdParty.ThirdParty;
+import com.ironhack.banksystem.user.UserTypes.ThirdParty.ThirdPartyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -41,6 +43,9 @@ public class DemoApplication implements CommandLineRunner {
 	RoleRepository roleRepository;
 
 	@Autowired
+	ThirdPartyRepository thirdPartyRepository;
+
+	@Autowired
 	PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args)  {
@@ -59,5 +64,8 @@ public class DemoApplication implements CommandLineRunner {
 		AccountHolder user3 = accountHolderRepository.save(new AccountHolder("antonia", passwordEncoder.encode("password"), LocalDate.parse("1980-03-05"), address, null, accountHolderRole ));
 		savingsRepository.save(new Savings(new Money(BigDecimal.valueOf(3000)), user2, null, null, null, passwordEncoder.encode("secretKey")));
 		savingsRepository.save(new Savings(new Money(BigDecimal.valueOf(1500)), user3, null, null, null, passwordEncoder.encode("secretKey")));
+
+		thirdPartyRepository.save(new ThirdParty(passwordEncoder.encode("hashedKey"), "thirdparty1" ));
+
 	}
 }

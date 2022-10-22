@@ -65,6 +65,11 @@ El rol admin se vincula a los usuarios tipo Admin y el role de AccountHolder a l
 - Endpoint2
   - Transacciones
 
+#### Third party
+Puede recibir y enviar dinero a otras cuentas, para ello se debe pasar la hashedKey 
+encriptada que se guarda en la base de datos
+una vez se crea la "Third party" en el header de la petición HTTP.
+
 
 ## API DOCUMENTATION
 

@@ -40,5 +40,4 @@ public class AccountController {
 
         return accountService.doTransfer(user.getUsername(), senderAccountId, transferDTO);
     }
-
 }
