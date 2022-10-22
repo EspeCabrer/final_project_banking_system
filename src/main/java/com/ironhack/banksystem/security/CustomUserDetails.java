@@ -1,7 +1,7 @@
 package com.ironhack.banksystem.security;
 
 
-import com.ironhack.banksystem.user.UserEntity;
+import com.ironhack.banksystem.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,10 +11,10 @@ import java.util.HashSet;
 
 public class CustomUserDetails implements UserDetails {
 
-    private UserEntity user;
+    private User user;
 
 
-    public CustomUserDetails(UserEntity user) {
+    public CustomUserDetails(User user) {
         this.user = user;
     }
 

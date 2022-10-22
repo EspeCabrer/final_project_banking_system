@@ -1,6 +1,6 @@
 package com.ironhack.banksystem.thirdParty;
 
-import com.ironhack.banksystem.account.AccountEntity;
+import com.ironhack.banksystem.account.Account;
 import com.ironhack.banksystem.account.AccountRepository;
 import com.ironhack.banksystem.thirdParty.DTOs.ThirdPartyCreateDTO;
 import com.ironhack.banksystem.thirdParty.DTOs.ThirdPartyTransferDTO;
@@ -33,8 +33,8 @@ public class ThirdPartyService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Third party not found");
     }
 
-    public AccountEntity getAccountIfValidIdAndPassword(Long accountId, String secretKey) {
-        AccountEntity account = accountRepository.findById(accountId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+    public Account getAccountIfValidIdAndPassword(Long accountId, String secretKey) {
+        Account account = accountRepository.findById(accountId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
         if (!passwordEncoder.matches(secretKey, account.getSecretKey()))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong account or password");
         return account;
@@ -42,7 +42,8 @@ public class ThirdPartyService {
 
     public void doTransaction(String encryptedHashedKey, ThirdPartyTransferDTO dto) {
         checkIfThirdPartyExistsByEncryptedHashedKey(encryptedHashedKey);
-        AccountEntity account = getAccountIfValidIdAndPassword(dto.getAccountId(), dto.getAccountKey());
+        Account account = getAccountIfValidIdAndPassword(dto.getAccountId(), dto.getAccountKey());
         account.deposit(dto.getAmount());
+        accountRepository.save(account);
     }
 }

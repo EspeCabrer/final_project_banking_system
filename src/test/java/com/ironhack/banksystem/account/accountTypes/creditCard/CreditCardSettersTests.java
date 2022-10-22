@@ -3,7 +3,7 @@ package com.ironhack.banksystem.account.accountTypes.creditCard;
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.role.RoleEntity;
+import com.ironhack.banksystem.role.Role;
 import com.ironhack.banksystem.role.RoleRepository;
 import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +32,7 @@ public class CreditCardSettersTests {
 
     @BeforeEach
     public void setUp() {
-        RoleEntity role = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
+        Role role = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
         Address address = new Address("Roma n25", "Madrid", 06754);
         user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null, role);
     }
@@ -45,10 +45,10 @@ public class CreditCardSettersTests {
         BigDecimal interestRateLessThanMin = BigDecimal.valueOf(0.09);
 
         assertThrows(IllegalArgumentException.class,
-                () -> new CreditCardEntity(new Money(BigDecimal.valueOf(1000)), user, null, interestRateGreaterThanMax, new Money(BigDecimal.valueOf(1000))));
+                () -> new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, interestRateGreaterThanMax, new Money(BigDecimal.valueOf(1000))));
 
         assertThrows(IllegalArgumentException.class,
-                () -> new CreditCardEntity(new Money(BigDecimal.valueOf(1000)), user, null, interestRateLessThanMin, new Money(BigDecimal.valueOf(1000))));
+                () -> new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, interestRateLessThanMin, new Money(BigDecimal.valueOf(1000))));
 
     }
 
@@ -57,7 +57,7 @@ public class CreditCardSettersTests {
     public void setInterestRate_NullValue_AssignDefaultValue() {
 
         BigDecimal interestRate = null;
-        CreditCardEntity creditCard = new CreditCardEntity(new Money(BigDecimal.valueOf(1000)), user, null, interestRate, new Money(BigDecimal.valueOf(1000)));
+        CreditCard creditCard = new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, interestRate, new Money(BigDecimal.valueOf(1000)));
 
         assertEquals(BigDecimal.valueOf(0.2), creditCard.getInterestRate());
     }
@@ -70,10 +70,10 @@ public class CreditCardSettersTests {
         Money creditLimitGreaterLessThanMin = new Money(BigDecimal.valueOf(99.9));
 
         assertThrows(IllegalArgumentException.class,
-                () -> new CreditCardEntity(new Money(BigDecimal.valueOf(1000)), user, null, null, creditLimitGreaterLessThanMin));
+                () -> new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, null, creditLimitGreaterLessThanMin));
 
         assertThrows(IllegalArgumentException.class,
-                () -> new CreditCardEntity(new Money(BigDecimal.valueOf(1000)), user, null, null, creditLimitGreaterThanMax));
+                () -> new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, null, creditLimitGreaterThanMax));
     }
 
     @Test
@@ -81,7 +81,7 @@ public class CreditCardSettersTests {
     public void setCreditLimit_NullValue_AssignDefaultValue() {
 
         Money creditLimit = null;
-        CreditCardEntity creditCard = new CreditCardEntity(new Money(BigDecimal.valueOf(1000)), user, null, null, creditLimit);
+        CreditCard creditCard = new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, null, creditLimit);
 
         assertEquals(new Money(BigDecimal.valueOf(100)), creditCard.getCreditLimit());
     }
@@ -94,8 +94,8 @@ public class CreditCardSettersTests {
         Date currentFakeDate = formatter.parse("05-03-2020");
 
         BigDecimal interestRate = BigDecimal.valueOf(0.12);
-        CreditCardEntity creditCard1 = new CreditCardEntity(new Money(BigDecimal.valueOf(1000)), user, null, interestRate, null);
-        CreditCardEntity creditCard2 = new CreditCardEntity(new Money(BigDecimal.valueOf(1000)), user, null, interestRate, null);
+        CreditCard creditCard1 = new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, interestRate, null);
+        CreditCard creditCard2 = new CreditCard(new Money(BigDecimal.valueOf(1000)), user, null, interestRate, null);
 
 
         assertEquals(1020.1, creditCard1.applyInterestRate(creationAccountFakeDate, currentFakeDate, 0).getAmount().doubleValue());

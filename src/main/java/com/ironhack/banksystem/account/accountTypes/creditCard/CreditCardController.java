@@ -22,7 +22,7 @@ public class CreditCardController {
 
     @PostMapping("/accounts/new/creditcard")
     @ResponseStatus(HttpStatus.CREATED)
-    public CreditCardEntity addCreditCard(@Valid @RequestBody CreditCardCreateDTO creditCardDTO) {
+    public CreditCard addCreditCard(@Valid @RequestBody CreditCardCreateDTO creditCardDTO) {
         AccountHolder primaryOwner = accountHolderService.getByUsername(creditCardDTO.getPrimaryOwnerUserName());
         AccountHolder secondaryOwner = null;
         if(creditCardDTO.getSecondaryOwnerUserName() != null) {

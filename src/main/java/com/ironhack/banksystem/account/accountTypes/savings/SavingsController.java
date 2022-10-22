@@ -22,7 +22,7 @@ public class SavingsController {
 
     @PostMapping("/accounts/new/savings")
     @ResponseStatus(HttpStatus.CREATED)
-    public SavingsEntity addSavingsAccount(@Valid @RequestBody SavingsDTO savingsDTO) {
+    public Savings addSavingsAccount(@Valid @RequestBody SavingsDTO savingsDTO) {
         AccountHolder primaryOwner = accountHolderService.getByUsername(savingsDTO.getPrimaryOwnerUserName());
         AccountHolder secondaryOwner = null;
         if(savingsDTO.getSecondaryOwnerUserName() != null) {

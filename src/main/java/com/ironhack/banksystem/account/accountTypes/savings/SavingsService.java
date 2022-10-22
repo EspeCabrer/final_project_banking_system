@@ -15,14 +15,14 @@ public class SavingsService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public SavingsEntity add(SavingsDTO savingsDTO, AccountHolder primaryOwner, AccountHolder secondaryOwner){
+    public Savings add(SavingsDTO savingsDTO, AccountHolder primaryOwner, AccountHolder secondaryOwner){
 
         Money minimumBalance = null;
         if (savingsDTO.getMinimumBalance() != null){
             minimumBalance = new Money(savingsDTO.getMinimumBalance());
         }
 
-        return savingsRepository.save(new SavingsEntity(
+        return savingsRepository.save(new Savings(
                 new Money(savingsDTO.getBalance()),
                 primaryOwner,
                 secondaryOwner,

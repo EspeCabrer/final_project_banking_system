@@ -1,7 +1,7 @@
 package com.ironhack.banksystem.user.userTypes.accountHolder;
 
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.role.RoleEntity;
+import com.ironhack.banksystem.role.Role;
 import com.ironhack.banksystem.role.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,7 +40,7 @@ public class AccountHolderService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This user already exists");
         }
 
-        RoleEntity role = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
+        Role role = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
 
         AccountHolder user = new AccountHolder(accountHolderDTO.getUsername(), passwordEncoder.encode(accountHolderDTO.getPassword()),LocalDate.parse(accountHolderDTO.getDateBirth()), accountHolderDTO.getPrimaryAddress(), accountHolderDTO.getMailingAddress(), role);
         return accountHolderRepository.save(user);

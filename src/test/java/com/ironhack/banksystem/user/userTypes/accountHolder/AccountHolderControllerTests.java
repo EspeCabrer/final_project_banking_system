@@ -3,7 +3,7 @@ package com.ironhack.banksystem.user.userTypes.accountHolder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.role.RoleEntity;
+import com.ironhack.banksystem.role.Role;
 import com.ironhack.banksystem.role.RoleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ public class AccountHolderControllerTests {
 
     ObjectMapper objectMapper = new ObjectMapper();
     Address address;
-    RoleEntity role;
+    Role role;
 
 
     @BeforeEach

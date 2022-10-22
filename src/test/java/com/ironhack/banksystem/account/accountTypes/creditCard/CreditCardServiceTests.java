@@ -2,7 +2,7 @@ package com.ironhack.banksystem.account.accountTypes.creditCard;
 
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.role.RoleEntity;
+import com.ironhack.banksystem.role.Role;
 import com.ironhack.banksystem.role.RoleRepository;
 import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
 import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderRepository;
@@ -32,7 +32,7 @@ public class CreditCardServiceTests {
     @Autowired
     CreditCardService creditCardService;
 
-    RoleEntity role;
+    Role role;
 
 
     @BeforeEach
@@ -55,7 +55,7 @@ public class CreditCardServiceTests {
         accountHolderRepository.save(user);
         CreditCardCreateDTO creditCardDTO = new CreditCardCreateDTO(BigDecimal.valueOf(2000), "maria", null, BigDecimal.valueOf(300), BigDecimal.valueOf(0.2));
 
-        CreditCardEntity creditCardSaved = creditCardService.add(creditCardDTO, user, null);
+        CreditCard creditCardSaved = creditCardService.add(creditCardDTO, user, null);
         assertTrue(creditCardRepository.findById(creditCardSaved.getId()).isPresent());
     }
 

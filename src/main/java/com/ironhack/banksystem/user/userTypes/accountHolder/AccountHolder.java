@@ -1,9 +1,9 @@
 package com.ironhack.banksystem.user.userTypes.accountHolder;
 
-import com.ironhack.banksystem.account.AccountEntity;
+import com.ironhack.banksystem.account.Account;
 import com.ironhack.banksystem.address.Address;
-import com.ironhack.banksystem.role.RoleEntity;
-import com.ironhack.banksystem.user.UserEntity;
+import com.ironhack.banksystem.role.Role;
+import com.ironhack.banksystem.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AccountHolder extends UserEntity {
+public class AccountHolder extends User {
 
     @Column(nullable = false)
     private LocalDate dateBirth;
@@ -34,13 +34,13 @@ public class AccountHolder extends UserEntity {
     private Address mailingAddress;
 
     @OneToMany(mappedBy = "primaryOwner", cascade = CascadeType.ALL)
-    private Set<AccountEntity> accountsByFirstOwner;
+    private Set<Account> accountsByFirstOwner;
 
     @OneToMany(mappedBy = "secondaryOwner", cascade = CascadeType.ALL)
-    private Set<AccountEntity> accountsBySecondOwner;
+    private Set<Account> accountsBySecondOwner;
 
 
-    public AccountHolder(String username, String password, LocalDate dateBirth, Address primaryAddress, Address mailingAddress, RoleEntity role) {
+    public AccountHolder(String username, String password, LocalDate dateBirth, Address primaryAddress, Address mailingAddress, Role role) {
         super(username, password, role);
         this.dateBirth = dateBirth;
         this.primaryAddress = primaryAddress;

@@ -3,7 +3,7 @@ package com.ironhack.banksystem.account.accountTypes.checking;
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.role.RoleEntity;
+import com.ironhack.banksystem.role.Role;
 import com.ironhack.banksystem.role.RoleRepository;
 import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
 import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderRepository;
@@ -33,7 +33,7 @@ public class StudentCheckingRepositoryTests {
     @Autowired
     private RoleRepository roleRepository;
 
-    RoleEntity role;
+    Role role;
 
     @BeforeEach
     void setUp() {
@@ -54,9 +54,9 @@ public class StudentCheckingRepositoryTests {
         accountHolderRepository.save(user);
 
 
-        StudentCheckingEntity account = new StudentCheckingEntity(new Money(new BigDecimal(2000)), user, null, "secretKey");
-        StudentCheckingEntity savedAccount = studentCheckingRepository.save(account);
-        Optional<StudentCheckingEntity> optionalStudentChecking = studentCheckingRepository.findById(savedAccount.getId());
+        StudentChecking account = new StudentChecking(new Money(new BigDecimal(2000)), user, null, "secretKey");
+        StudentChecking savedAccount = studentCheckingRepository.save(account);
+        Optional<StudentChecking> optionalStudentChecking = studentCheckingRepository.findById(savedAccount.getId());
 
         assertTrue(optionalStudentChecking.isPresent());
         assertEquals("antonia34", optionalStudentChecking.get().getPrimaryOwner().getUsername() );

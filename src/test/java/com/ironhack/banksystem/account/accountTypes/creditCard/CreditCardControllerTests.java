@@ -3,7 +3,7 @@ package com.ironhack.banksystem.account.accountTypes.creditCard;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.role.RoleEntity;
+import com.ironhack.banksystem.role.Role;
 import com.ironhack.banksystem.role.RoleRepository;
 import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
 import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderRepository;
@@ -43,7 +43,7 @@ public class CreditCardControllerTests {
 
 
     private final ObjectMapper objectMapper = new ObjectMapper();
-    RoleEntity role;
+    Role role;
 
 
     @BeforeEach

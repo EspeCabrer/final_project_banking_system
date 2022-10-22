@@ -1,7 +1,7 @@
 package com.ironhack.banksystem.account.accountTypes.creditCard;
 
 import com.ironhack.banksystem.Utils;
-import com.ironhack.banksystem.account.AccountEntity;
+import com.ironhack.banksystem.account.Account;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
 import lombok.Getter;
@@ -17,7 +17,7 @@ import java.util.Date;
 @Entity
 @Getter
 @NoArgsConstructor
-public class CreditCardEntity extends AccountEntity {
+public class CreditCard extends Account {
 
     @DecimalMax("0.2")
     @DecimalMin("0.1")
@@ -27,9 +27,9 @@ public class CreditCardEntity extends AccountEntity {
 
     private int monthsOfInterestRateApplied = 0;
 
-    public CreditCardEntity(Money balance, AccountHolder primaryOwner,
-                            AccountHolder secondaryOwner,
-                            BigDecimal interestRate, Money creditLimit) {
+    public CreditCard(Money balance, AccountHolder primaryOwner,
+                      AccountHolder secondaryOwner,
+                      BigDecimal interestRate, Money creditLimit) {
         super(balance, primaryOwner, secondaryOwner);
         setInterestRate(interestRate);
         setCreditLimit(creditLimit);

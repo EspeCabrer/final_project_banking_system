@@ -4,7 +4,7 @@ import com.ironhack.banksystem.account.dto.AmountDTO;
 import com.ironhack.banksystem.account.dto.TransferDTO;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.user.UserEntity;
+import com.ironhack.banksystem.user.User;
 import com.ironhack.banksystem.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class AccountService {
     @Autowired
     UserRepository userRepository;
 
-    public boolean isUserAccount(AccountEntity account, String userName) {
+    public boolean isUserAccount(Account account, String userName) {
 
         String primaryOwnerUserName = account.getPrimaryOwner().getUsername();
         String secondaryOwnerUserName = "";
@@ -44,8 +44,8 @@ public class AccountService {
 
 
     public Money getBalanceByAccountId(Long id, String userName){
-        AccountEntity account = accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
-        UserEntity user = userRepository.findByUsername(userName).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        Account account = accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+        User user = userRepository.findByUsername(userName).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
         EnumRole roleName = user.getRole().getName();
 
         if (roleName == EnumRole.ACCOUNT_HOLDER) {
@@ -56,15 +56,15 @@ public class AccountService {
 
     }
 
-    public AccountEntity updateBalanceByAccountId(Long id, AmountDTO amountDTO) {
-        AccountEntity account = accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+    public Account updateBalanceByAccountId(Long id, AmountDTO amountDTO) {
+        Account account = accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
         account.getBalance().setAmount(amountDTO.getAmount());
         return accountRepository.save(account);
     }
 
     public Money doTransfer(String senderUserName, Long senderAccountId, TransferDTO transferDTO) {
-        AccountEntity senderAccount = accountRepository.findById(senderAccountId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account " + senderAccountId + " not found"));
-        AccountEntity receiverAccount = accountRepository.findById(transferDTO.getReceiverAccountId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account " +transferDTO.getReceiverAccountId() + " not found"));
+        Account senderAccount = accountRepository.findById(senderAccountId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account " + senderAccountId + " not found"));
+        Account receiverAccount = accountRepository.findById(transferDTO.getReceiverAccountId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account " +transferDTO.getReceiverAccountId() + " not found"));
         if (isUserAccount(senderAccount, senderUserName) && isUserAccount(receiverAccount, transferDTO.getReceiverOwnerUserName())) {
             BigDecimal moneyToTransfer = transferDTO.getAmountToTransfer();
            try {

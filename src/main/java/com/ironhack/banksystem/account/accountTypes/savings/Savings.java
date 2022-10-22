@@ -1,7 +1,7 @@
 package com.ironhack.banksystem.account.accountTypes.savings;
 
 import com.ironhack.banksystem.Utils;
-import com.ironhack.banksystem.account.AccountEntity;
+import com.ironhack.banksystem.account.Account;
 import com.ironhack.banksystem.account.EnumAccountStatus;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
@@ -20,7 +20,7 @@ import java.util.Date;
 @Entity
 @Getter
 @NoArgsConstructor
-public class SavingsEntity extends AccountEntity {
+public class Savings extends Account {
 
     @DecimalMax(value = "0.5", inclusive = true)
     private BigDecimal interestRate;
@@ -38,7 +38,7 @@ public class SavingsEntity extends AccountEntity {
 
 
 
-    public SavingsEntity(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal interestRate, Money minimumBalance, String secretKey) {
+    public Savings(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal interestRate, Money minimumBalance, String secretKey) {
         super(balance, primaryOwner, secondaryOwner);
         setInterestRate(interestRate);
         setMinimumBalance(minimumBalance);

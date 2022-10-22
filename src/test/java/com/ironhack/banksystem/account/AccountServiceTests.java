@@ -2,19 +2,19 @@ package com.ironhack.banksystem.account;
 
 import com.ironhack.banksystem.account.dto.AmountDTO;
 import com.ironhack.banksystem.account.dto.TransferDTO;
-import com.ironhack.banksystem.account.accountTypes.checking.CheckingEntity;
+import com.ironhack.banksystem.account.accountTypes.checking.Checking;
 import com.ironhack.banksystem.account.accountTypes.checking.CheckingRepository;
-import com.ironhack.banksystem.account.accountTypes.creditCard.CreditCardEntity;
+import com.ironhack.banksystem.account.accountTypes.creditCard.CreditCard;
 import com.ironhack.banksystem.account.accountTypes.creditCard.CreditCardRepository;
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.role.RoleEntity;
+import com.ironhack.banksystem.role.Role;
 import com.ironhack.banksystem.role.RoleRepository;
 import com.ironhack.banksystem.user.UserRepository;
 import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
 import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderRepository;
-import com.ironhack.banksystem.user.userTypes.admin.AdminEntity;
+import com.ironhack.banksystem.user.userTypes.admin.Admin;
 import com.ironhack.banksystem.user.userTypes.admin.AdminRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,7 +57,7 @@ public class AccountServiceTests {
     @Autowired
     UserRepository userRepository;
 
-    AdminEntity userJose;
+    Admin userJose;
     AccountHolder userAlex;
     AccountHolder userAntonia;
 
@@ -65,10 +65,10 @@ public class AccountServiceTests {
     public void setUp(){
         accountHolderRepository.deleteAll();
         creditCardRepository.deleteAll();
-        RoleEntity accountHolderRole = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
-        RoleEntity adminRole = roleRepository.findByName(EnumRole.ADMIN).get();
+        Role accountHolderRole = roleRepository.findByName(EnumRole.ACCOUNT_HOLDER).get();
+        Role adminRole = roleRepository.findByName(EnumRole.ADMIN).get();
         Address address = new Address("Roma n25", "Madrid", 06754);
-        userJose = new AdminEntity("jose", "password", adminRole );
+        userJose = new Admin("jose", "password", adminRole );
         userAlex = new AccountHolder("alex", "password", LocalDate.parse("1987-06-02"), address, null, accountHolderRole );
         userAntonia = new AccountHolder("antonia", "password", LocalDate.parse("1987-06-02"), address, null, accountHolderRole );
         adminRepository.save(userJose);
@@ -87,7 +87,7 @@ public class AccountServiceTests {
 
         String userAccessName = userJose.getUsername();
         Money balance = new Money(BigDecimal.valueOf(10500));
-        CreditCardEntity accountUserPepe = creditCardRepository.save(new CreditCardEntity(balance, userAlex, null, null, null));
+        CreditCard accountUserPepe = creditCardRepository.save(new CreditCard(balance, userAlex, null, null, null));
 
         Money moneyOtherAccount = accountService.getBalanceByAccountId(accountUserPepe.getId(), userAccessName);
 
@@ -99,7 +99,7 @@ public class AccountServiceTests {
 
         String userAccessName = userAntonia.getUsername();
         Money balance = new Money(BigDecimal.valueOf(10500));
-        CreditCardEntity accountUserAlex = creditCardRepository.save(new CreditCardEntity(balance, userAlex, null, null, null));
+        CreditCard accountUserAlex = creditCardRepository.save(new CreditCard(balance, userAlex, null, null, null));
 
         assertThrows(ResponseStatusException.class,
                 ()-> accountService.getBalanceByAccountId(accountUserAlex.getId(), userAccessName));
@@ -110,7 +110,7 @@ public class AccountServiceTests {
 
         String userAccessName = userAlex.getUsername();
         Money balance = new Money(BigDecimal.valueOf(10500));
-        CreditCardEntity accountUserAlex = creditCardRepository.save(new CreditCardEntity(balance, userAlex, null, null, null));
+        CreditCard accountUserAlex = creditCardRepository.save(new CreditCard(balance, userAlex, null, null, null));
 
         Money moneyOwnAccount = accountService.getBalanceByAccountId(accountUserAlex.getId(), userAccessName);
 
@@ -122,7 +122,7 @@ public class AccountServiceTests {
         String userAccessName = userAlex.getUsername();
         //Checking MinimumBalance is 250
         Money balance = new Money(BigDecimal.valueOf(200));
-        CheckingEntity accountUserAlex = checkingRepository.save(new CheckingEntity(balance, userAlex, null, "secretKey"));
+        Checking accountUserAlex = checkingRepository.save(new Checking(balance, userAlex, null, "secretKey"));
         Money moneyOwnAccount = accountService.getBalanceByAccountId(accountUserAlex.getId(), userAccessName);
         //Expect 250 (initialBalance) - 40 (penalty fee) = 210
         assertEquals(new BigDecimal("160.00"), moneyOwnAccount.getAmount());
@@ -130,14 +130,14 @@ public class AccountServiceTests {
 
     @Test
     void isUserAccount_AccountNotBelongsUser_ReturnFalse(){
-        CreditCardEntity accountUserAlex = creditCardRepository.save(new CreditCardEntity(new Money(BigDecimal.valueOf(10500)), userAlex, null, null, null));
+        CreditCard accountUserAlex = creditCardRepository.save(new CreditCard(new Money(BigDecimal.valueOf(10500)), userAlex, null, null, null));
 
         assertFalse(accountService.isUserAccount(accountUserAlex, "jose"));;
     }
 
     @Test
     void isUserAccount_AccountBelongsUser_ReturnTrue(){
-        CreditCardEntity accountUserAlex = creditCardRepository.save(new CreditCardEntity(new Money(BigDecimal.valueOf(10500)), userAlex, null, null, null));
+        CreditCard accountUserAlex = creditCardRepository.save(new CreditCard(new Money(BigDecimal.valueOf(10500)), userAlex, null, null, null));
 
         assertTrue(accountService.isUserAccount(accountUserAlex, "alex"));;
     }
@@ -146,8 +146,8 @@ public class AccountServiceTests {
     void updateBalanceByAccountId_ValidAccountId_WorksOk(){
         Money balance = new Money(BigDecimal.valueOf(500));
         AmountDTO amountDTO = new AmountDTO(BigDecimal.valueOf(1000));
-        CreditCardEntity accountUserAlex = creditCardRepository.save(new CreditCardEntity(balance, userAlex, null, null, null));
-        AccountEntity updatedAccount = accountService.updateBalanceByAccountId(accountUserAlex.getId(), amountDTO);
+        CreditCard accountUserAlex = creditCardRepository.save(new CreditCard(balance, userAlex, null, null, null));
+        Account updatedAccount = accountService.updateBalanceByAccountId(accountUserAlex.getId(), amountDTO);
 
         assertEquals(amountDTO.getAmount(), updatedAccount.getBalance().getAmount());
     }
@@ -155,7 +155,7 @@ public class AccountServiceTests {
     @Test
     void updateBalanceByAccountId_NonExistentAccountId_ThrowsError(){
         AmountDTO amountDTO = new AmountDTO(BigDecimal.valueOf(1000));
-        List<AccountEntity> accounts = accountRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        List<Account> accounts = accountRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         long nonExistentId = 1;
         if (accounts.size() > 0){
             nonExistentId = accounts.get(0).getId() + 1;
@@ -168,8 +168,8 @@ public class AccountServiceTests {
     void doTransfer_ValidSenderInfo_And_ValidReceiverInfo_WorksOk(){
       Money balanceAlex = new Money(BigDecimal.valueOf(2500));
       Money balanceAntonia = new Money(BigDecimal.valueOf(5000));
-      CreditCardEntity accountUserAlex = creditCardRepository.save(new CreditCardEntity(balanceAlex, userAlex, null, null, null));
-      CreditCardEntity accountUserAntonia = creditCardRepository.save(new CreditCardEntity(balanceAntonia, userAntonia, null, null, null));
+      CreditCard accountUserAlex = creditCardRepository.save(new CreditCard(balanceAlex, userAlex, null, null, null));
+      CreditCard accountUserAntonia = creditCardRepository.save(new CreditCard(balanceAntonia, userAntonia, null, null, null));
       String senderUserName = "alex";
       String receiverUserName = "antonia";
       BigDecimal amountToTransfer = BigDecimal.valueOf(500);
@@ -185,7 +185,7 @@ public class AccountServiceTests {
     @Test
     void doTransfer_SenderUserName_NotBelongs_SenderAccountId_ThrowsError(){
         Money balanceAntonia = new Money(BigDecimal.valueOf(5000));
-        CreditCardEntity accountUserAntonia = creditCardRepository.save(new CreditCardEntity(balanceAntonia, userAntonia, null, null, null));
+        CreditCard accountUserAntonia = creditCardRepository.save(new CreditCard(balanceAntonia, userAntonia, null, null, null));
         String senderUserName = "alex";
         String receiverUserName = "antonia";
         BigDecimal amountToTransfer = BigDecimal.valueOf(500);
@@ -198,7 +198,7 @@ public class AccountServiceTests {
     @Test
     void doTransfer_ReceiverUserName_NotBelongs_ReceiverAccountId_ThrowsError(){
         Money balanceAlex = new Money(BigDecimal.valueOf(2500));
-        CreditCardEntity accountUserAlex = creditCardRepository.save(new CreditCardEntity(balanceAlex, userAlex, null, null, null));
+        CreditCard accountUserAlex = creditCardRepository.save(new CreditCard(balanceAlex, userAlex, null, null, null));
         BigDecimal amountToTransfer = BigDecimal.valueOf(500);
         TransferDTO transferDTO = new TransferDTO("antonia", accountUserAlex.getId(), amountToTransfer);
 
@@ -210,8 +210,8 @@ public class AccountServiceTests {
     void doTransfer_InsufficientFunds_ThrowsError(){
         Money balanceAlex = new Money(BigDecimal.valueOf(2500));
         Money balanceAntonia = new Money(BigDecimal.valueOf(5000));
-        CreditCardEntity accountUserAlex = creditCardRepository.save(new CreditCardEntity(balanceAlex, userAlex, null, null, null));
-        CreditCardEntity accountUserAntonia = creditCardRepository.save(new CreditCardEntity(balanceAntonia, userAntonia, null, null, null));
+        CreditCard accountUserAlex = creditCardRepository.save(new CreditCard(balanceAlex, userAlex, null, null, null));
+        CreditCard accountUserAntonia = creditCardRepository.save(new CreditCard(balanceAntonia, userAntonia, null, null, null));
         String senderUserName = "alex";
         String receiverUserName = "antonia";
         BigDecimal amountToTransfer = BigDecimal.valueOf(5000);
@@ -226,8 +226,8 @@ public class AccountServiceTests {
         Money balanceAlex = new Money(BigDecimal.valueOf(200));
         Money balanceAntonia = new Money(BigDecimal.valueOf(10));
         //Checking MinimumBalance is 250
-        CheckingEntity accountUserAlex = checkingRepository.save(new CheckingEntity(balanceAlex, userAlex, null, "secretKey"));
-        CreditCardEntity accountUserAntonia = creditCardRepository.save(new CreditCardEntity(balanceAntonia, userAntonia, null, null, null));
+        Checking accountUserAlex = checkingRepository.save(new Checking(balanceAlex, userAlex, null, "secretKey"));
+        CreditCard accountUserAntonia = creditCardRepository.save(new CreditCard(balanceAntonia, userAntonia, null, null, null));
         String senderUserName = "alex";
         String receiverUserName = "antonia";
         BigDecimal amountToTransfer = BigDecimal.valueOf(10);

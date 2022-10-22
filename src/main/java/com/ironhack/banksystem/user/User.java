@@ -2,7 +2,7 @@ package com.ironhack.banksystem.user;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ironhack.banksystem.role.RoleEntity;
+import com.ironhack.banksystem.role.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @NoArgsConstructor
-public abstract class UserEntity {
+public abstract class User {
 
 
     @Id
@@ -28,10 +28,10 @@ public abstract class UserEntity {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="role_id")
     @JsonIgnore
-    private RoleEntity role;
+    private Role role;
 
 
-    public UserEntity(String username, String password, RoleEntity role) {
+    public User(String username, String password, Role role) {
         this.username = username;
         this.password = password;
         this.role = role;

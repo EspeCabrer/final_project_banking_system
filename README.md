@@ -77,6 +77,12 @@ una vez se crea la "Third party" en el header de la petición HTTP.
 ## API DOCUMENTATION
 
 http://localhost:8080/swagger-ui/index.html
+## Diagrama de caso de uso
+![](use_case.png)
+
+## Diagrama de clases
+
+
 
 
 PENDING TESTS WITH SECURITY

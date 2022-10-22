@@ -2,7 +2,7 @@ package com.ironhack.banksystem.role;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ironhack.banksystem.user.UserEntity;
+import com.ironhack.banksystem.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class RoleEntity {
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,15 +28,15 @@ public class RoleEntity {
 
     @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
     @JsonIgnore
-    private Set<UserEntity> users = new HashSet<>();
+    private Set<User> users = new HashSet<>();
 
 
-    public RoleEntity(EnumRole role, Set<UserEntity> users) {
+    public Role(EnumRole role, Set<User> users) {
         this.name = role;
         this.users = users;
     }
 
-    public RoleEntity(EnumRole role) {
+    public Role(EnumRole role) {
         this.name = role;
     }
 }

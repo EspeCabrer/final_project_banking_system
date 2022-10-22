@@ -3,7 +3,7 @@ package com.ironhack.banksystem.account.accountTypes.savings;
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.role.RoleEntity;
+import com.ironhack.banksystem.role.Role;
 import com.ironhack.banksystem.role.RoleRepository;
 import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
 import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderRepository;
@@ -31,7 +31,7 @@ public class SavingsRepositoryTests {
     @Autowired
     private RoleRepository roleRepository;
 
-    RoleEntity role;
+    Role role;
 
     @BeforeEach
     public void setUp(){
@@ -50,10 +50,10 @@ public class SavingsRepositoryTests {
         Address address = new Address("Roma n25", "Madrid", 06754);
         AccountHolder user = new AccountHolder("antonia34", "password", LocalDate.parse("2000-06-02"), address, null, role );
         accountHolderRepository.save(user);
-        SavingsEntity savings = savingsRepository.save(new SavingsEntity(new Money(BigDecimal.valueOf(3000)), user, null,
+        Savings savings = savingsRepository.save(new Savings(new Money(BigDecimal.valueOf(3000)), user, null,
                 null, null, "secretKey"));
 
-        Optional<SavingsEntity> savingsOptional = savingsRepository.findById(savings.getId());
+        Optional<Savings> savingsOptional = savingsRepository.findById(savings.getId());
 
         assertTrue(savingsOptional.isPresent());
     }

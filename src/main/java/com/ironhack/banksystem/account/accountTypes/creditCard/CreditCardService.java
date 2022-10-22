@@ -11,14 +11,14 @@ public class CreditCardService {
     @Autowired
     CreditCardRepository creditCardRepository;
 
-    public CreditCardEntity add(CreditCardCreateDTO creditCardDTO, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
+    public CreditCard add(CreditCardCreateDTO creditCardDTO, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
 
         Money creditLimit = null;
         if (creditCardDTO.getCreditLimit() != null){
             creditLimit = new Money(creditCardDTO.getCreditLimit());
         }
 
-        return creditCardRepository.save(new CreditCardEntity(
+        return creditCardRepository.save(new CreditCard(
                         new Money(creditCardDTO.getBalance()),
                         primaryOwner,
                         secondaryOwner,

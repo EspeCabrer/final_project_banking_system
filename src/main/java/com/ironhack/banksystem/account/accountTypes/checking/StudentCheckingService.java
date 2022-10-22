@@ -18,8 +18,8 @@ public class StudentCheckingService {
     PasswordEncoder passwordEncoder;
 
     public AddCheckingAccountReturnedDTO add(CheckingCreateDTO checkingDTO, AccountHolder primaryOwner, AccountHolder secondaryOwner ){
-        StudentCheckingEntity studentChecking = studentCheckingRepository.save(
-                    new StudentCheckingEntity(
+        StudentChecking studentChecking = studentCheckingRepository.save(
+                    new StudentChecking(
                             new Money(checkingDTO.getBalance()),
                             primaryOwner,
                             secondaryOwner,

@@ -3,7 +3,7 @@ package com.ironhack.banksystem.account.accountTypes.checking;
 import com.ironhack.banksystem.address.Address;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.role.EnumRole;
-import com.ironhack.banksystem.role.RoleEntity;
+import com.ironhack.banksystem.role.Role;
 import com.ironhack.banksystem.role.RoleRepository;
 import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
 import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolderRepository;
@@ -33,7 +33,7 @@ public class CheckingRepositoryTests {
     @Autowired
     private RoleRepository roleRepository;
 
-    RoleEntity role;
+    Role role;
 
     @BeforeEach
     void setUp() {
@@ -53,10 +53,10 @@ public class CheckingRepositoryTests {
         Address address = new Address("Roma n25", "Madrid", 06754);
         AccountHolder user = new AccountHolder("pepe87", "password", LocalDate.parse("1987-06-02"), address, null, role );
         accountHolderRepository.save(user);
-        CheckingEntity account = new CheckingEntity(new Money(new BigDecimal(2000)), user, null, "secretKey");
+        Checking account = new Checking(new Money(new BigDecimal(2000)), user, null, "secretKey");
 
-        CheckingEntity savedAccount = checkingRepository.save(account);
-        Optional<CheckingEntity> optionalChecking = checkingRepository.findById(savedAccount.getId());
+        Checking savedAccount = checkingRepository.save(account);
+        Optional<Checking> optionalChecking = checkingRepository.findById(savedAccount.getId());
 
         assertTrue(optionalChecking.isPresent());
         assertEquals("pepe87", optionalChecking.get().getPrimaryOwner().getUsername() );

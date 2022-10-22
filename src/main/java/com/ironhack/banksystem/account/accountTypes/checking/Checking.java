@@ -1,6 +1,6 @@
 package com.ironhack.banksystem.account.accountTypes.checking;
 
-import com.ironhack.banksystem.account.AccountEntity;
+import com.ironhack.banksystem.account.Account;
 import com.ironhack.banksystem.account.EnumAccountStatus;
 import com.ironhack.banksystem.money.Money;
 import com.ironhack.banksystem.user.userTypes.accountHolder.AccountHolder;
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CheckingEntity extends AccountEntity {
+public class Checking extends Account {
 
     private String secretKey;
     @AttributeOverride(name = "amount", column = @Column(name = "minimum_balance_amount"))
@@ -25,7 +25,7 @@ public class CheckingEntity extends AccountEntity {
     @Enumerated(EnumType.STRING)
     private EnumAccountStatus status = EnumAccountStatus.ACTIVE;
 
-    public CheckingEntity(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
+    public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
         super(balance, primaryOwner, secondaryOwner);
         this.secretKey = secretKey;
     }

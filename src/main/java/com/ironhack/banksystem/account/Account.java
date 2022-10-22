@@ -15,7 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-public abstract class AccountEntity {
+public abstract class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +38,7 @@ public abstract class AccountEntity {
 
     private final Date CREATION_DATE = new Date(System.currentTimeMillis());
 
-    public AccountEntity(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
+    public Account(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
         this.balance = balance;
         this.primaryOwner = primaryOwner;
         this.secondaryOwner = secondaryOwner;

@@ -23,9 +23,9 @@ public class AccountController {
         return accountService.getBalanceByAccountId(id, user.getUsername());
     }
 
-    @PatchMapping("admin/account/balance/{id}")
+    @PatchMapping("account/balance/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public AccountEntity updateBalanceByAccountId(
+    public Account updateBalanceByAccountId(
             @PathVariable Long id,
             @RequestBody AmountDTO amountDTO) {
         return accountService.updateBalanceByAccountId(id, amountDTO);
