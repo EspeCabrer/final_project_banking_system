@@ -81,12 +81,8 @@ http://localhost:8080/swagger-ui/index.html
 ![](use_case.png)
 
 ## Diagrama de clases
+![](uml_diagram.png)
 
-
-
-
-PENDING TESTS WITH SECURITY
-- get_getBalanceByAccountId_WorksOK()
 
 ## Descripción de los tipos de cuentas
 

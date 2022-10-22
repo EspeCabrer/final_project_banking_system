@@ -47,12 +47,13 @@ public abstract class Account {
 
     public void withdraw(BigDecimal amount) {
         if(this.getBalance().getAmount().compareTo(amount) > 0) {
-            this.balance.setAmount(this.balance.getAmount().subtract(amount));
+            this.balance.decreaseAmount(amount);
         } else throw new IllegalArgumentException("Insufficient funds");
     }
 
     public void deposit(BigDecimal amount) {
-        this.balance.setAmount(this.balance.getAmount().add(amount));
+        this.balance.increaseAmount(amount);
+
     }
 
     public Money checkBalance(){
