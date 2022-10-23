@@ -79,7 +79,7 @@ public class CreditCardControllerTests {
         CreditCardCreateDTO creditCardDTO = new CreditCardCreateDTO(BigDecimal.valueOf(2000), "maria", "pepe", BigDecimal.valueOf(300), BigDecimal.valueOf(0.2));
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
-        mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/account/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
 
         assertEquals(1, creditCardRepository.findAll().size());
@@ -92,7 +92,7 @@ public class CreditCardControllerTests {
         CreditCardCreateDTO creditCardDTO = new CreditCardCreateDTO(balance, "maria", "maria", BigDecimal.valueOf(300), BigDecimal.valueOf(0.2));
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
-        mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/account/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest()).andReturn();
     }
 
@@ -103,7 +103,7 @@ public class CreditCardControllerTests {
         CreditCardCreateDTO creditCardDTO = new CreditCardCreateDTO(BigDecimal.valueOf(2000), primaryOwnerUserName, "maria", BigDecimal.valueOf(300), BigDecimal.valueOf(0.2));
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
-        mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/account/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest()).andReturn();
     }
 
@@ -114,7 +114,7 @@ public class CreditCardControllerTests {
         CreditCardCreateDTO creditCardDTO = new CreditCardCreateDTO(BigDecimal.valueOf(2000), "maria", secondaryOwnerUserName, BigDecimal.valueOf(300), BigDecimal.valueOf(0.2));
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
-        mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/account/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
     }
 
@@ -126,7 +126,7 @@ public class CreditCardControllerTests {
         CreditCardCreateDTO creditCardDTO = new CreditCardCreateDTO(BigDecimal.valueOf(2000), "maria", null, creditLimit, BigDecimal.valueOf(0.2));
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
-        mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/account/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
     }
 
@@ -137,7 +137,7 @@ public class CreditCardControllerTests {
         CreditCardCreateDTO creditCardDTO = new CreditCardCreateDTO(BigDecimal.valueOf(2000), "maria", null, BigDecimal.valueOf(300), interestRate);
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
-        mockMvc.perform(post("/accounts/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/account/new/creditcard").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
     }
 
@@ -149,7 +149,7 @@ public class CreditCardControllerTests {
         CreditCardCreateDTO creditCardDTO = new CreditCardCreateDTO(BigDecimal.valueOf(2000), "pepe", null, BigDecimal.valueOf(300), interestRate);
         String body = objectMapper.writeValueAsString(creditCardDTO);
 
-        mockMvc.perform(put("/accounts/update/creditcard/" + creditCardSaved.getId()).content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(put("/account/update/creditcard/" + creditCardSaved.getId()).content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
 
         CreditCard creditCardUpdated = creditCardRepository.findById(creditCardSaved.getId()).get();

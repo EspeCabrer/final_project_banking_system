@@ -81,7 +81,7 @@ public class CreditCard extends Account {
     }
 
     public Money applyInterestRate(Date dateCreationAccountToTest, Date currentDateToTest, int monthsOfInterestRatePaid) {
-        BigDecimal monthlyInterest = getInterestRate().divide(BigDecimal.valueOf(12));
+        BigDecimal monthlyInterest = getInterestRate().divide(BigDecimal.valueOf(12), RoundingMode.HALF_EVEN);
         int monthsToPay = checkMonthsFromCreatedAccount(dateCreationAccountToTest, currentDateToTest) - monthsOfInterestRatePaid;
         for (int i = monthsToPay; i > 0; i--) {
             BigDecimal addToAccount = getBalance().getAmount().multiply(monthlyInterest);
@@ -90,6 +90,4 @@ public class CreditCard extends Account {
         monthsOfInterestRateApplied += monthsToPay;
         return getBalance();
     }
-
-
 }

@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 public class AccountController {
 
@@ -27,7 +29,7 @@ public class AccountController {
     @ResponseStatus(HttpStatus.OK)
     public Account updateBalanceByAccountId(
             @PathVariable Long id,
-            @RequestBody AmountDTO amountDTO) {
+            @Valid @RequestBody AmountDTO amountDTO) {
         return accountService.updateBalanceByAccountId(id, amountDTO);
     }
 
@@ -36,7 +38,7 @@ public class AccountController {
     public Money doTransfer(
             @AuthenticationPrincipal CustomUserDetails user,
             @PathVariable("id") Long senderAccountId,
-            @RequestBody TransferDTO transferDTO) {
+            @Valid @RequestBody TransferDTO transferDTO) {
 
         return accountService.doTransfer(user.getUsername(), senderAccountId, transferDTO);
     }

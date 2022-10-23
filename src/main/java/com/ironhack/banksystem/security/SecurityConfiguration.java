@@ -17,9 +17,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
 
-    @Autowired
-    CustomUserDetailsService customUserDetailsService;
-
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -49,7 +46,5 @@ public class SecurityConfiguration {
         httpSecurity.csrf().disable();
 
         return httpSecurity.build();
-
     }
-
 }

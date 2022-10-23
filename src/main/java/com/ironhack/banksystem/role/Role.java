@@ -24,7 +24,6 @@ public class Role {
     @Column(unique = true, nullable = false)
     @Enumerated(EnumType.STRING)
     private EnumRole name;
-    //private String name;
 
     @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
     @JsonIgnore

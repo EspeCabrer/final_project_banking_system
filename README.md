@@ -38,6 +38,12 @@ Al iniciar la app se insertan automáticamente usando CommandLineRunner los sigu
   
 *Se ha puesto la misma contraseña a los tres usuarios para simplificar.
 
+#### Third Party
+- name: thirdParty1
+- hashedKey: Se crea en el momento de iniciar la aplicación, ver en la base de datos.*
+
+*La hashedKey cambia cada vez que se reinicia la applicación.
+
 #### Cuentas
 - Cuenta tipo **Savings** vinculada a *user1*
   - Balance: 3000
@@ -49,6 +55,7 @@ Al iniciar la app se insertan automáticamente usando CommandLineRunner los sigu
   - SecretKey: secretKey*
 
 *Se ha puesto la misma contraseña a las dos cuentas para simplificar.
+
 
 ### FUNCIONAMIENTO
 

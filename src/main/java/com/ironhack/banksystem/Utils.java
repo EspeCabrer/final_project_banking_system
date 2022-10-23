@@ -30,10 +30,8 @@ public class Utils {
                 calendar1.get(Calendar.YEAR);
 
         int monthsDiff = calendar2.get(Calendar.MONTH) - calendar1.get(Calendar.MONTH);
-                return yearsInBetween*12 + monthsDiff;
 
-
-
+        return yearsInBetween*12 + monthsDiff;
     }
 
 
@@ -42,5 +40,4 @@ public class Utils {
             cal.setTime(date);
             return cal;
         }
-
 }

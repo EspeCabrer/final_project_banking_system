@@ -33,7 +33,6 @@ public class AccountHolderService {
         return true;
     }
 
-
     public AccountHolder add(AccountHolderDTO accountHolderDTO){
 
         if(accountHolderRepository.findByUsername(accountHolderDTO.getUsername()).isPresent()) {
@@ -53,5 +52,4 @@ public class AccountHolderService {
     public int ageCalculator(LocalDate birthDate) {
         return Period.between(birthDate, LocalDate.now()).getYears();
     }
-
 }

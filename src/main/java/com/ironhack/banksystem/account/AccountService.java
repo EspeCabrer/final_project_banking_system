@@ -38,12 +38,6 @@ public class AccountService {
     }
 
 
-    /*public boolean hasEnoughMoney(Account account, BigDecimal amountToTransfer) {
-        if(account.getBalance().getAmount().compareTo(amountToTransfer) > 0) return true;
-        else throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient funds");
-    }*/
-
-
     public Money getBalanceByAccountId(Long id, String userName){
         Account account = accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
         User user = userRepository.findByUsername(userName).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));

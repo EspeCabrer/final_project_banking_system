@@ -80,7 +80,7 @@ public class CheckingControllerTests {
         CheckingCreateDTO checkingDTO = new CheckingCreateDTO(new BigDecimal("2000"), "pepe87", "maria63", "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
-        MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
+        MvcResult mvcResult = mockMvc.perform(post("/account/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
 
     }
@@ -90,7 +90,7 @@ public class CheckingControllerTests {
         CheckingCreateDTO checkingDTO = new CheckingCreateDTO(new BigDecimal("2000"), "anto76", null, "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
-        MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
+        MvcResult mvcResult = mockMvc.perform(post("/account/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest()).andReturn();
     }
 
@@ -101,7 +101,7 @@ public class CheckingControllerTests {
         CheckingCreateDTO checkingDTO = new CheckingCreateDTO(new BigDecimal("2000"), "pepe87", "anton763", "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
-        MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
+        MvcResult mvcResult = mockMvc.perform(post("/account/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest()).andReturn();
     }
 
@@ -112,7 +112,7 @@ public class CheckingControllerTests {
         CheckingCreateDTO checkingDTO = new CheckingCreateDTO(new BigDecimal("2000"), "pepe87", null, "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
-        MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
+        MvcResult mvcResult = mockMvc.perform(post("/account/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
     }
 
@@ -123,7 +123,7 @@ public class CheckingControllerTests {
         CheckingCreateDTO checkingDTO = new CheckingCreateDTO(new BigDecimal("2000"), "pepe87", null, "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
-        MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
+        MvcResult mvcResult = mockMvc.perform(post("/account/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
 
         assertEquals(1, studentCheckingRepository.findAll().size());
@@ -137,7 +137,7 @@ public class CheckingControllerTests {
         CheckingCreateDTO checkingDTO = new CheckingCreateDTO(new BigDecimal("2000"), "pepe87", null, "secretKey");
         String body = objectMapper.writeValueAsString(checkingDTO);
 
-        MvcResult mvcResult = mockMvc.perform(post("/accounts/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
+        MvcResult mvcResult = mockMvc.perform(post("/account/new/checking").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
 
         assertEquals(0, studentCheckingRepository.findAll().size());

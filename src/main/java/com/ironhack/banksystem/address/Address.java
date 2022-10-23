@@ -16,5 +16,4 @@ public class Address {
     private String postAddress;
     private String city;
     private Integer postalCode;
-
 }

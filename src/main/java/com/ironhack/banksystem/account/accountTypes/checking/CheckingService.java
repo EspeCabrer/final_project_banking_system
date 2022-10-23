@@ -17,9 +17,6 @@ public class CheckingService {
     CheckingRepository checkingRepository;
 
     @Autowired
-    AccountHolderRepository accountHolderRepository;
-
-    @Autowired
     PasswordEncoder passwordEncoder;
 
     public AddCheckingAccountReturnedDTO add(CheckingCreateDTO checkingDTO, AccountHolder primaryOwner, AccountHolder secondaryOwner ){

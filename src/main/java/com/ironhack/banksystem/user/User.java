@@ -14,7 +14,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 public abstract class User {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

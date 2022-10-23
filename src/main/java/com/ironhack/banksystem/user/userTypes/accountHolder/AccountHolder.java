@@ -39,13 +39,10 @@ public class AccountHolder extends User {
     @OneToMany(mappedBy = "secondaryOwner", cascade = CascadeType.ALL)
     private Set<Account> accountsBySecondOwner;
 
-
     public AccountHolder(String username, String password, LocalDate dateBirth, Address primaryAddress, Address mailingAddress, Role role) {
         super(username, password, role);
         this.dateBirth = dateBirth;
         this.primaryAddress = primaryAddress;
         this.mailingAddress = mailingAddress;
     }
-
-
 }

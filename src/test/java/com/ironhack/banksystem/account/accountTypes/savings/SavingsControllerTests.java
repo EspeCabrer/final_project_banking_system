@@ -68,7 +68,7 @@ public class SavingsControllerTests {
         SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000), "maria", "maria", BigDecimal.valueOf(0.3), BigDecimal.valueOf(200), "secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
 
-        mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/account/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
         System.out.println(savingsRepository.findAll().get(0).getId());
 
@@ -83,7 +83,7 @@ public class SavingsControllerTests {
         SavingsDTO savingsDto = new SavingsDTO(null, "maria", "maria", BigDecimal.valueOf(0.3), BigDecimal.valueOf(200), "secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
 
-        mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/account/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest()).andReturn();
     }
 
@@ -93,7 +93,7 @@ public class SavingsControllerTests {
         SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000), null, "maria", BigDecimal.valueOf(0.3), BigDecimal.valueOf(200), "secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
 
-        mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/account/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest()).andReturn();
     }
 
@@ -103,7 +103,7 @@ public class SavingsControllerTests {
         SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000), "maria", null, BigDecimal.valueOf(0.3), BigDecimal.valueOf(200), "secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
 
-        mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/account/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
     }
 
@@ -114,7 +114,7 @@ public class SavingsControllerTests {
         SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000),  "maria", null, BigDecimal.valueOf(0.3), null, "secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
 
-        mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/account/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
     }
 
@@ -124,7 +124,7 @@ public class SavingsControllerTests {
         SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000),  "maria", null, BigDecimal.valueOf(0.3), null, "secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
 
-        mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/account/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
     }
 
@@ -134,7 +134,7 @@ public class SavingsControllerTests {
         SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000),  "maria", null, BigDecimal.valueOf(0.3), BigDecimal.valueOf(1000.5),"secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
 
-        mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/account/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest()).andReturn();
     }
 
@@ -144,7 +144,7 @@ public class SavingsControllerTests {
         SavingsDTO savingsDto = new SavingsDTO(BigDecimal.valueOf(2000),  "maria", null, BigDecimal.valueOf(0.3), BigDecimal.valueOf(50), "secretKey");
         String body = objectMapper.writeValueAsString(savingsDto);
 
-        mockMvc.perform(post("/accounts/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/account/new/savings").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest()).andReturn();
     }
 
@@ -156,14 +156,10 @@ public class SavingsControllerTests {
         SavingsDTO savingsDto2 = new SavingsDTO(BigDecimal.valueOf(2000), "maria", null, BigDecimal.valueOf(0.3), BigDecimal.valueOf(400), null);
         String body2 = objectMapper.writeValueAsString(savingsDto2);
 
-        mockMvc.perform(post("/accounts/new/savings").content(body1).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/account/new/savings").content(body1).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest()).andReturn();
 
-        mockMvc.perform(post("/accounts/new/savings").content(body2).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/account/new/savings").content(body2).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest()).andReturn();
     }
-
-
-
-
 }

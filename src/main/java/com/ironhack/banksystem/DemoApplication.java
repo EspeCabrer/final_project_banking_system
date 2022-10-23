@@ -62,6 +62,5 @@ public class DemoApplication implements CommandLineRunner {
 		savingsRepository.save(new Savings(new Money(BigDecimal.valueOf(1500)), user3, null, null, null, passwordEncoder.encode("secretKey")));
 
 		thirdPartyRepository.save(new ThirdParty(passwordEncoder.encode("thirdParty1"), "thirdParty1" ));
-
 	}
 }
