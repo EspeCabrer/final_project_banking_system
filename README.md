@@ -42,7 +42,7 @@ Al iniciar la app se insertan automáticamente usando CommandLineRunner los sigu
 - name: thirdParty1
 - hashedKey: Se crea en el momento de iniciar la aplicación, ver en la base de datos.*
 
-*La hashedKey cambia cada vez que se reinicia la applicación.
+*La hashedKey cambia cada vez que se reinicia la aplicación.
 
 #### Cuentas
 - Cuenta tipo **Savings** vinculada a *user1*
