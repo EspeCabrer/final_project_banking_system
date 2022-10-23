@@ -33,14 +33,12 @@ public class SecurityConfiguration {
         httpSecurity.httpBasic();
 
         httpSecurity.authorizeRequests()
-                .mvcMatchers(HttpMethod.PATCH, "account/balance/{id}").hasRole(String.valueOf(EnumRole.ADMIN))
-                .mvcMatchers(HttpMethod.POST, "thirdparty/new").hasRole(String.valueOf(EnumRole.ADMIN))
-                .mvcMatchers(HttpMethod.GET,"account/new/**").hasRole(String.valueOf(EnumRole.ADMIN))
-                .mvcMatchers(HttpMethod.PUT, "account/update/creditcard").hasRole(String.valueOf(EnumRole.ADMIN))
-                .mvcMatchers(HttpMethod.DELETE, "account/delete/*").hasRole(String.valueOf(EnumRole.ADMIN))
-
-//
-                .mvcMatchers(HttpMethod.PATCH, "account/transfer/{id}").hasAnyRole(String.valueOf(EnumRole.ACCOUNT_HOLDER))
+                .mvcMatchers(HttpMethod.PATCH, "/account/balance/{id}").hasRole(String.valueOf(EnumRole.ADMIN))
+                .mvcMatchers(HttpMethod.POST, "/thirdparty/new").hasRole(String.valueOf(EnumRole.ADMIN))
+                .mvcMatchers(HttpMethod.POST,"/account/new/**").hasRole(String.valueOf(EnumRole.ADMIN))
+                .mvcMatchers(HttpMethod.PUT, "/account/update/**").hasRole(String.valueOf(EnumRole.ADMIN))
+                .mvcMatchers(HttpMethod.DELETE, "/account/delete/{id}").hasRole(String.valueOf(EnumRole.ADMIN))
+                .mvcMatchers(HttpMethod.PATCH, "/account/transfer/{id}").hasRole(String.valueOf(EnumRole.ACCOUNT_HOLDER))
                 .anyRequest().permitAll();
 
         httpSecurity.csrf().disable();
